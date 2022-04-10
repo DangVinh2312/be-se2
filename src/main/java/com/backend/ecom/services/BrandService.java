@@ -22,7 +22,7 @@ public class BrandService {
     }
 
     public ResponseEntity<ResponseObject> getBrandDetail(Integer id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete brand successfully", ""));
     }
 
     public ResponseEntity<ResponseObject> createBrand(Brand brandRequest) {
@@ -31,7 +31,7 @@ public class BrandService {
             throw new ResourceNotFoundException("Brand is already existed");
         }
         brandRepository.save(brandRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete brand successfully", ""));
 
     }
 
@@ -39,7 +39,7 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
         brand.setName(brandRequest.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete brand successfully", ""));
     }
 
     public ResponseEntity<ResponseObject> deleteBrand(Integer id) {
@@ -47,7 +47,7 @@ public class BrandService {
             throw new ResourceNotFoundException("Not found brand with id:" + id);
         }
         brandRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete brand successfully", ""));
 
     }
 

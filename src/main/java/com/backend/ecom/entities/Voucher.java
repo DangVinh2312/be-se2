@@ -1,10 +1,13 @@
 package com.backend.ecom.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -35,5 +38,14 @@ public class Voucher {
     @ManyToOne
     @JoinColumn(name = "transaction_id")
     private Transaction transaction;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "vouchers")
+    @JsonIgnore
+    private Set<Voucher> vouchers = new HashSet<>();
 
 }

@@ -33,7 +33,7 @@ public class DiscountService {
 
     public ResponseEntity<ResponseObject> updateDiscount(Long id, Discount discountRequest) {
         Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found discount with id:" + id));
 //        discount.setName(discountRequest.getName());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete discount successfully", ""));
     }

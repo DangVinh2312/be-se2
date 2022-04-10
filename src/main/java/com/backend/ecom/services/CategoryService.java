@@ -35,27 +35,27 @@ public class CategoryService {
         }
         List<Category> categories = categoryRepository.findTagsByProductsId(productId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query tags successfully", categories));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query categories successfully", categories));
 
     }
 
     public ResponseEntity<ResponseObject> getCategoriessById(Integer id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + id));
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query tag successfully", category));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query category successfully", category));
     }
 
     public ResponseEntity<ResponseObject> getAllProductsByCategoryId(Integer categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
-            throw new ResourceNotFoundException("Not found tag with id:" + categoryId);
+            throw new ResourceNotFoundException("Not found category with id:" + categoryId);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
         List<Product> products = productRepository.findProductsByTagsId(categoryId);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query tag successfully", productsShortInfo));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query category successfully", productsShortInfo));
 
     }
 
@@ -65,7 +65,7 @@ public class CategoryService {
             // tag is existed
             if (categoryId != 0) {
                 Category existCategory = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Not found tag with code: " + categoryId));
+                        .orElseThrow(() -> new ResourceNotFoundException("Not found category with code: " + categoryId));
                 product.addCategory(existCategory);
                 productRepository.save(product);
                 return existCategory;
@@ -73,15 +73,15 @@ public class CategoryService {
             product.addCategory(categoryRequest);
             return categoryRepository.save(categoryRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add tag successfully", category));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add category successfully", category));
     }
 
     public ResponseEntity<ResponseObject> updateCategory(Integer id, Category categoryRequest) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found category with id:" + id));
         category.setName(categoryRequest.getName());
         categoryRepository.save(category);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update tag successfully", category));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update category successfully", category));
 
     }
 
@@ -90,16 +90,16 @@ public class CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
         product.removeCategory(categoryId);
         productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag from product successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete category from product successfully", ""));
 
     }
 
     public ResponseEntity<ResponseObject> deleteCategory(Integer id) {
         if (!categoryRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Not found tag with id:" + id);
+            throw new ResourceNotFoundException("Not found category with id:" + id);
         }
         categoryRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete category successfully", ""));
 
     }
 }

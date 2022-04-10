@@ -37,7 +37,7 @@ public class VoucherService {
 
     public ResponseEntity<ResponseObject> updateVoucher(Long id, Voucher voucherRequest) {
         Voucher voucher = voucherRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found voucher with id:" + id));
         voucher.setName(voucherRequest.getName());
         voucher.setDescription(voucherRequest.getDescription());
         voucher.setStartDate(voucherRequest.getStartDate());
