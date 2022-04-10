@@ -16,6 +16,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findProductsByTagsId(Integer tagId);
 
+    List<Product> findProductsByCategoriesId(Integer categoryId);
+
     @Modifying
     @Query("UPDATE User SET deleted = true, deletedAt = current_date WHERE id in ?1")
     void softDeleteAllByIds (Iterable<? extends Long> ids);

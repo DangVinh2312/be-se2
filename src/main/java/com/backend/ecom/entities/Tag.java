@@ -30,8 +30,4 @@ public class Tag {
             mappedBy = "tags")
     @JsonIgnore
     private Set<Product> products = new HashSet<>();
-
-    public void addProduct(Product product) {
-       this.getProducts().add(product);
-    }
 }

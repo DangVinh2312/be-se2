@@ -1,12 +1,14 @@
 package com.backend.ecom.entities;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,5 +23,13 @@ public class Category {
     @NotBlank
     private String name;
 
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "categories")
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
 
 }

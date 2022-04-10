@@ -67,7 +67,6 @@ public class TagService {
                 return existTag;
             }
                 product.addTag(tagRequest);
-                tagRequest.addProduct(product);
                 return tagRepository.save(tagRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add tag successfully", tag));

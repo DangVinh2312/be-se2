@@ -87,4 +87,15 @@ public class Product {
         if (tag != null) this.tags.remove(tag);
         tag.getProducts().remove(this);
     }
+
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.getProducts().add(this);
+    }
+
+    public void removeCategory(Integer categoryId) {
+        Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
+        if (category != null) this.categories.remove(category);
+        category.getProducts().remove(this);
+    }
 }
