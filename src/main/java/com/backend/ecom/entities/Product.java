@@ -30,7 +30,7 @@ public class Product {
 
     private String detail;
 
-    private Integer quantity;
+    private int quantity;
 
     private Double price;
 
@@ -60,7 +60,7 @@ public class Product {
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "product")
-    private Set<Order> orders = new HashSet<>();
+    private Set<CartItem> cartItems = new HashSet<>();
 
     @NotNull
     @Column(name = "created_at")

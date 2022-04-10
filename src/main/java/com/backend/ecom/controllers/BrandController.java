@@ -4,11 +4,9 @@ import com.backend.ecom.entities.Brand;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController

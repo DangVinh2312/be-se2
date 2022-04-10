@@ -1,6 +1,5 @@
 package com.backend.ecom.controllers;
 
-import com.backend.ecom.entities.Brand;
 import com.backend.ecom.entities.Feedback;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.FeedbackService;

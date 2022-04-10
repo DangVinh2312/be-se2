@@ -1,7 +1,6 @@
-package com.backend.ecom.dto;
+package com.backend.ecom.dto.user;
 
 import com.backend.ecom.entities.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.backend.ecom.controllers;
 
-import com.backend.ecom.dto.UserShortInfoDTO;
+import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.UserService;

@@ -1,4 +1,4 @@
-package com.backend.ecom.dto;
+package com.backend.ecom.dto.product;
 
 import com.backend.ecom.entities.Brand;
 import com.backend.ecom.entities.Category;

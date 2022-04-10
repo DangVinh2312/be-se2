@@ -1,6 +1,6 @@
 package com.backend.ecom.controllers;
 
-import com.backend.ecom.dto.ProductShortInfoDTO;
+import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.Product;
 import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.payload.request.ProductRequest;

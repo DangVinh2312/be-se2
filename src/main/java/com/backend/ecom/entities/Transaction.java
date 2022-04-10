@@ -31,9 +31,6 @@ public class Transaction {
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "transaction")
-    private Set<Order> orders;
-
     private PaymentType paymentType;
 
     private TransactionStatus status;

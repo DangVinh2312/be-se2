@@ -1,9 +1,8 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.dto.ProductShortInfoDTO;
+import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.Category;
 import com.backend.ecom.entities.Product;
-import com.backend.ecom.entities.Tag;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.CategoryRepository;

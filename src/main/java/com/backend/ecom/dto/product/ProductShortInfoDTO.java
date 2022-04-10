@@ -1,4 +1,4 @@
-package com.backend.ecom.dto;
+package com.backend.ecom.dto.product;
 
 import com.backend.ecom.entities.Product;
 

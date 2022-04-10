@@ -10,32 +10,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/vouchers")
 public class VoucherController {
     @Autowired
     private VoucherService voucherService;
 
-    @GetMapping("brands/all")
+    @GetMapping("/all")
     public List<Voucher> getAllVouchers() {
         return voucherService.getAllVouchers();
     }
 
-    @GetMapping("/brands/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getVoucherDetail(@PathVariable("id") Long id) {
         return voucherService.getVoucherDetail(id);
     }
 
-    @PostMapping("/brands/create")
+    @PostMapping("/create")
     public ResponseEntity<ResponseObject> createVoucher(@RequestBody Voucher voucherRequest) {
         return voucherService.createVoucher(voucherRequest);
     }
 
-    @PutMapping("/brands/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateVoucher(@PathVariable("id") Long id, @RequestBody Voucher voucherRequest) {
         return voucherService.updateVoucher(id, voucherRequest);
     }
 
-    @DeleteMapping("/brands/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteVoucher(@PathVariable("id") Long id) {
         return voucherService.deleteVoucher(id);
     }

@@ -1,4 +1,4 @@
-package com.backend.ecom.dto;
+package com.backend.ecom.dto.user;
 
 import com.backend.ecom.entities.*;
 

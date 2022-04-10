@@ -77,6 +77,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "voucher_id"))
     private Set<Voucher> vouchers = new HashSet<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart = new Cart(this);
+
     @OneToMany(mappedBy = "user")
     private Set<Transaction> transactions;
 

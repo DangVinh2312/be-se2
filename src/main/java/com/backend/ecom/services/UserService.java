@@ -1,7 +1,7 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.dto.UserDetailDTO;
-import com.backend.ecom.dto.UserShortInfoDTO;
+import com.backend.ecom.dto.user.UserDetailDTO;
+import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
