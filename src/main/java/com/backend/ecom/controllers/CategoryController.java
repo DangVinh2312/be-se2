@@ -1,7 +1,6 @@
 package com.backend.ecom.controllers;
 
 import com.backend.ecom.entities.Category;
-import com.backend.ecom.entities.Tag;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

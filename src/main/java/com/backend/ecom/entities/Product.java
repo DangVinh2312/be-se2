@@ -1,9 +1,12 @@
 package com.backend.ecom.entities;
 
 import com.backend.ecom.payload.request.ProductRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,8 +37,10 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<ProductImage> image = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "brand_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "brand_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Brand brand;
 
     @ManyToMany

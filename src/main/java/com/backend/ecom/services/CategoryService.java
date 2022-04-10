@@ -88,7 +88,7 @@ public class CategoryService {
     public ResponseEntity<ResponseObject> deleteCategoryFromTutorial(Long productId, Integer categoryId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        product.removeTag(categoryId);
+        product.removeCategory(categoryId);
         productRepository.save(product);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag from product successfully", ""));
 
