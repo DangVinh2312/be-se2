@@ -28,7 +28,7 @@ public class BrandService {
     public ResponseEntity<ResponseObject> createBrand(Brand brandRequest) {
         boolean exist = brandRepository.existsByName(brandRequest.getName());
         if(exist){
-            throw new ResourceNotFoundException("Brand is already existed!");
+            throw new ResourceNotFoundException("Brand is already existed");
         }
         brandRepository.save(brandRequest);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete tag successfully", ""));

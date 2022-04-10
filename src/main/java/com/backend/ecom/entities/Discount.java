@@ -17,7 +17,7 @@ public class Discount {
     private long id;
 
     @NotBlank
-    private String name;
+    private int percentage;
 
     @NotBlank
     @Column(name = "start_date")
