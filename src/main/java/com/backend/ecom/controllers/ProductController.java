@@ -3,7 +3,7 @@ package com.backend.ecom.controllers;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.Product;
 import com.backend.ecom.payload.request.ArrayRequest;
-import com.backend.ecom.payload.request.ProductRequest;
+import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,27 @@ public class ProductController {
         return productService.getProductDetail(id);
     }
 
+    @GetMapping("/products/{productId}/categories")
+    public ResponseEntity<ResponseObject> getAllCategoriesByProductId(@PathVariable(value = "productId") Long productId) {
+        return productService.getAllCategoriesByProductId(productId);
+    }
+
+    @GetMapping("/products/{productId}/tags")
+    public ResponseEntity<ResponseObject> getAllTagsByProductId(@PathVariable(value = "productId") Long productId) {
+        return productService.getAllTagsByProductId(productId);
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createProduct(@RequestBody ProductRequest productRequest) {
-        return productService.createProduct(productRequest);
+    public ResponseEntity<ResponseObject> createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+        return productService.createProduct(productRequestDTO);
+    }
+
+    @PutMapping("/{productId}/categories-tags-brands")
+    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@PathVariable("productId") Long productId,
+                                                                           @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+                                                                           @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
+                                                                           @RequestParam(value = "tagId", defaultValue = "0") Integer brandId) {
+        return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, tagId, brandId);
     }
 
     @PutMapping("/update/{id}")
@@ -41,17 +59,26 @@ public class ProductController {
     }
 
     @PatchMapping("/delete")
-    public ResponseEntity<ResponseObject> softDeleteManyProducts (@RequestBody ArrayRequest ids){
+    public ResponseEntity<ResponseObject> softDeleteManyProducts(@RequestBody ArrayRequest ids) {
         return productService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/delete/force")
-    public ResponseEntity<ResponseObject> forceDeleteManyProducts (@RequestBody ArrayRequest ids){
+    public ResponseEntity<ResponseObject> forceDeleteManyProducts(@RequestBody ArrayRequest ids) {
         return productService.forceDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
     }
 
     @PatchMapping("/restore")
-    public ResponseEntity<ResponseObject> restoreOneOrManyProducts (@RequestBody ArrayRequest ids){
+    public ResponseEntity<ResponseObject> restoreOneOrManyProducts(@RequestBody ArrayRequest ids) {
         return productService.restoreOneOrManyUsers(Arrays.asList(ids.getIds()));
     }
+
+    @DeleteMapping("/{productId}/categories-tags-brands/delete")
+    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(@PathVariable(value = "productId") Long productId,
+                                                                                @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+                                                                                @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
+                                                                                @RequestParam(value = "brandId", defaultValue = "false") Boolean brandBool) {
+        return productService.deleteCategoryOrTagOrBrandFromProduct(productId, categoryId, tagId, brandBool);
+    }
+
 }

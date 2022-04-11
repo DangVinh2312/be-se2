@@ -1,12 +1,9 @@
 package com.backend.ecom.entities;
 
-import com.backend.ecom.payload.request.ProductRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.backend.ecom.dto.product.ProductRequestDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,16 +34,14 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<ProductImage> image = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "brand_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "brandId")
     private Brand brand;
 
     @ManyToMany
     @JoinTable(name = "product_categories",
-            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -55,8 +50,8 @@ public class Product {
                     CascadeType.MERGE
             })
     @JoinTable(name = "product_tags",
-            joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tagId", referencedColumnName = "id"))
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "product")
@@ -74,12 +69,12 @@ public class Product {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
-    public Product(ProductRequest productRequest) {
-        this.name = productRequest.getName();
-        this.description = productRequest.getDescription();
-        this.detail = productRequest.getDetail();
-        this.quantity = productRequest.getQuantity();
-        this.price = productRequest.getPrice();
+    public Product(ProductRequestDTO productRequestDTO) {
+        this.name = productRequestDTO.getName();
+        this.description = productRequestDTO.getDescription();
+        this.detail = productRequestDTO.getDetail();
+        this.quantity = productRequestDTO.getQuantity();
+        this.price = productRequestDTO.getPrice();
     }
 
     public void addTag(Tag tag) {
@@ -102,5 +97,15 @@ public class Product {
         Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
         if (category != null) this.categories.remove(category);
         category.getProducts().remove(this);
+    }
+
+
+    public void addBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public void removeBrand() {
+        this.brand.getProducts().remove(this);
+        this.brand = null;
     }
 }

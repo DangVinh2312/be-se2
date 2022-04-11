@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -17,6 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findProductsByTagsId(Integer tagId);
 
     List<Product> findProductsByCategoriesId(Integer categoryId);
+
+    List<Product> findProductsByBrandId(Integer brandId);
+
 
     @Modifying
     @Query("UPDATE User SET deleted = true, deletedAt = current_date WHERE id in ?1")

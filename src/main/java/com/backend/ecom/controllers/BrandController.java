@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.brand.BrandRequestDTO;
 import com.backend.ecom.entities.Brand;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.BrandService;
@@ -25,13 +26,18 @@ public class BrandController {
         return brandService.getBrandDetail(id);
     }
 
+    @GetMapping("/brands/{id}/products")
+    public ResponseEntity<ResponseObject> getAllProductsByBrandId(@PathVariable("id") Integer id){
+        return brandService.getAllProductsByBrandId(id);
+    }
+
     @PostMapping("/brands/create")
-    public ResponseEntity<ResponseObject> createBrand(@RequestBody Brand brandRequest) {
+    public ResponseEntity<ResponseObject> createBrand(@RequestBody BrandRequestDTO brandRequest) {
         return brandService.createBrand(brandRequest);
     }
 
     @PutMapping("/brands/update/{id}")
-    public ResponseEntity<ResponseObject> updateBrand(@PathVariable("id") Integer id, @RequestBody Brand brandRequest) {
+    public ResponseEntity<ResponseObject> updateBrand(@PathVariable("id") Integer id, @RequestBody BrandRequestDTO brandRequest) {
         return brandService.updateBrand(id,brandRequest );
     }
 

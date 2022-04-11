@@ -1,5 +1,6 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.tag.TagRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -30,4 +31,8 @@ public class Tag {
             mappedBy = "tags")
     @JsonIgnore
     private Set<Product> products = new HashSet<>();
+
+    public Tag(TagRequestDTO tagRequestDTO){
+        this.name = tagRequestDTO.getName();
+    }
 }

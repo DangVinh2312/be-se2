@@ -1,4 +1,4 @@
-package com.backend.ecom.payload.request;
+package com.backend.ecom.dto.product;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductRequest {
+public class ProductRequestDTO {
     private String name;
     private String description;
     private String detail;

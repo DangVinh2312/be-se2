@@ -1,5 +1,6 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +33,7 @@ public class Category {
     @JsonIgnore
     private Set<Product> products = new HashSet<>();
 
+    public Category(CategoryRequestDTO categoryRequestDTO){
+        this.name = categoryRequestDTO.getName();
+    }
 }

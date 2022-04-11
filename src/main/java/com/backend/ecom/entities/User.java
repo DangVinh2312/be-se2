@@ -28,27 +28,22 @@ public class User {
 
     @Size(min = 10, max = 50)
     @NotBlank
-    @Column(name = "fullName")
     private String fullName;
 
     @NotBlank
     @Size(min = 2, max = 50)
-    @Column(name = "username")
     private String username;
 
     @NotBlank
     @Size(max = 50)
     @Email
-    @Column(name = "email")
     private String email;
 
     @NotBlank
     @Size(min = 6, max = 150)
-    @Column(name = "password")
     private String password;
 
     @Size(max = 200)
-    @Column(name = "address")
     private String address;
 
     @Size(max = 100)
@@ -60,8 +55,8 @@ public class User {
                     CascadeType.MERGE
             })
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
@@ -73,13 +68,13 @@ public class User {
                     CascadeType.MERGE
             })
     @JoinTable(name = "user_vouchers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "voucher_id"))
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "voucherId"))
     private Set<Voucher> vouchers = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart = new Cart(this);
+    @JoinColumn(name = "cartId")
+    private Cart cart;
 
     @OneToMany(mappedBy = "user")
     private Set<Transaction> transactions;

@@ -11,10 +11,13 @@ import com.backend.ecom.repositories.CartRepository;
 import com.backend.ecom.repositories.ProductRepository;
 import com.backend.ecom.repositories.UserRepository;
 import com.backend.ecom.security.jwt.JwtUtils;
+import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLOutput;
 
 @Service
 public class CartService {
@@ -32,7 +35,8 @@ public class CartService {
 
     @Autowired
     private JwtUtils jwtUtils;
-    public ResponseEntity<ResponseObject> addToCart(AddToCartDTO addToCartDTO, String token) {
+    public ResponseEntity<ResponseObject> addToCart(AddToCartDTO addToCartDTO, HTTPRequest request) {
+        String token = request.getAuthorization();
         String username = jwtUtils.getUserNameFromJwtToken(token);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found username: " + username));

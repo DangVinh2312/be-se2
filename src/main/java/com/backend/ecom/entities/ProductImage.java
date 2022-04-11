@@ -22,7 +22,7 @@ public class ProductImage {
     private String file;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "productId")
     @JsonIgnore
     private Product product;
 

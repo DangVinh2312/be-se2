@@ -14,4 +14,5 @@ public class AddToCartDTO {
     private long productId;
     @NotNull
     private int quantity;
+
 }

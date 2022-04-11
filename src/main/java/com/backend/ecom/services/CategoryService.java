@@ -1,8 +1,10 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.Category;
 import com.backend.ecom.entities.Product;
+import com.backend.ecom.entities.Tag;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.CategoryRepository;
@@ -28,68 +30,47 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public ResponseEntity<ResponseObject> getAllCategoriesByProductId(Long productId) {
-        if (!productRepository.existsById(productId)) {
-            throw new ResourceNotFoundException("Not found product with id: " + productId);
-        }
-        List<Category> categories = categoryRepository.findTagsByProductsId(productId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query categories successfully", categories));
-
-    }
-
-    public ResponseEntity<ResponseObject> getCategoriessById(Integer id) {
+    public ResponseEntity<ResponseObject> getCategoryDetail(Integer id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + id));
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query category successfully", category));
     }
 
-    public ResponseEntity<ResponseObject> getAllProductsByCategoryId(Integer categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new ResourceNotFoundException("Not found category with id:" + categoryId);
+    public ResponseEntity<ResponseObject> getAllProductsByCategoryId(Integer id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Not found category with id:" + id);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
-        List<Product> products = productRepository.findProductsByTagsId(categoryId);
+        List<Product> products = productRepository.findProductsByCategoriesId(id);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query category successfully", productsShortInfo));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query products successfully", productsShortInfo));
 
     }
 
-    public ResponseEntity<ResponseObject> addCategory(Long productId, Category categoryRequest) {
-        Category category = productRepository.findById(productId).map(product -> {
-            int categoryId = categoryRequest.getId();
-            // tag is existed
-            if (categoryId != 0) {
-                Category existCategory = categoryRepository.findById(categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Not found category with code: " + categoryId));
-                product.addCategory(existCategory);
-                productRepository.save(product);
-                return existCategory;
-            }
-            product.addCategory(categoryRequest);
-            return categoryRepository.save(categoryRequest);
-        }).orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add category successfully", category));
+
+    public ResponseEntity<ResponseObject> createCategory(CategoryRequestDTO categoryRequest) {
+        boolean exist = categoryRepository.existsByName(categoryRequest.getName());
+        if (exist) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Tag is already existed", ""));
+        }
+        Category category = new Category(categoryRequest);
+        categoryRepository.save(category);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create category successfully", category));
     }
 
-    public ResponseEntity<ResponseObject> updateCategory(Integer id, Category categoryRequest) {
+    public ResponseEntity<ResponseObject> updateCategory(Integer id, CategoryRequestDTO categoryRequest) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found category with id:" + id));
+        boolean existName = categoryRepository.existsByName(categoryRequest.getName());
+        if (existName){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", ""));
+        }
         category.setName(categoryRequest.getName());
         categoryRepository.save(category);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update category successfully", category));
-
-    }
-
-    public ResponseEntity<ResponseObject> deleteCategoryFromTutorial(Long productId, Integer categoryId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        product.removeCategory(categoryId);
-        productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete category from product successfully", ""));
 
     }
 
@@ -101,4 +82,5 @@ public class CategoryService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete category successfully", ""));
 
     }
+
 }

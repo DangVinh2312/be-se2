@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.tag.TagRequestDTO;
 import com.backend.ecom.entities.Tag;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.TagService;
@@ -10,47 +11,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/tags")
 public class TagController {
     @Autowired
     private TagService tagService;
 
-    @GetMapping("/tags")
+    @GetMapping("/all")
     public List<Tag> getAllTags() {
         return tagService.getAllTags();
     }
 
-    @GetMapping("/products/{productId}/tags")
-    public ResponseEntity<ResponseObject> getAllTagsByProductId(@PathVariable(value = "productId") Long productId) {
-        return tagService.getAllTagsByProductId(productId);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getTagDetail(@PathVariable(value = "id") Integer id) {
+        return tagService.getTagDetail(id);
     }
 
-    @GetMapping("/tags/{id}")
-    public ResponseEntity<ResponseObject> getTagsById(@PathVariable(value = "id") Integer id) {
-        return tagService.getTagsById(id);
+    @GetMapping("/{id}/products")
+    public ResponseEntity<ResponseObject> getAllProductsByTagId(@PathVariable(value = "tagId") Integer id) {
+        return tagService.getAllProductsByTagId(id);
     }
 
-    @GetMapping("/tags/{tagId}/products")
-    public ResponseEntity<ResponseObject> getAllProductsByTagId(@PathVariable(value = "tagId") Integer tagId) {
-        return tagService.getAllProductsByTagId(tagId);
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> createTag (@RequestBody TagRequestDTO tagRequest){
+        return tagService.createTag(tagRequest);
     }
 
-    @PostMapping("/products/{productId}/tags")
-    public ResponseEntity<ResponseObject> addTag(@PathVariable(value = "productId") Long productId, @RequestBody Tag tagRequest) {
-        return tagService.addTag(productId, tagRequest);
-    }
-
-    @PutMapping("/tags/update/{id}")
-    public ResponseEntity<ResponseObject> updateTag(@PathVariable("id") Integer id, @RequestBody Tag tagRequest) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseObject> updateTag(@PathVariable("id") Integer id, @RequestBody TagRequestDTO tagRequest) {
         return tagService.updateTag(id, tagRequest);
     }
 
-    @DeleteMapping("/products/{productId}/tags/delete/{tagId}")
-    public ResponseEntity<ResponseObject> deleteTagFromTutorial(@PathVariable(value = "productId") Long productId, @PathVariable(value = "tagId") Integer tagId) {
-        return tagService.deleteTagFromTutorial(productId, tagId);
-    }
-
-    @DeleteMapping("/tags/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteTag(@PathVariable("id") Integer id) {
         return tagService.deleteTag(id);
     }
