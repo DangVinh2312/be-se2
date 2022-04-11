@@ -42,7 +42,7 @@ public class CategoryService {
             throw new ResourceNotFoundException("Not found category with id:" + id);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
-        List<Product> products = productRepository.findProductsByCategoriesId(id);
+        List<Product> products = productRepository.findProductsByCategories_id(id);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 

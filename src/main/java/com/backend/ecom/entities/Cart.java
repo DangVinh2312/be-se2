@@ -13,10 +13,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "cart")
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @OneToOne
@@ -25,11 +24,5 @@ public class Cart {
     @OneToMany(mappedBy = "cart")
     private Set<CartItem> cartItems;
 
-    @Column(name = "created_date")
     private Timestamp createdDate;
-
-    public Cart(User user){
-        this.user = user;
-        this.createdDate = Timestamp.from(Instant.now());
-    }
 }

@@ -17,10 +17,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "voucher")
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotBlank
@@ -29,14 +28,13 @@ public class Voucher {
     @NotNull
     private String description;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(nullable = false)
     private Timestamp startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(nullable = false)
     private Timestamp endDate;
 
     @ManyToOne
-    @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
     @ManyToMany(fetch = FetchType.LAZY,

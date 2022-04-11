@@ -40,7 +40,7 @@ public class BrandService {
             throw new ResourceNotFoundException("Not found brand with id:" + id);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
-        List<Product> products = productRepository.findProductsByBrandId(id);
+        List<Product> products = productRepository.findProductsByBrand_id(id);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 

@@ -44,6 +44,7 @@ public class ProductService {
         List<Product> products = productRepository.findAllByDeleted(deleted);
 
         products.forEach(product -> productShortInfo.add(new ProductShortInfoDTO(product)));
+
         return productShortInfo;
     }
 
@@ -107,7 +108,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> softDeleteOneOrManyUsers(List<Long> ids) {
+    public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(List<Long> ids) {
         try {
             productRepository.softDeleteAllByIds(ids);
             return ResponseEntity.ok(new ResponseObject("ok", "Delete products successfully", ""));
@@ -117,7 +118,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> forceDeleteOneOrManyUsers(List<Long> ids) {
+    public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(List<Long> ids) {
         try {
             productRepository.deleteAllById(ids);
             return ResponseEntity.ok(new ResponseObject("ok", "Delete products permanently", ""));
@@ -127,7 +128,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> restoreOneOrManyUsers(List<Long> ids) {
+    public ResponseEntity<ResponseObject> restoreOneOrManyProducts(List<Long> ids) {
         try {
             productRepository.restoreAllByIds(ids);
             return ResponseEntity.ok(new ResponseObject("ok", "Restore products successfully", ""));

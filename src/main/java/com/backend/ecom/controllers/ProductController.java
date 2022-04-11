@@ -49,7 +49,7 @@ public class ProductController {
     public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@PathVariable("productId") Long productId,
                                                                            @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
                                                                            @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
-                                                                           @RequestParam(value = "tagId", defaultValue = "0") Integer brandId) {
+                                                                           @RequestParam(value = "brandId", defaultValue = "0") Integer brandId) {
         return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, tagId, brandId);
     }
 
@@ -59,18 +59,18 @@ public class ProductController {
     }
 
     @PatchMapping("/delete")
-    public ResponseEntity<ResponseObject> softDeleteManyProducts(@RequestBody ArrayRequest ids) {
-        return productService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
+    public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(@RequestBody ArrayRequest ids) {
+        return productService.softDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/delete/force")
-    public ResponseEntity<ResponseObject> forceDeleteManyProducts(@RequestBody ArrayRequest ids) {
-        return productService.forceDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
+    public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(@RequestBody ArrayRequest ids) {
+        return productService.forceDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @PatchMapping("/restore")
     public ResponseEntity<ResponseObject> restoreOneOrManyProducts(@RequestBody ArrayRequest ids) {
-        return productService.restoreOneOrManyUsers(Arrays.asList(ids.getIds()));
+        return productService.restoreOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/{productId}/categories-tags-brands/delete")

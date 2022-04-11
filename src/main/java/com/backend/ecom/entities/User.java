@@ -73,21 +73,17 @@ public class User {
     private Set<Voucher> vouchers = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cartId")
     private Cart cart;
 
     @OneToMany(mappedBy = "user")
     private Set<Transaction> transactions;
 
-    @Column(name = "created_at")
     private Timestamp creationDate;
 
-    @Column(name = "updated_at")
     private Timestamp modifiedDate;
 
     private boolean deleted = Boolean.FALSE;
 
-    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
     public User(SignupRequest signUpRequest) {

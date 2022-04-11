@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +34,6 @@ public class Product {
     private Set<ProductImage> image = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "brandId")
     private Brand brand;
 
     @ManyToMany
@@ -58,15 +56,12 @@ public class Product {
     private Set<CartItem> cartItems = new HashSet<>();
 
     @NotNull
-    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     private boolean deleted = Boolean.FALSE;
 
-    @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
     public Product(ProductRequestDTO productRequestDTO) {

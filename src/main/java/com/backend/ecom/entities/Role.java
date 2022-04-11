@@ -13,14 +13,12 @@ import javax.validation.constraints.Max;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "role")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Enumerated(EnumType.STRING)
     @Max(20)
-    @Column(name = "name")
     private RoleType name;
 }

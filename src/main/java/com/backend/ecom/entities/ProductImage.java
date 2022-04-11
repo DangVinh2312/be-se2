@@ -12,17 +12,15 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "product_image")
 public class ProductImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
     private String file;
 
     @ManyToOne
-    @JoinColumn(name = "productId")
     @JsonIgnore
     private Product product;
 
