@@ -19,7 +19,6 @@ public class CartItem {
     @JsonIgnore
     private Cart cart;
 
-    @NotNull
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

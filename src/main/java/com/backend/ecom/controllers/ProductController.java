@@ -1,7 +1,6 @@
 package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
-import com.backend.ecom.entities.Product;
 import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.payload.response.ResponseObject;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,63 +21,64 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/all")
-    public List<ProductShortInfoDTO> getAllProducts(@RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
+    public List<ProductShortInfoDTO> getAllProducts(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return productService.getAllProducts(deleted);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getProductDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseObject> getProductDetail(@Valid @PathVariable("id") Long id) {
         return productService.getProductDetail(id);
     }
 
     @GetMapping("/products/{productId}/categories")
-    public ResponseEntity<ResponseObject> getAllCategoriesByProductId(@PathVariable(value = "productId") Long productId) {
+    public ResponseEntity<ResponseObject> getAllCategoriesByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllCategoriesByProductId(productId);
     }
 
     @GetMapping("/products/{productId}/tags")
-    public ResponseEntity<ResponseObject> getAllTagsByProductId(@PathVariable(value = "productId") Long productId) {
+    public ResponseEntity<ResponseObject> getAllTagsByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllTagsByProductId(productId);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         return productService.createProduct(productRequestDTO);
     }
 
     @PutMapping("/{productId}/categories-tags-brands")
-    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@PathVariable("productId") Long productId,
-                                                                           @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
-                                                                           @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
-                                                                           @RequestParam(value = "brandId", defaultValue = "0") Integer brandId) {
+    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@Valid @PathVariable("productId") Long productId,
+                                                                           @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+                                                                           @Valid @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
+                                                                           @Valid @RequestParam(value = "brandId", defaultValue = "0") Integer brandId) {
         return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, tagId, brandId);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public ResponseEntity<ResponseObject> updateProduct(@Valid @PathVariable("id") Long id,
+                                                        @Valid @RequestBody ProductRequestDTO productRequest) {
+        return productService.updateProduct(id, productRequest);
     }
 
     @PatchMapping("/delete")
-    public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(@RequestBody ArrayRequest ids) {
+    public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.softDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/delete/force")
-    public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(@RequestBody ArrayRequest ids) {
+    public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.forceDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @PatchMapping("/restore")
-    public ResponseEntity<ResponseObject> restoreOneOrManyProducts(@RequestBody ArrayRequest ids) {
+    public ResponseEntity<ResponseObject> restoreOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.restoreOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/{productId}/categories-tags-brands/delete")
-    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(@PathVariable(value = "productId") Long productId,
-                                                                                @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
-                                                                                @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
-                                                                                @RequestParam(value = "brandId", defaultValue = "false") Boolean brandBool) {
+    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(@Valid @PathVariable(value = "productId") Long productId,
+                                                                                @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+                                                                                @Valid @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
+                                                                                @Valid @RequestParam(value = "brandId", defaultValue = "false") Boolean brandBool) {
         return productService.deleteCategoryOrTagOrBrandFromProduct(productId, categoryId, tagId, brandBool);
     }
 

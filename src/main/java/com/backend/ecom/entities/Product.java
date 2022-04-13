@@ -1,12 +1,13 @@
 package com.backend.ecom.entities;
 
 import com.backend.ecom.dto.product.ProductRequestDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +28,22 @@ public class Product {
 
     private String detail;
 
-    private int quantity;
+    private Integer quantity;
 
     private Double price;
+
+    @Transient
+    private Double totalPrice;
 
     @OneToMany(mappedBy = "product")
     private Set<ProductImage> image = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Brand brand;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Discount discount;
 
     @ManyToMany
     @JoinTable(name = "product_categories",
@@ -55,7 +64,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private Set<CartItem> cartItems = new HashSet<>();
 
-    @NotNull
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
@@ -92,11 +100,6 @@ public class Product {
         Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
         if (category != null) this.categories.remove(category);
         category.getProducts().remove(this);
-    }
-
-
-    public void addBrand(Brand brand) {
-        this.brand = brand;
     }
 
     public void removeBrand() {

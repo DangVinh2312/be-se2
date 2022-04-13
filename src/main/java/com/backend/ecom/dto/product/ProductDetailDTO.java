@@ -1,9 +1,6 @@
 package com.backend.ecom.dto.product;
 
-import com.backend.ecom.entities.Brand;
-import com.backend.ecom.entities.Category;
-import com.backend.ecom.entities.Product;
-import com.backend.ecom.entities.Tag;
+import com.backend.ecom.entities.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +19,7 @@ public class ProductDetailDTO {
     private Integer quantity;
     private Double price;
     private Brand brand;
+    private Discount discount;
     private Set<Category> categories;
     private Set<Tag> tags;
     private Timestamp createdDate;
@@ -35,6 +33,7 @@ public class ProductDetailDTO {
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.brand = product.getBrand();
+        this.discount = product.getDiscount();
         this.categories = product.getCategories();
         this.tags = product.getTags();
         this.createdDate = product.getCreatedAt();

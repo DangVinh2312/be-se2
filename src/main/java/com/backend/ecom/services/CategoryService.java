@@ -54,7 +54,7 @@ public class CategoryService {
     public ResponseEntity<ResponseObject> createCategory(CategoryRequestDTO categoryRequest) {
         boolean exist = categoryRepository.existsByName(categoryRequest.getName());
         if (exist) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Tag is already existed", ""));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", categoryRequest.getName()));
         }
         Category category = new Category(categoryRequest);
         categoryRepository.save(category);

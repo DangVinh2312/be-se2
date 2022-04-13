@@ -26,21 +26,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Size(min = 10, max = 50)
-    @NotBlank
     private String fullName;
 
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String username;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 6, max = 150)
     private String password;
 
     @Size(max = 200)

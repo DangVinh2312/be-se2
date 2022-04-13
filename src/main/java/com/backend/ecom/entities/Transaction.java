@@ -31,7 +31,6 @@ public class Transaction {
 
     private TransactionStatus status;
 
-    @NotNull
     private String message;
 
     @OneToMany(mappedBy = "transaction")

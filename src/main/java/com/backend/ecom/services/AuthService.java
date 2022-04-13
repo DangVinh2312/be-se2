@@ -51,7 +51,7 @@ public class AuthService {
     JwtUtils jwtUtils;
 
     public ResponseEntity<ResponseObject> authenticateAccount(HttpServletRequest request,
-                                                 @Valid @RequestBody LoginRequest loginRequest) {
+                                                              @Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -66,10 +66,10 @@ public class AuthService {
         return ResponseEntity.ok(new ResponseObject("ok",
                 "Authenticate successfully",
                 new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles)));
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getEmail(),
+                        roles)));
     }
 
     public ResponseEntity<ResponseObject> registerAccount(SignupRequest signUpRequest) {

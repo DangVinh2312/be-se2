@@ -20,7 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findProductsByBrand_id(Integer brandId);
 
-
     @Modifying
     @Query("UPDATE Product SET deleted = true, deletedAt = current_date WHERE id in ?1")
     void softDeleteAllByIds (Iterable<? extends Long> ids);
