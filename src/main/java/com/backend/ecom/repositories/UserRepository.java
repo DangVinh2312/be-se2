@@ -15,6 +15,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
 
+    @Query("select u.cart from User u where u.cart is null and u.username = ?1")
+    User findCartByUsername (String name);
+
+    User getByUsername (String authenticatedUsername);
+
     List<User> findAllByDeleted (Boolean deleted);
 
     @Modifying

@@ -1,32 +1,39 @@
 package com.backend.ecom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Cart cart;
 
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
     @Transient
     private Double totalPrice;
+
+    public CartItem () {
+        this.quantity = 1;
+    }
 
     private boolean validateQuantity() {
         return getProduct().getQuantity() > this.quantity;
@@ -40,7 +47,7 @@ public class CartItem {
     }
 
     public Double getTotalPrice() {
-        return getQuantity() * getProduct().getPrice();
+        return getQuantity() * getProduct().getTotalPrice();
     }
 
 

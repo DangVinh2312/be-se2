@@ -6,9 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +32,7 @@ public class Product {
 
     private String detail;
 
-    private Integer quantity;
+    private int quantity;
 
     private Double price;
 
@@ -36,16 +40,27 @@ public class Product {
     private Double totalPrice;
 
     @OneToMany(mappedBy = "product")
-    private Set<ProductImage> image = new HashSet<>();
+    private Set<ProductImage> images = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "brandId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Brand brand;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Embedded
+    private ProductDetail productDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Discount discount;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(name = "product_categories",
             joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
@@ -62,7 +77,11 @@ public class Product {
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<TransactionItem> transactionItems = new HashSet<>();
 
     private Timestamp createdAt;
 
@@ -80,6 +99,26 @@ public class Product {
         this.price = productRequestDTO.getPrice();
     }
 
+    public Double getTotalPrice() {
+        if (isValidDiscount()) {
+            return price - (price * getDiscount().getPercentage() / 100);
+        }
+        return price;
+    }
+
+    private boolean isValidDiscount() {
+        if (getDiscount() == null) {
+            return false;
+        }
+        LocalDate date = LocalDate.now();
+        if (date.isAfter(getDiscount().getStartDate()) && date.isBefore(getDiscount().getEndDate())) {
+            return true;
+        } else {
+            this.setDiscount(null);
+            return false;
+        }
+    }
+
     public void addTag(Tag tag) {
         this.tags.add(tag);
         tag.getProducts().add(this);
@@ -91,6 +130,11 @@ public class Product {
         tag.getProducts().remove(this);
     }
 
+    public void addCartItem(CartItem cartItem){
+        this.cartItems.add(cartItem);
+        cartItem.setProduct(this);
+    }
+
     public void addCategory(Category category) {
         this.categories.add(category);
         category.getProducts().add(this);
@@ -100,10 +144,5 @@ public class Product {
         Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
         if (category != null) this.categories.remove(category);
         category.getProducts().remove(this);
-    }
-
-    public void removeBrand() {
-        this.brand.getProducts().remove(this);
-        this.brand = null;
     }
 }

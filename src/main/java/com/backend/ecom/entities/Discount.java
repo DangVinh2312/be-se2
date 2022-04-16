@@ -8,6 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,27 +25,13 @@ public class Discount {
 
     private Integer percentage;
 
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
-
-    @OneToMany(mappedBy = "discount")
-    private Set<Product> products = new HashSet<>();
+    private LocalDate endDate;
 
    public Discount(DiscountRequestDTO discountRequestDTO){
        this.percentage = discountRequestDTO.getPercentage();
        this.startDate = discountRequestDTO.getStartDate();
        this.endDate = discountRequestDTO.getEndDate();
    }
-
-    public void addProduct(Product product) {
-       this.getProducts().add(product);
-       product.setDiscount(this);
-    }
-
-    public void removeProduct(Long productId) {
-        Product product = this.products.stream().filter(t -> t.getId() == productId).findFirst().orElse(null);
-        if (product != null) this.products.remove(product);
-        product.setDiscount(null);
-    }
 }

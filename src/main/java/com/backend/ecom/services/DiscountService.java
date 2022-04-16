@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ public class DiscountService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete discount successfully", discountDTO));
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> createDiscount(DiscountRequestDTO discountRequest) {
         boolean exist = discountRepository.existsByPercentage(discountRequest.getPercentage());
         if (exist) {
@@ -45,12 +47,13 @@ public class DiscountService {
         for (Long productId : discountRequest.getProductIds()) {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-            discount.addProduct(product);
+            product.setDiscount(discount);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create discount successfully", discountRepository.save(discount)));
 
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> updateDiscount(Long id, DiscountRequestDTO discountRequest) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found discount with id:" + id));
@@ -61,22 +64,31 @@ public class DiscountService {
         discount.setStartDate(discountRequest.getStartDate());
         discount.setEndDate(discountRequest.getEndDate());
         discount.setEndDate(discountRequest.getEndDate());
-        discount.setProducts(new HashSet<>());
+        discountRepository.save(discount);
+        List<Product> products = productRepository.findProductsByDiscountId(id);
+        products.forEach(product -> {
+            product.setDiscount(null);
+        });
         for (Long productId : discountRequest.getProductIds()) {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the product with id: " + productId));
-            discount.addProduct(product);
+            product.setDiscount(discount);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update discount successfully", discountRepository.save(discount)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update discount successfully", discount));
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> deleteDiscount(Long id) {
         if (!discountRepository.existsById(id)) {
             throw new ResourceNotFoundException("Not found discount with id:" + id);
         }
+        List<Product> products = productRepository.findProductsByDiscountId(id);
+        products.forEach(product -> {
+            product.setDiscount(null);
+            productRepository.save(product);
+        });
         discountRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete discount successfully", ""));
-
     }
 
 }

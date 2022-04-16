@@ -1,5 +1,6 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.entities.Cart;
 import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import com.backend.ecom.payload.request.LoginRequest;
 import com.backend.ecom.payload.request.SignupRequest;
 import com.backend.ecom.payload.response.JwtResponse;
 import com.backend.ecom.payload.response.ResponseObject;
+import com.backend.ecom.repositories.CartRepository;
 import com.backend.ecom.repositories.RoleRepository;
 import com.backend.ecom.repositories.UserRepository;
 import com.backend.ecom.security.auth.UserDetailsImpl;
@@ -27,10 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +42,9 @@ public class AuthService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    CartRepository cartRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -63,6 +65,14 @@ public class AuthService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        if (roles.contains("ROLE_USER")) {
+            User findCart = userRepository.findCartByUsername(authentication.getName());
+            if(findCart == null){
+                Cart cart = new Cart();
+                cart.addUser(userRepository.getByUsername(authentication.getName()));
+                cartRepository.save(cart);
+            }
+        }
         return ResponseEntity.ok(new ResponseObject("ok",
                 "Authenticate successfully",
                 new JwtResponse(jwt,
@@ -90,26 +100,9 @@ public class AuthService {
         user.setCreationDate(Timestamp.from(Instant.now()));
         user.setModifiedDate(Timestamp.from(Instant.now()));
 
-        List<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                    .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                if (role.equals("admin")) {
-                    Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
-                            .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
-                    roles.add(adminRole);
-                } else {
-                    Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                            .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
-                    roles.add(userRole);
-                }
-            });
-        }
-        user.setRoles(roles);
+        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
+        user.setRole(userRole);
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "User registered successfully!", ""));

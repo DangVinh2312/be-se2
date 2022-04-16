@@ -18,6 +18,7 @@ public class ProductDetailDTO {
     private String detail;
     private Integer quantity;
     private Double price;
+    private Double totalPrice;
     private Brand brand;
     private Discount discount;
     private Set<Category> categories;
@@ -32,6 +33,7 @@ public class ProductDetailDTO {
         this.detail = product.getDetail();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.totalPrice = product.getTotalPrice();
         this.brand = product.getBrand();
         this.discount = product.getDiscount();
         this.categories = product.getCategories();

@@ -10,21 +10,18 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public class ProductRequestDTO {
-    @NotNull
     @Size(min = 2)
     private String name;
 
-    @NotNull
+    @NotBlank
     private String description;
 
-    @NotNull
+    @NotBlank
     private String detail;
 
-    @NotNull
     @Min(1)
     private Integer quantity;
 
-    @NotNull
     @DecimalMin("1000.0")
     private Double price;
 
@@ -33,4 +30,28 @@ public class ProductRequestDTO {
 
     @Min(1)
     private Integer brandId;
+
+    @NotNull
+    private Long discountId;
+
+    @NotBlank
+    private String screen;
+
+    @NotBlank
+    private String os;
+
+    @NotBlank
+    private String camera;
+
+    @NotBlank
+    private String processor;
+
+    @Min(2)
+    private Integer ram;
+
+    @Min(16)
+    private Integer iStorage;
+
+    @Min(500)
+    private Integer battery;
 }

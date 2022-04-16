@@ -18,6 +18,7 @@ public class ProductShortInfoDTO {
     private String detail;
     private Integer quantity;
     private Double price;
+    private Double totalPrice;
     private Timestamp createdDate;
     private Timestamp updatedDate;
 
@@ -30,5 +31,6 @@ public class ProductShortInfoDTO {
         this.price = product.getPrice();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();
+        this.totalPrice = product.getTotalPrice();
     }
 }

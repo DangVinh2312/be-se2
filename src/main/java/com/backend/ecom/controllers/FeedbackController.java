@@ -25,11 +25,6 @@ public class FeedbackController {
         return feedbackService.getFeedbackDetail(id);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createFeedback(@RequestBody Feedback feedbackRequest) {
-        return feedbackService.createFeedback(feedbackRequest);
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("id") Long id, @RequestBody Feedback feedbackRequest) {
         return feedbackService.updateFeedback(id,feedbackRequest );

@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class UserShortInfoDTO {
     private Long id;
-    private String image;
+    private String ava;
     private String fullName;
     private String address;
     private Timestamp modifiedDate;
@@ -20,7 +20,7 @@ public class UserShortInfoDTO {
 
     public UserShortInfoDTO(User user) {
         this.id = user.getId();
-        this.image = user.getImage();
+        this.ava = user.getAva();
         this.fullName = user.getFullName();
         this.address = user.getAddress();
         this.modifiedDate = user.getModifiedDate();

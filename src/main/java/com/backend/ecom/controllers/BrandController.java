@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.brand.BrandDTO;
 import com.backend.ecom.dto.brand.BrandRequestDTO;
 import com.backend.ecom.entities.Brand;
 import com.backend.ecom.payload.response.ResponseObject;
@@ -12,38 +13,38 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/brands")
 public class BrandController {
     @Autowired
     private BrandService brandService;
 
-    @GetMapping("brands/all")
-    public List<Brand> getAllBrands() {
+    @GetMapping("/all")
+    public List<BrandDTO> getAllBrands() {
         return brandService.getAllBrands();
     }
 
-    @GetMapping("/brands/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getBrandDetail(@Valid @PathVariable("id") Integer id) {
         return brandService.getBrandDetail(id);
     }
 
-    @GetMapping("/brands/{id}/products")
+    @GetMapping("/{id}/products")
     public ResponseEntity<ResponseObject> getAllProductsByBrandId(@Valid @PathVariable("id") Integer id) {
         return brandService.getAllProductsByBrandId(id);
     }
 
-    @PostMapping("/brands/create")
+    @PostMapping("/create")
     public ResponseEntity<ResponseObject> createBrand(@Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.createBrand(brandRequest);
     }
 
-    @PutMapping("/brands/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateBrand(@Valid @PathVariable("id") Integer id,
                                                       @Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.updateBrand(id, brandRequest);
     }
 
-    @DeleteMapping("/brands/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteBrand(@Valid @PathVariable("id") Integer id) {
         return brandService.deleteBrand(id);
     }

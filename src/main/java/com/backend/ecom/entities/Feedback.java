@@ -1,5 +1,6 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -21,6 +22,8 @@ public class Feedback {
 
     private String content;
 
+    private Integer rating;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private User user;
@@ -29,9 +32,10 @@ public class Feedback {
     @JsonIgnore
     private Product product;
 
-
     private Timestamp createdDate;
 
-
-
+    public Feedback(FeedbackRequestDTO feedbackRequestDTO){
+        this.content = feedbackRequestDTO.getContent();
+        this.rating = feedbackRequestDTO.getRating();
+    }
 }

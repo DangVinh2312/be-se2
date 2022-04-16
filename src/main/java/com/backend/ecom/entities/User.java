@@ -1,6 +1,9 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.user.UserRequestDTO;
 import com.backend.ecom.payload.request.SignupRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,9 +12,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -21,10 +21,13 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    private String ava;
 
     private String fullName;
 
@@ -34,21 +37,10 @@ public class User {
 
     private String password;
 
-    @Size(max = 200)
     private String address;
 
-    @Size(max = 100)
-    private String image;
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private Set<Feedback> feedbacks = new HashSet<>();
@@ -84,5 +76,10 @@ public class User {
         this.address = signUpRequest.getAddress();
     }
 
+    public User(UserRequestDTO userRequestDTO) {
+        this.fullName = userRequestDTO.getFullName();
+        this.username = userRequestDTO.getUsername();
+        this.email = userRequestDTO.getEmail();
+    }
 
 }

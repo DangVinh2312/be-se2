@@ -18,7 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findProductsByCategories_id(Integer categoryId);
 
-    List<Product> findProductsByBrand_id(Integer brandId);
+    List<Product> findProductsByBrandId(Integer brandId);
+
+    List<Product> findProductsByDiscountId(Long discountId);
 
     @Modifying
     @Query("UPDATE Product SET deleted = true, deletedAt = current_date WHERE id in ?1")
@@ -27,4 +29,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Query("UPDATE Product SET deleted = false WHERE id in ?1")
     void restoreAllByIds(Iterable<? extends Long>  ids);
-}
+
+    void deleteAllByBrandId(Integer brandId);}

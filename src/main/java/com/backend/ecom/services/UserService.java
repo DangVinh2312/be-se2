@@ -1,24 +1,49 @@
 package com.backend.ecom.services;
 
 import com.backend.ecom.dto.user.UserDetailDTO;
+import com.backend.ecom.dto.user.UserRequestDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
+import com.backend.ecom.entities.Cart;
+import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
+import com.backend.ecom.repositories.RoleRepository;
 import com.backend.ecom.repositories.UserRepository;
+import com.backend.ecom.security.jwt.JwtUtils;
+import com.backend.ecom.supporters.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    JwtUtils jwtUtils;
 
 //    public ResponseEntity<?> saveUserRoles(SaveUserRolesRequest req) {
 //        logger.info("Save user roles {}", req);
@@ -155,6 +180,41 @@ public class UserService {
         return ResponseEntity.ok(new ResponseObject("ok", "Query user successfully", userDetail));
     }
 
+    public ResponseEntity<ResponseObject> createUser(UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ResponseObject("error", "Username is already taken!", ""));
+        }
+
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ResponseObject("error", "Email is already in use!", ""));
+        }
+
+        User user = new User(userRequestDTO);
+        user.setPassword(encoder.encode(userRequestDTO.getPassword()));
+        user.setCreationDate(Timestamp.from(Instant.now()));
+        user.setModifiedDate(Timestamp.from(Instant.now()));
+
+        String role = userRequestDTO.getRole();
+
+        if (role.equals("admin")) {
+            Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
+            user.setRole(adminRole);
+        } else if (role.equals("user")) {
+            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
+            user.setRole(userRole);
+        }
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
+    }
+
     @Transactional
     public ResponseEntity<ResponseObject> softDeleteOneOrManyUsers(List<Long> ids) {
         try {
@@ -184,6 +244,4 @@ public class UserService {
             throw new ResourceNotFoundException("Not found user with id: " + e);
         }
     }
-
-
 }

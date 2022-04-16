@@ -12,7 +12,4 @@ import javax.validation.constraints.NotNull;
 public class AddToCartDTO {
     @NotNull
     private long productId;
-    @NotNull
-    private int quantity;
-
 }

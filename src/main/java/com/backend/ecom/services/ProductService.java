@@ -1,21 +1,18 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.dto.product.ProductDetailDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
-import com.backend.ecom.entities.Brand;
-import com.backend.ecom.entities.Category;
-import com.backend.ecom.entities.Product;
-import com.backend.ecom.entities.Tag;
+import com.backend.ecom.entities.*;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.payload.response.ResponseObject;
-import com.backend.ecom.repositories.BrandRepository;
-import com.backend.ecom.repositories.CategoryRepository;
-import com.backend.ecom.repositories.ProductRepository;
-import com.backend.ecom.repositories.TagRepository;
+import com.backend.ecom.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +36,15 @@ public class ProductService {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DiscountRepository discountRepository;
 
     public List<ProductShortInfoDTO> getAllProducts(Boolean deleted) {
         List<ProductShortInfoDTO> productShortInfo = new ArrayList<>();
@@ -98,15 +104,27 @@ public class ProductService {
         Brand brand = brandRepository.findById(productRequestDTO.getBrandId())
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id: " + productRequestDTO.getBrandId()));
         product.setBrand(brand);
-
+        ProductDetail productDetail = new ProductDetail(productRequestDTO);
+        product.setProductDetail(productDetail);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create product successfully", productRepository.save(product)));
     }
 
+    public ResponseEntity<ResponseObject> createFeedbackFromProduct(Long id, FeedbackRequestDTO feedbackRequest) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Feedback feedback = new Feedback(feedbackRequest);
+        feedback.setCreatedDate(Timestamp.from(Instant.now()));
+        Product product = productRepository.getById(id);
+        feedback.setProduct(product);
+        User user = userRepository.getByUsername(auth.getName());
+        feedback.setUser(user);
+        feedbackRepository.save(feedback);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Write feedback successfully", feedback));
+    }
 
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
-        if(productRepository.existsByName(productRequest.getName())){
+        if (productRepository.existsByName(productRequest.getName())) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("error", "Product name is already existed", productRequest.getName()));
         }
@@ -116,16 +134,25 @@ public class ProductService {
         product.setQuantity(productRequest.getQuantity());
         product.setPrice(productRequest.getPrice());
         product.setCategories(new HashSet<>());
+        product.setProductDetail(new ProductDetail(productRequest));
         for (Integer categoryId : productRequest.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the category with id: " + categoryId));
             product.addCategory(category);
         }
-        Brand brand = brandRepository.findById(productRequest.getBrandId())
-                .orElseThrow(() -> new ResourceNotFoundException("Not found the category with id: " + productRequest.getBrandId()));
-        product.setBrand(brand);
+        if (productRequest.getBrandId().intValue() != product.getBrand().getId()) {
+            Brand brand = brandRepository.findById(productRequest.getBrandId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found the category with id: " + productRequest.getBrandId()));
+            product.setBrand(brand);
+        }
+        if (productRequest.getDiscountId().longValue() != 0 && productRequest.getDiscountId().longValue() != product.getDiscount().getId()) {
+            Discount discount = discountRepository.findById(productRequest.getDiscountId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequest.getBrandId()));
+            product.setDiscount(discount);
+        }
+        productRepository.save(product);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("ok", "Update product successfully", productRepository.save(product)));
+                .body(new ResponseObject("ok", "Update product successfully", product));
     }
 
     @Transactional
@@ -158,44 +185,44 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(Long productId, Integer categoryId, Integer tagId, Integer brandId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        if (categoryId.intValue() != 0) {
-            Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + categoryId));
-            product.addCategory(category);
-        }
-        if (tagId.intValue() != 0) {
-            Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id: " + tagId));
-            product.addTag(tag);
-        }
-        if (brandId.intValue() != 0) {
-            Brand brand = brandRepository.findById(brandId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id: " + brandId));
-            product.setBrand(brand);
-        }
-        productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("ok", "Update product successfully", product));
-    }
+//    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(Long productId, Integer categoryId, Integer tagId, Integer brandId) {
+//        Product product = productRepository.findById(productId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
+//        if (categoryId.intValue() != 0) {
+//            Category category = categoryRepository.findById(categoryId)
+//                    .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + categoryId));
+//            product.addCategory(category);
+//        }
+//        if (tagId.intValue() != 0) {
+//            Tag tag = tagRepository.findById(tagId)
+//                    .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id: " + tagId));
+//            product.addTag(tag);
+//        }
+//        if (brandId.intValue() != 0) {
+//            Brand brand = brandRepository.findById(brandId)
+//                    .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id: " + brandId));
+//            product.setBrand(brand);
+//        }
+//        productRepository.save(product);
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(new ResponseObject("ok", "Update product successfully", product));
+//    }
 
-    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(Long productId, Integer categoryId, Integer tagId, Boolean brandBool) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-        if (categoryId.intValue() != 0) {
-            product.removeCategory(categoryId);
-        }
-        if (tagId.intValue() != 0) {
-            product.removeTag(tagId);
-        }
-        if (brandBool.booleanValue() != false) {
-            product.removeBrand();
-        }
-        productRepository.save(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete successfully", product));
-
-    }
+//    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(Long productId, Integer categoryId, Integer tagId, Boolean brandBool) {
+//        Product product = productRepository.findById(productId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
+//        if (categoryId.intValue() != 0) {
+//            product.removeCategory(categoryId);
+//        }
+//        if (tagId.intValue() != 0) {
+//            product.removeTag(tagId);
+//        }
+//        if (brandBool.booleanValue() != false) {
+//            product.setBrand(null);
+//        }
+//        productRepository.save(product);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete successfully", product));
+//
+//    }
 
 }

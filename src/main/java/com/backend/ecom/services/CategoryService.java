@@ -4,7 +4,6 @@ import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.Category;
 import com.backend.ecom.entities.Product;
-import com.backend.ecom.entities.Tag;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.CategoryRepository;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found category with id:" + id));
         boolean existName = categoryRepository.existsByName(categoryRequest.getName());
-        if (existName){
+        if (existName) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", ""));
         }
         category.setName(categoryRequest.getName());
@@ -74,10 +74,20 @@ public class CategoryService {
 
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> deleteCategory(Integer id) {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Not found category with id:" + id);
         }
+        List<Product> products = productRepository.findProductsByCategories_id(id);
+        products.forEach(product -> {
+            if (product.getCategories().size() > 1) {
+                product.removeCategory(id);
+                productRepository.save(product);
+            } else if (product.getCategories().size() == 1){
+                productRepository.delete(product);
+            }
+        });
         categoryRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete category successfully", ""));
 
