@@ -52,6 +52,7 @@ public class Product {
     private ProductDetail productDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "discountId")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Discount discount;
