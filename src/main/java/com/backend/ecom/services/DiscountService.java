@@ -65,7 +65,7 @@ public class DiscountService {
         discount.setEndDate(discountRequest.getEndDate());
         discount.setEndDate(discountRequest.getEndDate());
         discountRepository.save(discount);
-        List<Product> products = productRepository.findProductsByDiscountId(id);
+        List<Product> products = productRepository.findProductsByDiscountIdAndDeleted(id, false);
         products.forEach(product -> {
             product.setDiscount(null);
         });
@@ -82,7 +82,7 @@ public class DiscountService {
         if (!discountRepository.existsById(id)) {
             throw new ResourceNotFoundException("Not found discount with id:" + id);
         }
-        List<Product> products = productRepository.findProductsByDiscountId(id);
+        List<Product> products = productRepository.findProductsByDiscountIdAndDeleted(id, false);
         products.forEach(product -> {
             product.setDiscount(null);
             productRepository.save(product);

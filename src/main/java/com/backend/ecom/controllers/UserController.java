@@ -35,8 +35,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getUserDetail(@Valid @PathVariable("id") Long id) {
-        return userService.getUserDetail(id);
+    public ResponseEntity<ResponseObject> getUserDetail(@Valid @PathVariable("id") Long id,
+                                                        @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
+        return userService.getUserDetail(id, deleted);
     }
 
     @PostMapping("/create")

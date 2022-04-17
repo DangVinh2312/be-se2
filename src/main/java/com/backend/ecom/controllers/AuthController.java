@@ -24,9 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<ResponseObject> authenticateAccount(HttpServletRequest request,
-                                                              @Valid @RequestBody LoginRequest loginRequest) {
-        return authService.authenticateAccount(request, loginRequest);
+    public ResponseEntity<ResponseObject> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
+        return authService.authenticateAccount(loginRequest);
     }
 
 }

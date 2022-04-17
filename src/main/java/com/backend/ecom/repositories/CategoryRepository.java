@@ -11,5 +11,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Boolean existsByName(String name);
 
-    List<Category> findCategoriesByProductsId(Long id);
+    @Query("select c from Category c inner join c.products products where products.id = ?1")
+    List<Category> findByProductId(Long id);
 }

@@ -57,25 +57,25 @@ public class ProductService {
         return productShortInfo;
     }
 
-    public ResponseEntity<ResponseObject> getProductDetail(@PathVariable("id") Long id) {
-        Product product = productRepository.findById(id)
+    public ResponseEntity<ResponseObject> getProductDetail(Long id, Boolean deleted) {
+        Product product = productRepository.findByIdAndDeleted(id, deleted)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + id));
         ProductDetailDTO productDetail = new ProductDetailDTO(product);
         return ResponseEntity.ok(new ResponseObject("ok", "Query product successfully", productDetail));
     }
 
     public ResponseEntity<ResponseObject> getAllCategoriesByProductId(Long productId) {
-        if (!productRepository.existsById(productId)) {
+        if  (!productRepository.existsByIdAndDeleted(productId, false)) {
             throw new ResourceNotFoundException("Not found product with id: " + productId);
         }
-        List<Category> categories = categoryRepository.findCategoriesByProductsId(productId);
+        List<Category> categories = categoryRepository.findByProductId(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query categories successfully", categories));
 
     }
 
     public ResponseEntity<ResponseObject> getAllTagsByProductId(Long productId) {
-        if (!productRepository.existsById(productId)) {
+        if  (!productRepository.existsByIdAndDeleted(productId, false)) {
             throw new ResourceNotFoundException("Not found product with id: " + productId);
         }
 
@@ -86,7 +86,7 @@ public class ProductService {
     }
 
     public ResponseEntity<ResponseObject> getAllFeedbacksByProductId(Long productId) {
-        if (!productRepository.existsById(productId)) {
+        if (!productRepository.existsByIdAndDeleted(productId, false)) {
             throw new ResourceNotFoundException("Not found product with id: " + productId);
         }
 
@@ -140,7 +140,7 @@ public class ProductService {
     }
 
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
         if (productRepository.existsByName(productRequest.getName())) {
             return ResponseEntity.status(HttpStatus.OK)

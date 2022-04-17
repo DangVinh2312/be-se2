@@ -52,10 +52,12 @@ public class AuthService {
     @Autowired
     JwtUtils jwtUtils;
 
-    public ResponseEntity<ResponseObject> authenticateAccount(HttpServletRequest request,
-                                                              @Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<ResponseObject> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+        userRepository.findByUsernameAndDeleted(loginRequest.getUsername(), false)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -67,7 +69,7 @@ public class AuthService {
 
         if (roles.contains("ROLE_USER")) {
             User findCart = userRepository.findCartByUsername(authentication.getName());
-            if(findCart == null){
+            if (findCart == null) {
                 Cart cart = new Cart();
                 cart.addUser(userRepository.getByUsername(authentication.getName()));
                 cartRepository.save(cart);

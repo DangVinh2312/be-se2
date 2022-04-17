@@ -42,7 +42,7 @@ public class CategoryService {
             throw new ResourceNotFoundException("Not found category with id:" + id);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
-        List<Product> products = productRepository.findProductsByCategories_id(id);
+        List<Product> products = productRepository.findProductsByCategories_idAndDeleted(id, false);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 
@@ -79,7 +79,7 @@ public class CategoryService {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Not found category with id:" + id);
         }
-        List<Product> products = productRepository.findProductsByCategories_id(id);
+        List<Product> products = productRepository.findProductsByCategories_idAndDeleted(id, false);
         products.forEach(product -> {
             if (product.getCategories().size() > 1) {
                 product.removeCategory(id);

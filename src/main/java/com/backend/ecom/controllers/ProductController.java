@@ -29,8 +29,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getProductDetail(@Valid @PathVariable("id") Long id) {
-        return productService.getProductDetail(id);
+    public ResponseEntity<ResponseObject> getProductDetail(@Valid @PathVariable("id") Long id,
+    @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
+        return productService.getProductDetail(id, deleted);
     }
 
     @GetMapping("/products/{productId}/categories")

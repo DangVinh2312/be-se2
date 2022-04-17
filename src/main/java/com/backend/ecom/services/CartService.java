@@ -55,7 +55,7 @@ public class CartService {
     public ResponseEntity<ResponseObject> addToCart( Long productId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsernameAndDeleted(username, false)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found username: " + username));
 
         Product product = productRepository.findById(productId)

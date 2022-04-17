@@ -40,7 +40,7 @@ public class TagService {
             throw new ResourceNotFoundException("Not found tag with id:" + tagId);
         }
         List<ProductShortInfoDTO> productsShortInfo = new ArrayList<>();
-        List<Product> products = productRepository.findProductsByTags_id(tagId);
+        List<Product> products = productRepository.findProductsByTags_idAndDeleted(tagId, false);
 
         products.forEach(product -> productsShortInfo.add(new ProductShortInfoDTO(product)));
 
