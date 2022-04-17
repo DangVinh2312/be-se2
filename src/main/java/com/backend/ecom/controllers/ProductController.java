@@ -34,17 +34,17 @@ public class ProductController {
         return productService.getProductDetail(id, deleted);
     }
 
-    @GetMapping("/products/{productId}/categories")
+    @GetMapping("/{productId}/categories")
     public ResponseEntity<ResponseObject> getAllCategoriesByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllCategoriesByProductId(productId);
     }
 
-    @GetMapping("/products/{productId}/tags")
+    @GetMapping("/{productId}/tags")
     public ResponseEntity<ResponseObject> getAllTagsByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllTagsByProductId(productId);
     }
 
-    @GetMapping("/products/{productId}/feedbacks")
+    @GetMapping("/{productId}/feedbacks")
     public ResponseEntity<ResponseObject> getAllFeedbacksByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllFeedbacksByProductId(productId);
     }

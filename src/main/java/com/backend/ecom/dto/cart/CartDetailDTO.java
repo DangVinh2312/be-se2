@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class CartDetailDTO {
 
-    private int id;
+    private long id;
 
     private User user;
 
