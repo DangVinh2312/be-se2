@@ -71,4 +71,9 @@ public class UserController {
         return userService.restoreOneOrManyUsers(Arrays.asList(ids.getIds()));
     }
 
+    @DeleteMapping("/feedbacks/delete/{id}")
+    public ResponseEntity<ResponseObject> deleteFeedback(@PathVariable("id") Long id) {
+        return userService.deleteFeedback(id);
+    }
+
 }

@@ -4,10 +4,13 @@ import com.backend.ecom.dto.user.UserDetailDTO;
 import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
+import com.backend.ecom.entities.Feedback;
+import com.backend.ecom.entities.Product;
 import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
+import com.backend.ecom.repositories.FeedbackRepository;
 import com.backend.ecom.repositories.RoleRepository;
 import com.backend.ecom.repositories.UserRepository;
 import com.backend.ecom.security.jwt.JwtUtils;
@@ -40,6 +43,9 @@ public class UserService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    FeedbackRepository feedbackRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -186,6 +192,16 @@ public class UserService {
         }
         userRepository.restoreAllByIds(ids);
         return ResponseEntity.ok(new ResponseObject("ok", "Restore users successfully", ""));
+
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseObject> deleteFeedback(Long id) {
+        if (!feedbackRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Not found feedback with id:" + id);
+        }
+        feedbackRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete feedback successfully", ""));
 
     }
 

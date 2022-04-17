@@ -25,9 +25,4 @@ public class FeedbackController {
     public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("id") Long id, @RequestBody FeedbackRequestDTO feedbackRequest) {
         return feedbackService.updateFeedback(id,feedbackRequest );
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteFeedback(@PathVariable("id") Long id) {
-        return feedbackService.deleteFeedback(id);
-    }
 }

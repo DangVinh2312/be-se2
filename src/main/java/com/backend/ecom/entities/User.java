@@ -82,4 +82,15 @@ public class User {
         this.email = userCreateRequestDTO.getEmail();
     }
 
+    public void addFeedback(Feedback feedback) {
+        this.feedbacks.add(feedback);
+        feedback.setUser(this);
+    }
+
+    public void removeFeedback(Long feedbackId) {
+        Feedback feedback = this.feedbacks.stream().filter(t -> t.getId() == feedbackId).findFirst().orElse(null);
+        if (feedback != null) this.feedbacks.remove(feedback);
+        feedback.setUser(null);
+    }
+
 }

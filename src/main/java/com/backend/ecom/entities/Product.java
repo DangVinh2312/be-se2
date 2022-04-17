@@ -56,6 +56,10 @@ public class Product {
     @JsonIgnore
     private Discount discount;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Feedback> feedbacks = new HashSet<>();
+
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
@@ -143,5 +147,16 @@ public class Product {
         Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
         if (category != null) this.categories.remove(category);
         category.getProducts().remove(this);
+    }
+
+    public void addFeedback(Feedback feedback) {
+        this.feedbacks.add(feedback);
+        feedback.setProduct(this);
+    }
+
+    public void removeFeedback(Long feedbackId) {
+        Feedback feedback = this.feedbacks.stream().filter(t -> t.getId() == feedbackId).findFirst().orElse(null);
+        if (feedback != null) this.feedbacks.remove(feedback);
+        feedback.setProduct(null);
     }
 }
