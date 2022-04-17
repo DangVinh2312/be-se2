@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
@@ -43,14 +44,19 @@ public class DiscountService {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponseObject("error", "Discount is already existed", ""));
         }
+        if (discountRequest.getEndDate().isBefore(LocalDate.now())){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponseObject("error", "Date is invalid", ""));
+        }
         Discount discount = new Discount(discountRequest);
+        discountRepository.save(discount);
         for (Long productId : discountRequest.getProductIds()) {
-            Product product = productRepository.findById(productId)
+            Product product = productRepository.findByIdAndDeleted(productId, false)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
             product.setDiscount(discount);
             productRepository.save(product);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create discount successfully", discountRepository.save(discount)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create discount successfully", discount));
 
     }
 

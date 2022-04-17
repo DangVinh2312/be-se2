@@ -29,10 +29,6 @@ public class Discount {
 
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "discount")
-    @JsonIgnore
-    private Set<Product> products = new HashSet<>();
-
    public Discount(DiscountRequestDTO discountRequestDTO){
        this.percentage = discountRequestDTO.getPercentage();
        this.startDate = discountRequestDTO.getStartDate();
