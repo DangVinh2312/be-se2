@@ -2,6 +2,7 @@ package com.backend.ecom.entities;
 
 import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.payload.request.SignupRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,7 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Feedback> feedbacks = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -56,9 +58,11 @@ public class User {
     private Set<Voucher> vouchers = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Cart cart;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private Set<Transaction> transactions;
 
     private Timestamp creationDate;
