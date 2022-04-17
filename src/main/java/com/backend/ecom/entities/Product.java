@@ -45,7 +45,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "brandId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Brand brand;
 
     @Embedded
@@ -54,7 +53,6 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discountId")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Discount discount;
 
     @OneToMany(fetch = FetchType.LAZY)
