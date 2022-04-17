@@ -25,15 +25,11 @@ public class FeedbackService {
         return feedbackRepository.findAll();
     }
 
-    public ResponseEntity<ResponseObject> getFeedbackDetail(Long id) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query feedback successfully", ""));
-    }
-
     public ResponseEntity<ResponseObject> updateFeedback(Long id, Feedback feedbackRequest) {
         Feedback feedback = feedbackRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with id:" + id));
         feedback.setContent(feedbackRequest.getContent());
+        feedback.setRating(feedbackRequest.getRating());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update feedback successfully", ""));
     }
 

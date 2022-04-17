@@ -16,7 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -83,8 +85,18 @@ public class ProductService {
 
     }
 
+    public ResponseEntity<ResponseObject> getAllFeedbacksByProductId(Long productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new ResourceNotFoundException("Not found product with id: " + productId);
+        }
 
-    public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) {
+        List<Feedback> feedbacks = feedbackRepository.findFeedbacksByProductId(productId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query feedbacks successfully", feedbacks));
+
+    }
+
+    public ResponseEntity<ResponseObject> createProduct(MultipartFile thumbnail, ProductRequestDTO productRequestDTO) throws IOException {
         boolean exist = productRepository.existsByName(productRequestDTO.getName());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -93,6 +105,12 @@ public class ProductService {
         Product product = new Product(productRequestDTO);
         product.setCreatedAt(Timestamp.from(Instant.now()));
         product.setUpdatedAt(Timestamp.from(Instant.now()));
+        if(productRequestDTO.getThumbnailUrl() != null && productRequestDTO.getThumbnailUrl() != ""){
+            product.setThumbnail(thumbnail.getBytes());
+        }
+        if(thumbnail != null){
+            product.setThumbnail(thumbnail.getBytes());
+        }
         for (Integer categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + categoryId));
@@ -130,7 +148,6 @@ public class ProductService {
         }
         product.setName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
-        product.setDetail(productRequest.getDetail());
         product.setQuantity(productRequest.getQuantity());
         product.setPrice(productRequest.getPrice());
         product.setCategories(new HashSet<>());

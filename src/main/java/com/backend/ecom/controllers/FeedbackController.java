@@ -20,11 +20,6 @@ public class FeedbackController {
         return feedbackService.getAllFeedbacks();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getFeedbackDetail(@PathVariable("id") Long id){
-        return feedbackService.getFeedbackDetail(id);
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("id") Long id, @RequestBody Feedback feedbackRequest) {
         return feedbackService.updateFeedback(id,feedbackRequest );

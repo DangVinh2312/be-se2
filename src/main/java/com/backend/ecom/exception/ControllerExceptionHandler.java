@@ -1,11 +1,14 @@
 package com.backend.ecom.exception;
 
 import java.util.Date;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -29,6 +32,18 @@ public class ControllerExceptionHandler {
                 new Date(),
                 ex.getMessage(),
                 request.getDescription(false));
+
+        return message;
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(value = HttpStatus.EXPECTATION_FAILED)
+    public ErrorMessage handleMaxSizeException(MaxUploadSizeExceededException exc) {
+        ErrorMessage message = new ErrorMessage(
+                HttpStatus.EXPECTATION_FAILED.value(),
+                new Date(),
+               "File too large!",
+                "");
 
         return message;
     }

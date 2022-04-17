@@ -9,8 +9,10 @@ import com.backend.ecom.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,9 +43,15 @@ public class ProductController {
         return productService.getAllTagsByProductId(productId);
     }
 
+    @GetMapping("/products/{productId}/feedbacks")
+    public ResponseEntity<ResponseObject> getAllFeedbacksByProductId(@Valid @PathVariable(value = "productId") Long productId) {
+        return productService.getAllFeedbacksByProductId(productId);
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
-        return productService.createProduct(productRequestDTO);
+    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
+                                                        @Valid @RequestBody ProductRequestDTO productRequestDTO) throws IOException {
+        return productService.createProduct(thumbnail, productRequestDTO);
     }
 
     @PostMapping("/{id}/feedbacks/create")

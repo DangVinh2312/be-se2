@@ -10,14 +10,13 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public class ProductRequestDTO {
+    private String thumbnailUrl;
+
     @Size(min = 2)
     private String name;
 
     @NotBlank
     private String description;
-
-    @NotBlank
-    private String detail;
 
     @Min(1)
     private Integer quantity;

@@ -22,6 +22,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByDeleted (Boolean deleted);
 
+    @Query("select u from User u where u.role.id = ?2 and u.deleted = ?1")
+    List<User> findAllByDeletedAndRoleId (Boolean deleted, Long roleId);
+
     @Modifying
     @Query("UPDATE User SET deleted = true, deletedAt = current_date WHERE id in ?1")
     void softDeleteAllByIds (Iterable<? extends Long> ids);

@@ -7,15 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class ProductShortInfoDTO {
     private Long id;
+    private String thumbnail;
     private String name;
     private String description;
-    private String detail;
     private Integer quantity;
     private Double price;
     private Double totalPrice;
@@ -25,8 +26,8 @@ public class ProductShortInfoDTO {
     public ProductShortInfoDTO (Product product){
         this.id = product.getId();
         this.name = product.getName();
+        this.thumbnail = Arrays.toString(product.getThumbnail());
         this.description = product.getDescription();
-        this.detail = product.getDetail();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.createdDate = product.getCreatedAt();

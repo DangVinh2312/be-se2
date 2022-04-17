@@ -3,19 +3,16 @@ package com.backend.ecom.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRequestDTO {
-    @Size(max = 100)
-    private String image;
-
+public class UserUpdateInfoRequestDTO {
     @Size(min = 10, max = 50)
     private String fullName;
 
@@ -30,6 +27,6 @@ public class UserRequestDTO {
     @NotBlank
     private String role;
 
-    @Size(min = 6, max = 150)
-    private String password;
+    private String address;
+
 }

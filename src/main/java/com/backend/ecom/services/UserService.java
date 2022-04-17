@@ -1,9 +1,9 @@
 package com.backend.ecom.services;
 
 import com.backend.ecom.dto.user.UserDetailDTO;
-import com.backend.ecom.dto.user.UserRequestDTO;
+import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
-import com.backend.ecom.entities.Cart;
+import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
 import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
@@ -16,16 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserService {
@@ -173,6 +175,15 @@ public class UserService {
         return userShortInfo;
     }
 
+    public List<UserShortInfoDTO> getAllUsersByRole(Boolean deleted, Long roleId) {
+        List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
+        List<User> users = userRepository.findAllByDeletedAndRoleId(deleted, roleId);
+
+        users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
+
+        return userShortInfo;
+    }
+
     public ResponseEntity<ResponseObject> getUserDetail(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user with id: " + id));
@@ -180,25 +191,25 @@ public class UserService {
         return ResponseEntity.ok(new ResponseObject("ok", "Query user successfully", userDetail));
     }
 
-    public ResponseEntity<ResponseObject> createUser(UserRequestDTO userRequestDTO) {
-        if (userRepository.existsByUsername(userRequestDTO.getUsername())) {
+    public ResponseEntity<ResponseObject> createUser(UserCreateRequestDTO userCreateRequestDTO) {
+        if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+        if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
 
-        User user = new User(userRequestDTO);
-        user.setPassword(encoder.encode(userRequestDTO.getPassword()));
+        User user = new User(userCreateRequestDTO);
+        user.setPassword(encoder.encode(userCreateRequestDTO.getPassword()));
         user.setCreationDate(Timestamp.from(Instant.now()));
         user.setModifiedDate(Timestamp.from(Instant.now()));
 
-        String role = userRequestDTO.getRole();
+        String role = userCreateRequestDTO.getRole();
 
         if (role.equals("admin")) {
             Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
@@ -214,6 +225,53 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
     }
+
+    public ResponseEntity<ResponseObject> setUserAva(MultipartFile ava) throws IOException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Not found user with name: " + auth.getName()));
+        user.setAva(ava.getBytes());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Save ava successfully!", userRepository.save(user)));
+    }
+
+    public ResponseEntity<ResponseObject> updateUser(Long id, UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
+        if (userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ResponseObject("error", "Username is already taken!", ""));
+        }
+
+        if (userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ResponseObject("error", "Email is already in use!", ""));
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
+        user.setFullName(userUpdateInfoRequestDTO.getFullName());
+        user.setUsername(userUpdateInfoRequestDTO.getUsername());
+        user.setEmail(userUpdateInfoRequestDTO.getEmail());
+        user.setModifiedDate(Timestamp.from(Instant.now()));
+
+        String role = userUpdateInfoRequestDTO.getRole();
+
+        if (role.equals("admin")) {
+            Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
+            user.setRole(adminRole);
+        } else if (role.equals("user")) {
+            Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
+                    .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
+            user.setRole(userRole);
+            user.setAddress(userUpdateInfoRequestDTO.getAddress());
+        }
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
+    }
+
 
     @Transactional
     public ResponseEntity<ResponseObject> softDeleteOneOrManyUsers(List<Long> ids) {
@@ -244,4 +302,5 @@ public class UserService {
             throw new ResourceNotFoundException("Not found user with id: " + e);
         }
     }
+
 }

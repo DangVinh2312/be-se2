@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Set;
 
 @Getter
@@ -26,9 +27,9 @@ public class UserDetailDTO {
     private Timestamp creationDate;
     private Timestamp modifiedDate;
 
-    public UserDetailDTO (User user) {
+    public UserDetailDTO(User user) {
         this.id = user.getId();
-        this.ava = user.getAva();
+        this.ava = Arrays.toString(user.getAva());
         this.fullName = user.getFullName();
         this.username = user.getUsername();
         this.email = user.getEmail();

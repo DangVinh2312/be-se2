@@ -1,8 +1,7 @@
 package com.backend.ecom.entities;
 
-import com.backend.ecom.dto.user.UserRequestDTO;
+import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.payload.request.SignupRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String ava;
+    @Lob
+    private byte[] ava;
 
     private String fullName;
 
@@ -76,10 +76,10 @@ public class User {
         this.address = signUpRequest.getAddress();
     }
 
-    public User(UserRequestDTO userRequestDTO) {
-        this.fullName = userRequestDTO.getFullName();
-        this.username = userRequestDTO.getUsername();
-        this.email = userRequestDTO.getEmail();
+    public User(UserCreateRequestDTO userCreateRequestDTO) {
+        this.fullName = userCreateRequestDTO.getFullName();
+        this.username = userCreateRequestDTO.getUsername();
+        this.email = userCreateRequestDTO.getEmail();
     }
 
 }

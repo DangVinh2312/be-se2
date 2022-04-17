@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Set;
 
 @Getter
@@ -13,9 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class ProductDetailDTO {
     private Long id;
+    private String thumbnail;
     private String name;
     private String description;
-    private String detail;
     private Integer quantity;
     private Double price;
     private Double totalPrice;
@@ -28,9 +29,9 @@ public class ProductDetailDTO {
 
     public ProductDetailDTO (Product product){
         this.id = product.getId();
+        this.thumbnail = Arrays.toString(product.getThumbnail());
         this.name = product.getName();
         this.description = product.getDescription();
-        this.detail = product.getDetail();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.totalPrice = product.getTotalPrice();

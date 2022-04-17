@@ -12,7 +12,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,11 +25,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Lob
+    private byte[] thumbnail;
+
     private String name;
 
     private String description;
-
-    private String detail;
 
     private int quantity;
 
@@ -94,7 +94,6 @@ public class Product {
     public Product(ProductRequestDTO productRequestDTO) {
         this.name = productRequestDTO.getName();
         this.description = productRequestDTO.getDescription();
-        this.detail = productRequestDTO.getDetail();
         this.quantity = productRequestDTO.getQuantity();
         this.price = productRequestDTO.getPrice();
     }
