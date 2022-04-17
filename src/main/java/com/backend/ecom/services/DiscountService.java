@@ -48,6 +48,7 @@ public class DiscountService {
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
             product.setDiscount(discount);
+            productRepository.save(product);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create discount successfully", discountRepository.save(discount)));
 
@@ -73,6 +74,7 @@ public class DiscountService {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the product with id: " + productId));
             product.setDiscount(discount);
+            productRepository.save(product);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update discount successfully", discount));
     }
