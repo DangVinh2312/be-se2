@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.entities.Feedback;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.FeedbackService;
@@ -21,7 +22,7 @@ public class FeedbackController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("id") Long id, @RequestBody Feedback feedbackRequest) {
+    public ResponseEntity<ResponseObject> updateFeedback(@PathVariable("id") Long id, @RequestBody FeedbackRequestDTO feedbackRequest) {
         return feedbackService.updateFeedback(id,feedbackRequest );
     }
 

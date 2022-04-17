@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,17 +24,17 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getCartDetail(@Valid @PathVariable("id") Long id) {
+    public ResponseEntity<ResponseObject> getCartDetail(@Valid @NotNull @PathVariable("id") Long id) {
         return cartService.getCartDetail(id);
     }
 
-    @PostMapping("/addToCart")
-    public ResponseEntity<ResponseObject> addToCart(@Valid @RequestBody AddToCartDTO addToCartDTO) {
-        return cartService.addToCart(addToCartDTO);
+    @PostMapping("/addToCart/{productId}")
+    public ResponseEntity<ResponseObject> addToCart(@Valid @NotNull @PathVariable("productId") Long productId) {
+        return cartService.addToCart(productId);
     }
 
     @DeleteMapping("/delete/{cartItemId}")
-    public ResponseEntity<ResponseObject> deleteFromCart(@Valid @PathVariable("cartItemId") Long cartItemId) {
+    public ResponseEntity<ResponseObject> deleteFromCart(@Valid @NotNull @PathVariable("cartItemId") Long cartItemId) {
         return cartService.deleteFromCart(cartItemId);
     }
 }

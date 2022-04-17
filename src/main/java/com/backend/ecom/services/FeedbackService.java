@@ -1,5 +1,6 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.entities.Feedback;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
@@ -25,7 +26,7 @@ public class FeedbackService {
         return feedbackRepository.findAll();
     }
 
-    public ResponseEntity<ResponseObject> updateFeedback(Long id, Feedback feedbackRequest) {
+    public ResponseEntity<ResponseObject> updateFeedback(Long id, FeedbackRequestDTO feedbackRequest) {
         Feedback feedback = feedbackRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with id:" + id));
         feedback.setContent(feedbackRequest.getContent());

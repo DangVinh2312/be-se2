@@ -52,14 +52,14 @@ public class CartService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> addToCart(AddToCartDTO addToCartDTO) {
+    public ResponseEntity<ResponseObject> addToCart( Long productId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new ResourceNotFoundException("Not found username: " + username));
 
-        Product product = productRepository.findById(addToCartDTO.getProductId())
-                .orElseThrow(()-> new ResourceNotFoundException("Not found product with id: " + addToCartDTO.getProductId()));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Not found product with id: " + productId));
         CartItem cartItem = cartItemService.createCartItem(product);
 
         Cart cart = cartRepository.findByUserId(user.getId())
