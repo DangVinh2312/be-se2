@@ -46,7 +46,7 @@ public class DiscountService {
         }
         if (discountRequest.getEndDate().isBefore(LocalDate.now())){
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ResponseObject("error", "Date is invalid", ""));
+                    .body(new ResponseObject("error", "Date is invalid", discountRequest.getEndDate()));
         }
         Discount discount = new Discount(discountRequest);
         discountRepository.save(discount);
@@ -66,6 +66,9 @@ public class DiscountService {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found discount with id:" + id));
         if (discountRepository.existsByPercentage(discountRequest.getPercentage())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Discount percentage is already existed", discountRequest.getPercentage()));
+        }
+        if(discountRequest.getEndDate().isBefore(LocalDate.now())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Date is invalid", discountRequest.getEndDate()));
         }
         discount.setPercentage(discountRequest.getPercentage());
         discount.setStartDate(discountRequest.getStartDate());
