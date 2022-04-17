@@ -71,7 +71,7 @@ public class BrandService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Brand name is already existed", ""));
         }
         brand.setName(brandRequest.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update brand successfully", brand));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update brand successfully", brandRepository.save(brand)));
     }
 
     @Transactional

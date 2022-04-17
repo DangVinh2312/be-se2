@@ -13,14 +13,14 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class UserUpdateInfoRequestDTO {
-    @Size(min = 10, max = 50)
+    @Size(min = 10, max = 100)
     private String fullName;
 
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 100)
     private String username;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 100)
     @Email
     private String email;
 

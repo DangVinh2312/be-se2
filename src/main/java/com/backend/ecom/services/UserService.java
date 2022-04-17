@@ -185,7 +185,7 @@ public class UserService {
     }
 
     public ResponseEntity<ResponseObject> getUserDetail(Long id) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user with id: " + id));
         UserDetailDTO userDetail = new UserDetailDTO(user);
         return ResponseEntity.ok(new ResponseObject("ok", "Query user successfully", userDetail));
@@ -228,32 +228,32 @@ public class UserService {
 
     public ResponseEntity<ResponseObject> setUserAva(MultipartFile ava) throws IOException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getName())
+        User user = userRepository.findByUsernameAndDeleted(auth.getName(), false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user with name: " + auth.getName()));
         user.setAva(ava.getBytes());
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Save ava successfully!", userRepository.save(user)));
     }
 
     public ResponseEntity<ResponseObject> updateUser(Long id, UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
-        if (userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername())) {
+        User user = userRepository.findByIdAndDeleted(id, false)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
+
+        if (userUpdateInfoRequestDTO.getUsername() != user.getUsername() && userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail())) {
+        if (userUpdateInfoRequestDTO.getEmail() != user.getEmail() && userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
         user.setFullName(userUpdateInfoRequestDTO.getFullName());
         user.setUsername(userUpdateInfoRequestDTO.getUsername());
         user.setEmail(userUpdateInfoRequestDTO.getEmail());
         user.setModifiedDate(Timestamp.from(Instant.now()));
-
+        user.setAddress(userUpdateInfoRequestDTO.getAddress());
         String role = userUpdateInfoRequestDTO.getRole();
 
         if (role.equals("admin")) {
@@ -264,7 +264,6 @@ public class UserService {
             Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                     .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
             user.setRole(userRole);
-            user.setAddress(userUpdateInfoRequestDTO.getAddress());
         }
 
         userRepository.save(user);
@@ -275,32 +274,38 @@ public class UserService {
 
     @Transactional
     public ResponseEntity<ResponseObject> softDeleteOneOrManyUsers(List<Long> ids) {
-        try {
-            userRepository.softDeleteAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete users successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found user with id: " + e);
+
+        for (Long id : ids) {
+            if (!userRepository.existsByIdAndDeleted(id, false)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        userRepository.softDeleteAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users successfully", ""));
+
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> forceDeleteOneOrManyUsers(List<Long> ids) {
-        try {
-            userRepository.deleteAllById(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete users permanently", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found user with id: " + e);
+        for (Long id : ids) {
+            if (!userRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        userRepository.deleteAllById(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users permanently", ""));
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> restoreOneOrManyUsers(List<Long> ids) {
-        try {
-            userRepository.restoreAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Restore users successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found user with id: " + e);
+        for (Long id : ids) {
+            if (!userRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        userRepository.restoreAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Restore users successfully", ""));
+
     }
 
 }

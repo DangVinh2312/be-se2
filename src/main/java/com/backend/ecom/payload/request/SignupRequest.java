@@ -10,14 +10,14 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public class SignupRequest {
-    @Size(min = 10, max = 50)
+    @Size(min = 10, max = 100)
     private String fullName;
 
-    @Size(min = 3, max = 20)
+    @Size(min = 2, max = 100)
     private String username;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 100)
     @Email
     private String email;
 
