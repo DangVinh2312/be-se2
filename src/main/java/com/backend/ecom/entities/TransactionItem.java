@@ -24,5 +24,4 @@ public class TransactionItem {
 
     @ManyToOne
     private Transaction transaction;
-
 }
