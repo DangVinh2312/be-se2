@@ -4,11 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResetPasswordRequest {
+public class UpdatePasswordAfterResetRequest {
+    @NotBlank
     private String email;
 
-    private int resetCode;
+    @NotBlank
+    private String newPassword;
 }

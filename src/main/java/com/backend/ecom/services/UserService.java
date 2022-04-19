@@ -38,10 +38,6 @@ import java.util.Random;
 
 @Service
 public class UserService {
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -50,14 +46,8 @@ public class UserService {
 
     @Autowired
     private FeedbackRepository feedbackRepository;
-
-    @Autowired
-    private SendEmailService sendEmailService;
     @Autowired
     private PasswordEncoder encoder;
-
-    @Autowired
-    private JwtUtils jwtUtils;
 
     public List<UserShortInfoDTO> getAllUsers(Boolean deleted) {
         List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
@@ -119,13 +109,7 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
     }
 
-    public ResponseEntity<ResponseObject> setUserAva(String ava) throws IOException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameAndDeleted(auth.getName(), false)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found user with name: " + auth.getName()));
-        user.setAva(ava);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Save ava successfully!", userRepository.save(user)));
-    }
+
 
     public ResponseEntity<ResponseObject> updateUser(Long id, UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
         User user = userRepository.findByIdAndDeleted(id, false)
@@ -162,25 +146,6 @@ public class UserService {
         userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
-    }
-
-    public ResponseEntity<ResponseObject> resetUserPassword(ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found the user with email: " + resetPasswordRequest.getEmail()));
-        sendEmailService.sendEmail(user.getEmail(), "Your code for reset your password: " + (new Random().nextInt(900000) + 100000), "Password Reset");
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Change password successfully", ""));
-    }
-
-    public ResponseEntity<ResponseObject> updateUserPassword(ChangePasswordRequest changePasswordRequest) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsernameAndDeleted(auth.getName(), false).get();
-        boolean matchedPassword = encoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword());
-        if (!matchedPassword) {
-            throw new ResourceNotFoundException("Your current password is not matched");
-        }
-        user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Change password successfully", ""));
     }
 
     @Transactional

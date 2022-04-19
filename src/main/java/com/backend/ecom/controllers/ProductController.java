@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) throws IOException {
+    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         return productService.createProduct(productRequestDTO);
     }
 

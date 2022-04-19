@@ -7,8 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResetPasswordRequest {
-    private String email;
-
-    private int resetCode;
+public class ChangeAvaRequest {
+    private String ava;
 }

@@ -96,7 +96,7 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) throws IOException {
+    public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) {
         boolean exist = productRepository.existsByName(productRequestDTO.getName());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT)

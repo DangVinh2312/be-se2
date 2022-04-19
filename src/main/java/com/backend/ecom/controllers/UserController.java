@@ -47,26 +47,12 @@ public class UserController {
         return userService.createUser(userCreateRequestDTO);
     }
 
-    @PostMapping("/setAva")
-    public ResponseEntity<ResponseObject> setUserAva(@Valid @RequestParam(value = "ava", required = true) String ava) throws IOException {
-        return userService.setUserAva(ava);
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateUser(@Valid @PathVariable("id") Long id,
                                                      @Valid @RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
         return userService.updateUser(id, userUpdateInfoRequestDTO);
     }
 
-    @PatchMapping("/update/password/forget")
-    public ResponseEntity<ResponseObject> resetUserPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
-        return userService.resetUserPassword(resetPasswordRequest);
-    }
-
-    @PatchMapping("/update/password")
-    public ResponseEntity<ResponseObject> updateUserPassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
-        return userService.updateUserPassword(changePasswordRequest);
-    }
     @PatchMapping("/delete")
     public ResponseEntity<ResponseObject> softDeleteManyUsers(@Valid @RequestBody ArrayRequest ids) {
         return userService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));

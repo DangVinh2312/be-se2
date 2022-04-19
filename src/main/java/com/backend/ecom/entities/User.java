@@ -70,6 +70,10 @@ public class User {
 
     private Timestamp modifiedDate;
 
+    @JsonIgnore
+    private int passwordResetCode;
+
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
     private Timestamp deletedAt;

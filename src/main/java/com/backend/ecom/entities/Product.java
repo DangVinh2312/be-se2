@@ -90,6 +90,7 @@ public class Product {
 
     private Timestamp updatedAt;
 
+    @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
     private Timestamp deletedAt;
