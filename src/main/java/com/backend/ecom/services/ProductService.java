@@ -96,7 +96,7 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<ResponseObject> createProduct(MultipartFile thumbnail, ProductRequestDTO productRequestDTO) throws IOException {
+    public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) throws IOException {
         boolean exist = productRepository.existsByName(productRequestDTO.getName());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -106,10 +106,7 @@ public class ProductService {
         product.setCreatedAt(Timestamp.from(Instant.now()));
         product.setUpdatedAt(Timestamp.from(Instant.now()));
         if(productRequestDTO.getThumbnailUrl() != null && productRequestDTO.getThumbnailUrl() != ""){
-            product.setThumbnail(thumbnail.getBytes());
-        }
-        if(thumbnail != null){
-            product.setThumbnail(thumbnail.getBytes());
+            product.setThumbnail(productRequestDTO.getThumbnailUrl());
         }
         for (Integer categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)

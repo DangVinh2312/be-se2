@@ -51,9 +51,8 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestParam(value = "thumbnail", required = false) MultipartFile thumbnail,
-                                                        @Valid @RequestBody ProductRequestDTO productRequestDTO) throws IOException {
-        return productService.createProduct(thumbnail, productRequestDTO);
+    public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) throws IOException {
+        return productService.createProduct(productRequestDTO);
     }
 
     @PostMapping("/{id}/feedbacks/create")

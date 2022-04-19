@@ -28,7 +28,7 @@ public class User {
     private long id;
 
     @Lob
-    private byte[] ava;
+    private String ava;
 
     private String fullName;
 

@@ -17,6 +17,7 @@ public class ProductDetailDTO {
     private String thumbnail;
     private String name;
     private String description;
+    private ProductDetail productDetail;
     private Integer quantity;
     private Double price;
     private Double totalPrice;
@@ -29,9 +30,10 @@ public class ProductDetailDTO {
 
     public ProductDetailDTO (Product product){
         this.id = product.getId();
-        this.thumbnail = Arrays.toString(product.getThumbnail());
+        this.thumbnail = product.getThumbnail();
         this.name = product.getName();
         this.description = product.getDescription();
+        this.productDetail = product.getProductDetail();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.totalPrice = product.getTotalPrice();

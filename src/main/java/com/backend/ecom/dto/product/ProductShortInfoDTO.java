@@ -2,6 +2,7 @@ package com.backend.ecom.dto.product;
 
 import com.backend.ecom.entities.Product;
 
+import com.backend.ecom.entities.ProductDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,10 +27,11 @@ public class ProductShortInfoDTO {
     public ProductShortInfoDTO (Product product){
         this.id = product.getId();
         this.name = product.getName();
-        this.thumbnail = Arrays.toString(product.getThumbnail());
+        this.thumbnail = product.getThumbnail();
         this.description = product.getDescription();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.totalPrice = product.getTotalPrice();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();
         this.totalPrice = product.getTotalPrice();

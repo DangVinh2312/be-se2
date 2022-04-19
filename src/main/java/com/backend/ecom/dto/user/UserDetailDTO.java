@@ -29,7 +29,7 @@ public class UserDetailDTO {
 
     public UserDetailDTO(User user) {
         this.id = user.getId();
-        this.ava = Arrays.toString(user.getAva());
+        this.ava = user.getAva();
         this.fullName = user.getFullName();
         this.username = user.getUsername();
         this.email = user.getEmail();

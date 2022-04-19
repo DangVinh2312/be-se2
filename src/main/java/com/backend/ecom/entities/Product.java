@@ -26,7 +26,7 @@ public class Product {
     private long id;
 
     @Lob
-    private byte[] thumbnail;
+    private String thumbnail;
 
     private String name;
 

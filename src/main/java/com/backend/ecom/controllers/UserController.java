@@ -4,6 +4,8 @@ import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
 import com.backend.ecom.payload.request.ArrayRequest;
+import com.backend.ecom.payload.request.ChangePasswordRequest;
+import com.backend.ecom.payload.request.ResetPasswordRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/setAva")
-    public ResponseEntity<ResponseObject> setUserAva(@Valid @RequestParam(value = "ava", required = true) MultipartFile ava) throws IOException {
+    public ResponseEntity<ResponseObject> setUserAva(@Valid @RequestParam(value = "ava", required = true) String ava) throws IOException {
         return userService.setUserAva(ava);
     }
 
@@ -56,6 +58,15 @@ public class UserController {
         return userService.updateUser(id, userUpdateInfoRequestDTO);
     }
 
+    @PatchMapping("/update/password/forget")
+    public ResponseEntity<ResponseObject> resetUserPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
+        return userService.resetUserPassword(resetPasswordRequest);
+    }
+
+    @PatchMapping("/update/password")
+    public ResponseEntity<ResponseObject> updateUserPassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
+        return userService.updateUserPassword(changePasswordRequest);
+    }
     @PatchMapping("/delete")
     public ResponseEntity<ResponseObject> softDeleteManyUsers(@Valid @RequestBody ArrayRequest ids) {
         return userService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
