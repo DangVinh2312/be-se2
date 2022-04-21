@@ -38,7 +38,7 @@ public class UserDetailDTO {
         this.feedbacks = user.getFeedbacks();
         this.vouchers = user.getVouchers();
         this.transactions = user.getTransactions();
-        this.creationDate = user.getCreationDate();
-        this.modifiedDate = user.getModifiedDate();
+        this.creationDate = user.getCreatedDate();
+        this.modifiedDate = user.getUpdatedDate();
     }
 }

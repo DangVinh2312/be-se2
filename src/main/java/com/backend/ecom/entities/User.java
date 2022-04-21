@@ -65,9 +65,9 @@ public class User {
     @JsonIgnore
     private Set<Transaction> transactions;
 
-    private Timestamp creationDate;
+    private Timestamp createdDate;
 
-    private Timestamp modifiedDate;
+    private Timestamp updatedDate;
 
     @JsonIgnore
     private int passwordResetCode;

@@ -24,7 +24,7 @@ public class UserShortInfoDTO {
         this.ava = user.getAva();
         this.fullName = user.getFullName();
         this.address = user.getAddress();
-        this.modifiedDate = user.getModifiedDate();
+        this.modifiedDate = user.getUpdatedDate();
         this.deletedAt = user.getDeletedAt();
     }
 

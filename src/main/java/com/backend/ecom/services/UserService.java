@@ -89,8 +89,8 @@ public class UserService {
 
         User user = new User(userCreateRequestDTO);
         user.setPassword(encoder.encode(userCreateRequestDTO.getPassword()));
-        user.setCreationDate(Timestamp.from(Instant.now()));
-        user.setModifiedDate(Timestamp.from(Instant.now()));
+        user.setCreatedDate(Timestamp.from(Instant.now()));
+        user.setUpdatedDate(Timestamp.from(Instant.now()));
 
         String role = userCreateRequestDTO.getRole();
 
@@ -129,7 +129,7 @@ public class UserService {
         user.setFullName(userUpdateInfoRequestDTO.getFullName());
         user.setUsername(userUpdateInfoRequestDTO.getUsername());
         user.setEmail(userUpdateInfoRequestDTO.getEmail());
-        user.setModifiedDate(Timestamp.from(Instant.now()));
+        user.setUpdatedDate(Timestamp.from(Instant.now()));
         user.setAddress(userUpdateInfoRequestDTO.getAddress());
         String role = userUpdateInfoRequestDTO.getRole();
 
