@@ -1,5 +1,6 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.entities.Feedback;
 import com.backend.ecom.exception.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,16 +24,19 @@ public class FeedbackService {
     public UserRepository userRepository;
 
 
-    public List<Feedback> getAllFeedbacks() {
-        return feedbackRepository.findAll();
+    public List<FeedbackDTO> getAllFeedbacks() {
+        List<Feedback> feedbacks = feedbackRepository.findAll();
+        List<FeedbackDTO> feedbackDTOS = new ArrayList<>();
+        feedbacks.forEach(feedback -> feedbackDTOS.add(new FeedbackDTO(feedback)));
+        return feedbackDTOS;
     }
 
-    public ResponseEntity<ResponseObject> updateFeedback(Long id, FeedbackRequestDTO feedbackRequest) {
-        Feedback feedback = feedbackRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with id:" + id));
+    public ResponseEntity<ResponseObject> updateFeedback(Long feedbackId, FeedbackRequestDTO feedbackRequest) {
+        Feedback feedback = feedbackRepository.findById(feedbackId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found feedback with id:" + feedbackId));
         feedback.setContent(feedbackRequest.getContent());
         feedback.setRating(feedbackRequest.getRating());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update feedback successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update feedback successfully", feedbackRepository.save(feedback)));
     }
 
 }

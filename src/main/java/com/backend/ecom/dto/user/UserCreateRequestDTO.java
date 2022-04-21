@@ -3,7 +3,6 @@ package com.backend.ecom.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,10 +12,10 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class UserCreateRequestDTO {
-    @Size(min = 10, max = 100)
+    @Size(min = 5, max = 80)
     private String fullName;
 
-    @Size(min = 2, max = 100)
+    @Size(min = 2, max = 80)
     private String username;
 
     @NotBlank

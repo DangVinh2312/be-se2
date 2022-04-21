@@ -30,7 +30,7 @@ public class AccountController {
         return accountService.resetUserPassword(resetPasswordRequest);
     }
 
-    @PostMapping("/password/forget/checkOtp")
+    @PostMapping("/password/forget/codeVerify")
     public ResponseEntity<HttpStatus> checkResetUserPasswordCode(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         return accountService.checkResetUserPasswordCode(resetPasswordRequest);
     }

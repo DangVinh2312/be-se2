@@ -1,5 +1,6 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.dto.product.ProductDetailDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
@@ -91,8 +92,9 @@ public class ProductService {
         }
 
         List<Feedback> feedbacks = feedbackRepository.findFeedbacksByProductId(productId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query feedbacks successfully", feedbacks));
+        List<FeedbackDTO> feedbackDTOS = new ArrayList<>();
+        feedbacks.forEach(feedback -> feedbackDTOS.add(new FeedbackDTO(feedback)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query feedbacks successfully", feedbackDTOS));
 
     }
 
