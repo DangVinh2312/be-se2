@@ -16,7 +16,7 @@ public class UserShortInfoDTO {
     private String ava;
     private String fullName;
     private String address;
-    private Timestamp modifiedDate;
+    private Timestamp updatedAt;
     private Timestamp deletedAt;
 
     public UserShortInfoDTO(User user) {
@@ -24,7 +24,7 @@ public class UserShortInfoDTO {
         this.ava = user.getAva();
         this.fullName = user.getFullName();
         this.address = user.getAddress();
-        this.modifiedDate = user.getUpdatedDate();
+        this.updatedAt = user.getUpdatedDate();
         this.deletedAt = user.getDeletedAt();
     }
 

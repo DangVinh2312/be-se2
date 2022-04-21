@@ -24,8 +24,8 @@ public class UserDetailDTO {
     private Set<Feedback> feedbacks;
     private Set<Voucher> vouchers;
     private Set<Transaction> transactions;
-    private Timestamp creationDate;
-    private Timestamp modifiedDate;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public UserDetailDTO(User user) {
         this.id = user.getId();
@@ -38,7 +38,7 @@ public class UserDetailDTO {
         this.feedbacks = user.getFeedbacks();
         this.vouchers = user.getVouchers();
         this.transactions = user.getTransactions();
-        this.creationDate = user.getCreatedDate();
-        this.modifiedDate = user.getUpdatedDate();
+        this.createdAt = user.getCreatedDate();
+        this.updatedAt = user.getUpdatedDate();
     }
 }
