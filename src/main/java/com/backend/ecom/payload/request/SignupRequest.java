@@ -10,9 +10,11 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public class SignupRequest {
+    @NotBlank
     @Size(min = 10, max = 100)
     private String fullName;
 
+    @NotBlank
     @Size(min = 2, max = 100)
     private String username;
 
@@ -21,6 +23,7 @@ public class SignupRequest {
     @Email
     private String email;
 
+    @NotBlank
     @Size(min = 6, max = 150)
     private String password;
 

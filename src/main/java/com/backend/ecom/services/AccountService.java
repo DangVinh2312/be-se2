@@ -74,6 +74,7 @@ public class AccountService {
             throw new ResourceNotFoundException("Your current password is not matched");
         }
         user.setPassword(encoder.encode(changePasswordRequest.getNewPassword()));
+        user.setPasswordResetCode(0);
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Change password successfully", ""));
     }
