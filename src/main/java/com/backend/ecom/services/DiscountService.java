@@ -64,7 +64,7 @@ public class DiscountService {
     public ResponseEntity<ResponseObject> updateDiscount(Long id, DiscountRequestDTO discountRequest) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found discount with id:" + id));
-        if (discountRepository.existsByPercentage(discountRequest.getPercentage())) {
+        if (discount.getPercentage().intValue() != discountRequest.getPercentage().intValue() && discountRepository.existsByPercentage(discountRequest.getPercentage())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Discount percentage is already existed", discountRequest.getPercentage()));
         }
         if(discountRequest.getEndDate().isBefore(LocalDate.now())){

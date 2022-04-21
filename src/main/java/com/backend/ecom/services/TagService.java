@@ -61,7 +61,7 @@ public class TagService {
         Tag tag = tagRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id:" + id));
         boolean existName = tagRepository.existsByName(tagRequest.getName());
-        if (existName){
+        if (!tag.getName().equals(tagRequest.getName()) && existName){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Tag name is already existed", ""));
         }
         tag.setName(tagRequest.getName());

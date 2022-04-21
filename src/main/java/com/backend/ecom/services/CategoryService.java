@@ -65,7 +65,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found category with id:" + id));
         boolean existName = categoryRepository.existsByName(categoryRequest.getName());
-        if (existName) {
+        if (!category.getName().equals(categoryRequest.getName()) && existName) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", ""));
         }
         category.setName(categoryRequest.getName());

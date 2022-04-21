@@ -139,7 +139,7 @@ public class ProductService {
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
         Product product = productRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
-        if (productRepository.existsByName(productRequest.getName())) {
+        if (!product.getName().equals(productRequest.getName()) && productRepository.existsByName(productRequest.getName())) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("error", "Product name is already existed", productRequest.getName()));
         }

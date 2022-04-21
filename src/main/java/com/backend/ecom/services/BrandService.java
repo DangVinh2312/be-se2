@@ -67,7 +67,7 @@ public class BrandService {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
         boolean existName = brandRepository.existsByName(brandRequest.getName());
-        if (existName) {
+        if (!brand.getName().equals(brandRequest.getName()) && existName) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Brand name is already existed", ""));
         }
         brand.setName(brandRequest.getName());
