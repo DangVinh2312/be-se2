@@ -21,6 +21,9 @@ public class Role {
     private long id;
 
     @Enumerated(EnumType.STRING)
-    @Max(20)
     private RoleType name;
+
+    public Role (RoleType name){
+        this.name = name;
+    }
 }
