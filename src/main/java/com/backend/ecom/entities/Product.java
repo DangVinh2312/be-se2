@@ -68,16 +68,6 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
     private Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "product_tags",
-            joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tagId", referencedColumnName = "id"))
-    private Set<Tag> tags = new HashSet<>();
-
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();
@@ -119,17 +109,6 @@ public class Product {
             this.setDiscount(null);
             return false;
         }
-    }
-
-    public void addTag(Tag tag) {
-        this.tags.add(tag);
-        tag.getProducts().add(this);
-    }
-
-    public void removeTag(Integer tagId) {
-        Tag tag = this.tags.stream().filter(t -> t.getId() == tagId).findFirst().orElse(null);
-        if (tag != null) this.tags.remove(tag);
-        tag.getProducts().remove(this);
     }
 
     public void addCartItem(CartItem cartItem){

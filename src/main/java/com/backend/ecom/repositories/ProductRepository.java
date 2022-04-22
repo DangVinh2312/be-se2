@@ -21,9 +21,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAllByDeleted(Boolean deleted);
 
-    @Query("select p from Product p inner join p.tags tags where tags.id = ?1 and p.deleted = ?2")
-    List<Product> findProductsByTags_idAndDeleted(Integer tagId, Boolean deleted);
-
     @Query("select p from Product p inner join p.categories categories where categories.id = ?1 and p.deleted = ?2")
     List<Product> findProductsByCategories_idAndDeleted(Integer categoryId, Boolean deleted);
 

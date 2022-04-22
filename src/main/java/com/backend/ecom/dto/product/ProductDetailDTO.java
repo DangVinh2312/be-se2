@@ -24,7 +24,6 @@ public class ProductDetailDTO {
     private Brand brand;
     private Discount discount;
     private Set<Category> categories;
-    private Set<Tag> tags;
     private Timestamp createdDate;
     private Timestamp updatedDate;
 
@@ -40,7 +39,6 @@ public class ProductDetailDTO {
         this.brand = product.getBrand();
         this.discount = product.getDiscount();
         this.categories = product.getCategories();
-        this.tags = product.getTags();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();
     }

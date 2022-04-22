@@ -35,9 +35,6 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private TagRepository tagRepository;
-
-    @Autowired
     private BrandRepository brandRepository;
 
     @Autowired
@@ -72,17 +69,6 @@ public class ProductService {
         List<Category> categories = categoryRepository.findByProductId(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query categories successfully", categories));
-
-    }
-
-    public ResponseEntity<ResponseObject> getAllTagsByProductId(Long productId) {
-        if  (!productRepository.existsByIdAndDeleted(productId, false)) {
-            throw new ResourceNotFoundException("Not found product with id: " + productId);
-        }
-
-        List<Tag> tags = tagRepository.findTagsByProductsId(productId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query categories successfully", tags));
 
     }
 

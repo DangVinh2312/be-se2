@@ -40,11 +40,6 @@ public class ProductController {
         return productService.getAllCategoriesByProductId(productId);
     }
 
-    @GetMapping("/{productId}/tags")
-    public ResponseEntity<ResponseObject> getAllTagsByProductId(@Valid @PathVariable(value = "productId") Long productId) {
-        return productService.getAllTagsByProductId(productId);
-    }
-
     @GetMapping("/{productId}/feedbacks")
     public ResponseEntity<ResponseObject> getAllFeedbacksByProductId(@Valid @PathVariable(value = "productId") Long productId) {
         return productService.getAllFeedbacksByProductId(productId);
@@ -64,9 +59,8 @@ public class ProductController {
 //    @PutMapping("/{productId}/categories-tags-brands")
 //    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@Valid @PathVariable("productId") Long productId,
 //                                                                           @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
-//                                                                           @Valid @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
 //                                                                           @Valid @RequestParam(value = "brandId", defaultValue = "0") Integer brandId) {
-//        return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, tagId, brandId);
+//        return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, brandId);
 //    }
 
     @PutMapping("/update/{id}")
@@ -93,9 +87,8 @@ public class ProductController {
 //    @DeleteMapping("/{productId}/categories-tags-brands/delete")
 //    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(@Valid @PathVariable(value = "productId") Long productId,
 //                                                                                @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
-//                                                                                @Valid @RequestParam(value = "tagId", defaultValue = "0") Integer tagId,
 //                                                                                @Valid @RequestParam(value = "brandId", defaultValue = "false") Boolean brandBool) {
-//        return productService.deleteCategoryOrTagOrBrandFromProduct(productId, categoryId, tagId, brandBool);
+//        return productService.deleteCategoryOrTagOrBrandFromProduct(productId, categoryId, brandBool);
 //    }
 
 }
