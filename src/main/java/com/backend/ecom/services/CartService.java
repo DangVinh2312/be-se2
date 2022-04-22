@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -52,21 +53,27 @@ public class CartService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> addToCart( Long productId) {
+    public ResponseEntity<ResponseObject> addToCart(Long productId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userRepository.findByUsernameAndDeleted(username, false)
-                .orElseThrow(()-> new ResourceNotFoundException("Not found username: " + username));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found username: " + username));
 
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new ResourceNotFoundException("Not found product with id: " + productId));
-        CartItem cartItem = cartItemService.createCartItem(product);
+                .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
 
         Cart cart = cartRepository.findByUserId(user.getId())
-                .orElseThrow(()-> new ResourceNotFoundException("Not found user cart with user id: " + user.getId()));
-        cart.addCartItem(cartItem);
-        cartItemService.saveCartItem(cartItem);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add to cart successfully", cartItem));
+                .orElseThrow(() -> new ResourceNotFoundException("Not found user cart with user id: " + user.getId()));
+        Optional<CartItem> cartItem = cartItemService.getCartItemByCartId(cart.getId(), productId);
+        if (cartItem.isPresent()) {
+            cartItem.get().setQuantity(cartItem.get().getQuantity() + 1);
+            cartItemService.saveCartItem(cartItem.get());
+        } else {
+            CartItem newCartItem = cartItemService.createCartItem(product);
+            cart.addCartItem(newCartItem);
+            cartItemService.saveCartItem(newCartItem);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Add to cart successfully", cart));
     }
 
     public ResponseEntity<ResponseObject> deleteFromCart(Long cartItemId) {

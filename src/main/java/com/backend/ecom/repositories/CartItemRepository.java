@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    List<CartItem> findCartItemByCartId(Long cartId);
+    @Query("select c from CartItem c where c.cart.id = ?1 and c.product.id = ?2")
+    Optional<CartItem> findCartItemByCartId(Long cartId, Long productId);
 }

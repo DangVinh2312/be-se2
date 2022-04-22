@@ -7,6 +7,9 @@ import com.backend.ecom.repositories.CartItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CartItemService {
     @Autowired
@@ -22,10 +25,10 @@ public class CartItemService {
         return cartItemRepository.save(cartItem);
     }
 
-//    public List<CartItem> getAllCartItemByCartId (Long cartId){
-//        List<CartItem> cartItems = cartItemRepository.findCartItemByCartId(cartId);
-//        return cartItems;
-//    }
+    public Optional<CartItem>  getCartItemByCartId (Long cartId, Long productId){
+        Optional<CartItem> cartItem = cartItemRepository.findCartItemByCartId(cartId, productId);
+        return cartItem;
+    }
 
     public void deleteCartItem (Long id) {
         CartItem cartItem = cartItemRepository.findById(id)
