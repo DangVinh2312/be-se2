@@ -22,7 +22,7 @@ public class ProductDetail {
 
     private Integer ram;
 
-    private Integer iStorage;
+    private Integer internalStorage;
 
     private Integer battery;
 
@@ -32,7 +32,7 @@ public class ProductDetail {
        this.camera = productRequestDTO.getCamera();
        this.processor = productRequestDTO.getProcessor();
        this.ram = productRequestDTO.getRam();
-       this.iStorage = productRequestDTO.getIStorage();
+       this.internalStorage = productRequestDTO.getInternalStorage();
        this.battery = productRequestDTO.getBattery();
     }
 }

@@ -56,11 +56,11 @@ public class ProductController {
         return productService.createFeedbackFromProduct(id, feedbackRequest);
     }
 
-//    @PutMapping("/{productId}/categories-tags-brands")
+//    @PutMapping("/{productId}/categories-brands")
 //    public ResponseEntity<ResponseObject> addTagOrCategoryOrBrandToProduct(@Valid @PathVariable("productId") Long productId,
 //                                                                           @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
 //                                                                           @Valid @RequestParam(value = "brandId", defaultValue = "0") Integer brandId) {
-//        return productService.addTagOrCategoryOrBrandToProduct(productId, categoryId, brandId);
+//        return productService.addCategoryOrBrandToProduct(productId, categoryId, brandId);
 //    }
 
     @PutMapping("/update/{id}")
@@ -84,11 +84,11 @@ public class ProductController {
         return productService.restoreOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
-//    @DeleteMapping("/{productId}/categories-tags-brands/delete")
+//    @DeleteMapping("/{productId}/categories-brands/delete")
 //    public ResponseEntity<ResponseObject> deleteCategoryOrTagOrBrandFromProduct(@Valid @PathVariable(value = "productId") Long productId,
 //                                                                                @Valid @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
 //                                                                                @Valid @RequestParam(value = "brandId", defaultValue = "false") Boolean brandBool) {
-//        return productService.deleteCategoryOrTagOrBrandFromProduct(productId, categoryId, brandBool);
+//        return productService.deleteCategoryOrBrandFromProduct(productId, categoryId, brandBool);
 //    }
 
 }

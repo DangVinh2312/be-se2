@@ -101,9 +101,6 @@ public class ProductService {
                     .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + categoryId));
             product.addCategory(category);
         }
-//        Tag tag = tagRepository.findById(productRequestDTO.getTagId())
-//                .orElseThrow(() -> new ResourceNotFoundException("Not found tag with id: " + productRequestDTO.getTagId()));
-//        product.addTag(tag);
         Brand brand = brandRepository.findById(productRequestDTO.getBrandId())
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id: " + productRequestDTO.getBrandId()));
         product.setBrand(brand);

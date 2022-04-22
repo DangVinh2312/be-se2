@@ -49,7 +49,7 @@ public class ProductRequestDTO {
     private Integer ram;
 
     @Min(16)
-    private Integer iStorage;
+    private Integer internalStorage;
 
     @Min(500)
     private Integer battery;
