@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,11 +30,9 @@ public class Voucher {
     @NotNull
     private String description;
 
-    @Column(nullable = false)
-    private Timestamp startDate;
+    private LocalDate startDate;
 
-    @Column(nullable = false)
-    private Timestamp endDate;
+    private LocalDate endDate;
 
     @ManyToOne
     private Transaction transaction;
