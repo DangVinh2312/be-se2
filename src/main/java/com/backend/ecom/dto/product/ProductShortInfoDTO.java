@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,9 +23,8 @@ public class ProductShortInfoDTO {
     private String description;
     private Integer quantity;
     private Double price;
-    private Brand brand;
-
-    private Set<Category> categories;
+    private String brand;
+    private Set<String> categories = new HashSet<>();
     private Double totalPrice;
     private Timestamp createdDate;
     private Timestamp updatedDate;
@@ -37,8 +36,8 @@ public class ProductShortInfoDTO {
         this.description = product.getDescription();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
-        this.brand = product.getBrand();
-        this.categories = product.getCategories();
+        this.brand = product.getBrand().getName();
+        product.getCategories().forEach(category -> categories.add(category.getName()));
         this.totalPrice = product.getTotalPrice();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();
