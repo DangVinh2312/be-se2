@@ -1,5 +1,7 @@
 package com.backend.ecom.dto.product;
 
+import com.backend.ecom.entities.Brand;
+import com.backend.ecom.entities.Category;
 import com.backend.ecom.entities.Product;
 
 import com.backend.ecom.entities.ProductDetail;
@@ -9,6 +11,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +23,9 @@ public class ProductShortInfoDTO {
     private String description;
     private Integer quantity;
     private Double price;
+    private Brand brand;
+
+    private Set<Category> categories;
     private Double totalPrice;
     private Timestamp createdDate;
     private Timestamp updatedDate;
@@ -31,6 +37,8 @@ public class ProductShortInfoDTO {
         this.description = product.getDescription();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.brand = product.getBrand();
+        this.categories = product.getCategories();
         this.totalPrice = product.getTotalPrice();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();

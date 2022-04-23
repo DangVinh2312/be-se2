@@ -21,7 +21,7 @@ public class ProductRequestDTO {
     @Min(1)
     private Integer quantity;
 
-    @DecimalMin("100000.0")
+    @DecimalMin("100.0")
     private Double price;
 
     @NotEmpty
