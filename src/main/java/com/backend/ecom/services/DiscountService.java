@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -44,7 +43,7 @@ public class DiscountService {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponseObject("error", "Discount is already existed", ""));
         }
-        if (discountRequest.getEndDate().isBefore(LocalDate.now())){
+        if ((discountRequest.getEndDate()).isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponseObject("error", "Date is invalid", discountRequest.getEndDate()));
         }
@@ -67,18 +66,15 @@ public class DiscountService {
         if (discount.getPercentage().intValue() != discountRequest.getPercentage().intValue() && discountRepository.existsByPercentage(discountRequest.getPercentage())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Discount percentage is already existed", discountRequest.getPercentage()));
         }
-        if(discountRequest.getEndDate().isBefore(LocalDate.now())){
+        if ((discountRequest.getEndDate()).isBefore(LocalDate.now())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Date is invalid", discountRequest.getEndDate()));
         }
         discount.setPercentage(discountRequest.getPercentage());
         discount.setStartDate(discountRequest.getStartDate());
         discount.setEndDate(discountRequest.getEndDate());
-        discount.setEndDate(discountRequest.getEndDate());
         discountRepository.save(discount);
         List<Product> products = productRepository.findProductsByDiscountIdAndDeleted(id, false);
-        products.forEach(product -> {
-            product.setDiscount(null);
-        });
+        products.forEach(product -> product.setDiscount(null));
         for (Long productId : discountRequest.getProductIds()) {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the product with id: " + productId));

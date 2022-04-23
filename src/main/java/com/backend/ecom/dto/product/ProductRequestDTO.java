@@ -30,7 +30,6 @@ public class ProductRequestDTO {
     @Min(1)
     private Integer brandId;
 
-    @NotNull
     private Long discountId;
 
     @NotBlank
