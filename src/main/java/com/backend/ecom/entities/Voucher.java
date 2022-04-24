@@ -1,12 +1,13 @@
 package com.backend.ecom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,10 +19,10 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "voucher")
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotBlank
@@ -30,11 +31,17 @@ public class Voucher {
     @NotNull
     private String description;
 
-    private LocalDate startDate;
+    @Column(name = "start_date", nullable = false)
+    private LocalTime startDate;
 
-    private LocalDate endDate;
+    @Column(name = "end_date", nullable = false)
+    private LocalTime endDate;
 
-    @ManyToOne
+    private double reductionPercentage;
+
+    private double maxReduction;
+
+    @OneToOne
     private Transaction transaction;
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -45,5 +52,17 @@ public class Voucher {
             mappedBy = "vouchers")
     @JsonIgnore
     private Set<User> users = new HashSet<>();
+
+    public static double applyVoucher(double price, Voucher voucher){
+        double finalPrice = price;
+        double reducedPrice = price * voucher.getReductionPercentage();
+
+        if (reducedPrice > voucher.getMaxReduction()){
+            finalPrice = finalPrice - voucher.getMaxReduction();
+        } else {
+            finalPrice = finalPrice - reducedPrice;
+        }
+            return  finalPrice;
+    }
 
 }
