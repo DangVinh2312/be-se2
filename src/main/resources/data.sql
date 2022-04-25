@@ -193,14 +193,6 @@ TABLES `transaction` WRITE;
 UNLOCK
 TABLES;
 
-
-LOCK
-TABLES `transaction_item` WRITE;
-
-UNLOCK
-TABLES;
-
-
 LOCK
 TABLES `user` WRITE;
 INSERT INTO user
