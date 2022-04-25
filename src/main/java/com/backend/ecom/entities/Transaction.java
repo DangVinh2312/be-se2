@@ -4,27 +4,31 @@ import com.backend.ecom.supporters.PaymentType;
 import com.backend.ecom.supporters.TransactionStatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "transaction")
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
 
@@ -32,6 +36,7 @@ public class Transaction {
 
     private TransactionStatus status;
 
+    @NotNull
     private String message;
 
     @OneToOne(mappedBy = "transaction")
@@ -40,5 +45,20 @@ public class Transaction {
     @Transient
     private Double totalPrice;
 
+    @Column(name = "created_at")
     private Timestamp createdAt;
+
+    @OneToOne
+    private Cart cart;
+
+    public Transaction(User user, PaymentType paymentType, TransactionStatus status, String message,Voucher vouchers, Double totalPrice, Cart cart) {
+        this.user = user;
+        this.paymentType = paymentType;
+        this.status = status;
+        this.message = message;
+        this.voucher = vouchers;
+        this.totalPrice = totalPrice;
+        this.createdAt = Timestamp.from(Instant.now());
+        this.cart = cart;
+    }
 }

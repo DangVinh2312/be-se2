@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 
+import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +22,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "voucher")
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @NotBlank
@@ -51,15 +53,6 @@ public class Voucher {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "vouchers")
-    @JsonIgnore
-    private Set<Product> products = new HashSet<>();
-
     public static double applyVoucher(double price, Voucher voucher){
         double finalPrice = price;
         double reducedPrice = price * voucher.getReductionPercentage();
@@ -69,7 +62,7 @@ public class Voucher {
         } else {
             finalPrice = finalPrice - reducedPrice;
         }
-        return  finalPrice;
+            return  finalPrice;
     }
 
 }
