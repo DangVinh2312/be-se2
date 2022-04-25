@@ -25,6 +25,6 @@ public class Shipment {
 
     private ShipmentStatus status;
 
-    @OneToMany(mappedBy = "shipping_order")
+    @OneToMany
     private Set<Transaction> transaction;
 }
