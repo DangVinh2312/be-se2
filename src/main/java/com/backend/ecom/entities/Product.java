@@ -81,9 +81,6 @@ public class Product {
     @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();
 
-    @OneToMany(mappedBy = "product")
-    private Set<TransactionItem> transactionItems = new HashSet<>();
-
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
