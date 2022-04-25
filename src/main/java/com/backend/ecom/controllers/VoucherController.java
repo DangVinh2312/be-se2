@@ -1,8 +1,8 @@
-package com.backend.ecom.controllers;
+package main.java.com.backend.ecom.controllers;
 
-import com.backend.ecom.entities.Voucher;
-import com.backend.ecom.payload.response.ResponseObject;
-import com.backend.ecom.services.VoucherService;
+import main.java.com.backend.ecom.entities.Voucher;
+import main.java.com.backend.ecom.payload.response.ResponseObject;
+import main.java.com.backend.ecom.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class VoucherController {
     private VoucherService voucherService;
 
     @GetMapping("/all")
-    public List<Voucher> getAllVouchers() {
+    public ResponseEntity<ResponseObject> getAllVouchers() {
         return voucherService.getAllVouchers();
     }
 
