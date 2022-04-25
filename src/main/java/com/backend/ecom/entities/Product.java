@@ -68,6 +68,15 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
     private Set<Category> categories = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "product_vouchers",
+            joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "voucherId", referencedColumnName = "id"))
+    private Set<Voucher> vouchers = new HashSet<>();
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();

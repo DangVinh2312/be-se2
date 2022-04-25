@@ -34,8 +34,8 @@ public class Transaction {
 
     private String message;
 
-    @OneToMany(mappedBy = "transaction")
-    private Set<Voucher> vouchers;
+    @OneToOne(mappedBy = "transaction")
+    private Voucher voucher;
 
     @Transient
     private Double totalPrice;
