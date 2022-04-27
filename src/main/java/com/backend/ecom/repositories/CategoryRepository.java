@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
     Boolean existsByName(String name);
 
     @Query("select c from Category c inner join c.products products where products.id = ?1")
-    List<Category> findByProductId(Long id);
+    List<Category> findByProductId(Long productId);
 }

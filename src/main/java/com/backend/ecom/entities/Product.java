@@ -6,12 +6,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +32,7 @@ public class Product {
 
     private String name;
 
+    @Lob
     private String description;
 
     private int quantity;
@@ -54,8 +58,7 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Discount discount;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private Set<Feedback> feedbacks = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -67,28 +70,20 @@ public class Product {
             joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
     private Set<Category> categories = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "product_vouchers",
-            joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "voucherId", referencedColumnName = "id"))
-    private Set<Voucher> vouchers = new HashSet<>();
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private Set<CartItem> cartItems = new HashSet<>();
 
-    private Timestamp createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    private Timestamp updatedAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
-    private Timestamp deletedAt;
+    private LocalDateTime deletedAt;
 
     public Product(ProductRequestDTO productRequestDTO) {
         this.name = productRequestDTO.getName();
@@ -127,20 +122,10 @@ public class Product {
         category.getProducts().add(this);
     }
 
-    public void removeCategory(Integer categoryId) {
+    public void removeCategory(Long categoryId) {
         Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
         if (category != null) this.categories.remove(category);
         category.getProducts().remove(this);
     }
 
-    public void addFeedback(Feedback feedback) {
-        this.feedbacks.add(feedback);
-        feedback.setProduct(this);
-    }
-
-    public void removeFeedback(Long feedbackId) {
-        Feedback feedback = this.feedbacks.stream().filter(t -> t.getId() == feedbackId).findFirst().orElse(null);
-        if (feedback != null) this.feedbacks.remove(feedback);
-        feedback.setProduct(null);
-    }
 }

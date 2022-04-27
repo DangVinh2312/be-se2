@@ -2,6 +2,7 @@ package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.backend.ecom.entities.Category;
+import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getCategoryDetail(@Valid @PathVariable(value = "id") Integer id) {
+    public ResponseEntity<ResponseObject> getCategoryDetail(@Valid @PathVariable(value = "id") Long id) {
         return categoryService.getCategoryDetail(id);
-    }
-
-    @GetMapping("/{id}/products")
-    public ResponseEntity<ResponseObject> getAllProductsByCategoryId(@Valid @PathVariable(value = "id") Integer id) {
-        return categoryService.getAllProductsByCategoryId(id);
     }
 
     @PostMapping("/create")
@@ -39,12 +35,12 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateCategory(@Valid @PathVariable("id") Integer id, @Valid @RequestBody CategoryRequestDTO categoryRequest) {
+    public ResponseEntity<ResponseObject> updateCategory(@Valid @PathVariable("id") Long id, @Valid @RequestBody CategoryRequestDTO categoryRequest) {
         return categoryService.updateCategory(id, categoryRequest);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteCategory(@Valid @PathVariable("id") Integer id) {
+    public ResponseEntity<ResponseObject> deleteCategory(@Valid @PathVariable("id") Long id) {
         return categoryService.deleteCategory(id);
     }
 

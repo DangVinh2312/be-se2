@@ -7,8 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -47,16 +51,6 @@ public class User {
     @JsonIgnore
     private Set<Feedback> feedbacks = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "user_vouchers",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "voucherId"))
-    private Set<Voucher> vouchers = new HashSet<>();
-
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     private Cart cart;
@@ -65,9 +59,11 @@ public class User {
     @JsonIgnore
     private Set<Transaction> transactions;
 
-    private Timestamp createdDate;
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 
-    private Timestamp updatedDate;
+    @UpdateTimestamp
+    private LocalDateTime updatedDate;
 
     @JsonIgnore
     private int passwordResetCode;
@@ -75,7 +71,7 @@ public class User {
     @JsonIgnore
     private boolean deleted = Boolean.FALSE;
 
-    private Timestamp deletedAt;
+    private LocalDateTime deletedAt;
 
     public User(SignupRequest signUpRequest) {
         this.fullName = signUpRequest.getFullName();
@@ -89,16 +85,4 @@ public class User {
         this.username = userCreateRequestDTO.getUsername();
         this.email = userCreateRequestDTO.getEmail();
     }
-
-    public void addFeedback(Feedback feedback) {
-        this.feedbacks.add(feedback);
-        feedback.setUser(this);
-    }
-
-    public void removeFeedback(Long feedbackId) {
-        Feedback feedback = this.feedbacks.stream().filter(t -> t.getId() == feedbackId).findFirst().orElse(null);
-        if (feedback != null) this.feedbacks.remove(feedback);
-        feedback.setUser(null);
-    }
-
 }

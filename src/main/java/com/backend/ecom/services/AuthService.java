@@ -99,8 +99,6 @@ public class AuthService {
 
         User user = new User(signUpRequest);
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
-        user.setCreatedDate(Timestamp.from(Instant.now()));
-        user.setUpdatedDate(Timestamp.from(Instant.now()));
 
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                 .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));

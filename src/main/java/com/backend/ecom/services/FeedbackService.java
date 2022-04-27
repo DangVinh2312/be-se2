@@ -39,4 +39,12 @@ public class FeedbackService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update feedback successfully", feedbackRepository.save(feedback)));
     }
 
+    public ResponseEntity<ResponseObject> deleteFeedback(Long feedbackId) {
+        if (!feedbackRepository.existsById(feedbackId)) {
+            throw new ResourceNotFoundException("Not found discount with id:" + feedbackId);
+        }
+        feedbackRepository.deleteById(feedbackId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete feedback successfully", ""));
+    }
+
 }

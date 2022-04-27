@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByDeleted(Boolean deleted);
 
     @Query("select p from Product p inner join p.categories categories where categories.id = ?1 and p.deleted = ?2")
-    List<Product> findProductsByCategories_idAndDeleted(Integer categoryId, Boolean deleted);
+    List<Product> findProductsByCategories_idAndDeleted(Long categoryId, Boolean deleted);
 
     @Query("select p from Product p where p.brand.id = ?1 and p.deleted = ?2")
     List<Product> findProductsByBrandIdAndDeleted(Integer brandId, Boolean deleted);
@@ -32,11 +32,19 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Modifying
     @Query("UPDATE Product SET deleted = true, deletedAt = current_date WHERE id in ?1")
-    void softDeleteAllByIds (Iterable<? extends Long> ids);
+    void softDeleteAllByIds(Iterable<? extends Long> ids);
 
     @Modifying
     @Query("UPDATE Product SET deleted = false WHERE id in ?1")
-    void restoreAllByIds(Iterable<? extends Long>  ids);
+    void restoreAllByIds(Iterable<? extends Long> ids);
 
     void deleteAllByBrandId(Integer brandId);
+
+    @Query("select p from Product p inner join p.categories categories where " +
+            "p.deleted = ?3 and" +
+            "(p.name like  concat('%', ?1, '%')" +
+            "or p.brand.name like concat('%', ?1, '%')" +
+            "or p.description like concat('%', ?1, '%'))" +
+            "or categories.name like concat('%', ?2, '%')")
+    List<Product> searchProduct(String query, String categories, Boolean deleted);
 }

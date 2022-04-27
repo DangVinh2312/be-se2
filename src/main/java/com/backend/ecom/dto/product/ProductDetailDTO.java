@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ public class ProductDetailDTO {
     private Brand brand;
     private Discount discount;
     private Set<Category> categories;
-    private Timestamp createdDate;
-    private Timestamp updatedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     public ProductDetailDTO (Product product){
         this.id = product.getId();

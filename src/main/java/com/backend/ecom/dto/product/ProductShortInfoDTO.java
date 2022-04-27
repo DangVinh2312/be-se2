@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,8 @@ public class ProductShortInfoDTO {
     private String brand;
     private Set<String> categories = new HashSet<>();
     private Double totalPrice;
-    private Timestamp createdDate;
-    private Timestamp updatedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     public ProductShortInfoDTO (Product product){
         this.id = product.getId();

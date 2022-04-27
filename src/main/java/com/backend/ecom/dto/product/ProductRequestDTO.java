@@ -10,7 +10,8 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 public class ProductRequestDTO {
-    private String thumbnailUrl;
+    @NotBlank
+    private String thumbnail;
 
     @Size(min = 2)
     private String name;
@@ -25,7 +26,7 @@ public class ProductRequestDTO {
     private Double price;
 
     @NotEmpty
-    private Integer[] categoryIds;
+    private Long[] categoryIds;
 
     @Min(1)
     private Integer brandId;
