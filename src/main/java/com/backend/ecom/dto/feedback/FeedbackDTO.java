@@ -12,27 +12,29 @@ import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class FeedbackDTO {
-
+    private long id;
     private String content;
 
     private Integer rating;
 
-    private User user;
+    private String user;
 
-    private Product product;
+    private String product;
 
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     public FeedbackDTO(Feedback feedback){
+        this.id = feedback.getId();
         this.content = feedback.getContent();
         this.rating = feedback.getRating();
-        this.user = feedback.getUser();
-        this.product = feedback.getProduct();
+        this.user = feedback.getUser().getUsername();
+        this.product = feedback.getProduct().getName();
         this.createdDate = feedback.getCreatedDate();
     }
 }

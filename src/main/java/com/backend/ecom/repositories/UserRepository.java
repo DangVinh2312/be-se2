@@ -1,5 +1,6 @@
 package com.backend.ecom.repositories;
 
+import com.backend.ecom.entities.Product;
 import com.backend.ecom.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -43,4 +44,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User SET deleted = false WHERE id in ?1")
     void restoreAllByIds(Iterable<? extends Long>  ids);
+    @Query("select u from User u where " +
+            "u.deleted = ?2 and" +
+            "(u.fullName like  concat('%', ?1, '%')" +
+            "or u.username like concat('%', ?1, '%')" +
+            "or u.address like concat('%', ?1, '%')" +
+            "or u.email like concat('%', ?1, '%'))")
+    List<User> searchUser(String query, Boolean deleted);
 }

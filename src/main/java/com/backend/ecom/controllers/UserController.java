@@ -30,6 +30,12 @@ public class UserController {
         return userService.getAllUsers(deleted);
     }
 
+    @GetMapping("/search")
+    public List<UserShortInfoDTO> searchUser(@RequestParam(value = "q", defaultValue = "") String query,
+                                             @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
+        return userService.searchUser(query, deleted);
+    }
+
     @GetMapping("/all/{roleId}")
     public List<UserShortInfoDTO> getAllUsersByRole(@Valid @PathVariable("roleId") Long id,
                                                     @Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {

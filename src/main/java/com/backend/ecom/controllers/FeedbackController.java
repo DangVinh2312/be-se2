@@ -2,7 +2,6 @@ package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
-import com.backend.ecom.entities.Feedback;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,11 @@ public class FeedbackController {
     public ResponseEntity<ResponseObject> updateFeedback(@Valid @PathVariable("feedbackId") Long feedbackId,
                                                          @Valid @RequestBody FeedbackRequestDTO feedbackRequest) {
         return feedbackService.updateFeedback(feedbackId, feedbackRequest);
+    }
+
+    @DeleteMapping("/delete/{feedbackId}")
+    public ResponseEntity<ResponseObject> deleteFeedback(@Valid @PathVariable("feedbackId") Long feedbackId) {
+        return feedbackService.deleteFeedback(feedbackId);
     }
 
 }

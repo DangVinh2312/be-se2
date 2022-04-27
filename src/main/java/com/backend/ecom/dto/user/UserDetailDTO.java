@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -22,10 +23,9 @@ public class UserDetailDTO {
     private String address;
     private Role role;
     private Set<Feedback> feedbacks;
-    private Set<Voucher> vouchers;
     private Set<Transaction> transactions;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UserDetailDTO(User user) {
         this.id = user.getId();
@@ -36,7 +36,6 @@ public class UserDetailDTO {
         this.address = user.getAddress();
         this.role = user.getRole();
         this.feedbacks = user.getFeedbacks();
-        this.vouchers = user.getVouchers();
         this.transactions = user.getTransactions();
         this.createdAt = user.getCreatedDate();
         this.updatedAt = user.getUpdatedDate();

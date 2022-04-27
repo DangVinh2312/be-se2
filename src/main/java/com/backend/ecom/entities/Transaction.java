@@ -8,10 +8,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -40,5 +42,6 @@ public class Transaction {
     @Transient
     private Double totalPrice;
 
-    private Timestamp createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

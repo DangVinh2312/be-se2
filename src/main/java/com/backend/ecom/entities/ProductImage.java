@@ -18,7 +18,7 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String file;
+    private String image;
 
     @ManyToOne
     @JsonIgnore

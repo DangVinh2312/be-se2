@@ -42,24 +42,6 @@ public class Voucher {
     @OneToOne
     private Transaction transaction;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "vouchers")
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "vouchers")
-    @JsonIgnore
-    private Set<Product> products = new HashSet<>();
-
     public static double applyVoucher(double price, Voucher voucher){
         double finalPrice = price;
         double reducedPrice = price * voucher.getReductionPercentage();

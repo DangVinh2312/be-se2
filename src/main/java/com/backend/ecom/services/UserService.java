@@ -58,6 +58,19 @@ public class UserService {
         return userShortInfo;
     }
 
+    public List<UserShortInfoDTO> searchUser(String query, Boolean deleted) {
+        List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
+
+        if (query.equals("")) {
+            List<User> users = userRepository.findAllByDeleted(deleted);
+            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
+        } else {
+            List<User> users = userRepository.searchUser(query, deleted);
+            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
+        }
+        return userShortInfo;
+    }
+
     public List<UserShortInfoDTO> getAllUsersByRole(Boolean deleted, Long roleId) {
         List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
         List<User> users = userRepository.findAllByDeletedAndRoleId(deleted, roleId);
@@ -89,8 +102,6 @@ public class UserService {
 
         User user = new User(userCreateRequestDTO);
         user.setPassword(encoder.encode(userCreateRequestDTO.getPassword()));
-        user.setCreatedDate(Timestamp.from(Instant.now()));
-        user.setUpdatedDate(Timestamp.from(Instant.now()));
 
         String role = userCreateRequestDTO.getRole();
 
@@ -108,7 +119,6 @@ public class UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create user successfully!", user));
     }
-
 
 
     public ResponseEntity<ResponseObject> updateUser(Long id, UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
@@ -129,7 +139,6 @@ public class UserService {
         user.setFullName(userUpdateInfoRequestDTO.getFullName());
         user.setUsername(userUpdateInfoRequestDTO.getUsername());
         user.setEmail(userUpdateInfoRequestDTO.getEmail());
-        user.setUpdatedDate(Timestamp.from(Instant.now()));
         user.setAddress(userUpdateInfoRequestDTO.getAddress());
         String role = userUpdateInfoRequestDTO.getRole();
 
@@ -193,5 +202,6 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete feedback successfully", ""));
 
     }
+
 
 }
