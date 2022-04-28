@@ -9,6 +9,7 @@ import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Shipment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private LocalDate startDate;
@@ -26,8 +27,8 @@ public class Shipment {
 
     private ShipmentStatus status;
 
-    @OneToMany
-    private Set<Transaction> transaction;
+    @OneToMany(mappedBy = "shipment")
+    private Set<Transaction> transaction = new HashSet<>();
 
     public Shipment(ShipmentRequestDTO shipmentRequestDTO){
         this.startDate = shipmentRequestDTO.getStartDate();

@@ -1,4 +1,4 @@
-package main.java.com.backend.ecom.services;
+package com.backend.ecom.services;
 
 import com.backend.ecom.dto.voucher.VoucherDTO;
 import com.backend.ecom.dto.voucher.VoucherRequestDTO;

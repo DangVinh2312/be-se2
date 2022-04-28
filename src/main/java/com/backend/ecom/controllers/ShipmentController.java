@@ -26,12 +26,12 @@ public class ShipmentController {
         return shipmentService.getShipmentDetail(id);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<ResponseObject> createShipment(@RequestBody ShipmentRequestDTO shipment){
         return shipmentService.createShipment(shipment);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateShipment(@PathVariable Long id, @RequestBody ShipmentRequestDTO updateShipment){
         return shipmentService.updateShipment(id, updateShipment);
     }

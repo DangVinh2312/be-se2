@@ -3,7 +3,7 @@ package com.backend.ecom.controllers;
 import com.backend.ecom.dto.voucher.VoucherRequestDTO;
 import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.payload.response.ResponseObject;
-import main.java.com.backend.ecom.services.VoucherService;
+import com.backend.ecom.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

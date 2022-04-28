@@ -2,6 +2,7 @@ package com.backend.ecom.entities;
 
 import com.backend.ecom.dto.voucher.VoucherRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,18 +21,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "voucher")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Voucher {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @NotBlank
     private String name;
 
-    @NotNull
     private String description;
-
     @Column(name = "start_date", nullable = false)
     private LocalTime startDate;
 

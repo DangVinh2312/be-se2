@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,8 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ import java.util.Set;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -38,20 +39,30 @@ public class Transaction {
 
     private TransactionStatus status;
 
-    @NotNull
     private String message;
 
-    @OneToOne(mappedBy = "transaction")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn
     private Voucher voucher;
 
     @Transient
     private Double totalPrice;
 
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Cart cart;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Shipment shipment;
 
     public Transaction(User user, PaymentType paymentType, TransactionStatus status, String message,Voucher vouchers, Double totalPrice, Cart cart) {
         this.user = user;
@@ -60,7 +71,10 @@ public class Transaction {
         this.message = message;
         this.voucher = vouchers;
         this.totalPrice = totalPrice;
-        this.createdAt = Timestamp.from(Instant.now());
         this.cart = cart;
+    }
+
+    public Double getTotalPrice(){
+        return totalPrice = cart.getTotalItemPrice();
     }
 }

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class TransactionDTO {
 
     private Double totalPrice;
 
-    private Timestamp createAt;
+    private LocalDateTime createAt;
 
     private Cart cart;
 
