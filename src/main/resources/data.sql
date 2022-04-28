@@ -36,15 +36,6 @@ UNLOCK TABLES;
 -- Dumping data for table `cart`
 --
 
-LOCK TABLES cart WRITE;
-UNLOCK TABLES;
-
---
--- Dumping data for table `cart_item`
---
-
-LOCK TABLES cart_item WRITE;
-UNLOCK TABLES;
 
 --
 -- Dumping data for table `category`
@@ -86,6 +77,8 @@ UNLOCK TABLES;
 --
 -- Dumping data for table `feedback`
 --
+
+
 
 --
 -- Dumping data for table `product`
@@ -356,19 +349,19 @@ VALUES (1, '2022-04-21 19:12:34', _binary '\0', NULL,
         ' Nokia C30', 130.15, 6000, ' 5MP | main 13MP, sub 2MP ', 32, 'Android 11(Go Edition)', 'Spreadtrum SC9863A', 3,
         'IPS LCD6.82 HD+', 39, 'https://cdn.tgdd.vn/Products/Images/42/239748/nokia-c30-xanh-la-600x600.jpg',
         '2022-04-26 18:57:13', 3, NULL),
-       (48, '2022-04-26 19:09:57', _binary '\0', NULL,
+       (49, '2022-04-26 19:09:57', _binary '\0', NULL,
         'the low-cost segment with a highlight of luxurious geometric design, a set of 3 quality cameras, effects that meet the requirements quite well and the battery life corresponds to the estimated time for users to experience impressively.',
         ' Realme C21-Y ', 132.33, 5000, ' 5MP | main 13MP, sub 2 2MP ', 32, 'Android 11', 'Spreadtrum T610 8-core', 3,
         'IPS LCD6.5 HD+', 29,
         'https://cdn.tgdd.vn/Products/Images/42/246195/samsung-galaxy-a73-5g-xanh-thumb-600x600.jpg',
         '2022-04-26 19:09:57', 7, NULL),
-       (49, '2022-04-26 19:13:21', _binary '\0', NULL,
+       (50, '2022-04-26 19:13:21', _binary '\0', NULL,
         'A pretty good price, possessing a modern design with 3 AI cameras up to 50 MP, stable performance and long usage time thanks to a huge 5000 mAh battery, considered one of the fantasy products. you should own',
         ' Realme C25-Y ', 164.54, 5000, ' 8MP | main 50MP, sub 2 2MP ', 64, 'Android 11', 'Unisoc T618 8-core', 4,
         'IPS LCD6.5 HD+', 59,
         'https://cdn.tgdd.vn/Products/Images/42/246195/samsung-galaxy-a73-5g-xanh-thumb-600x600.jpg',
         '2022-04-26 19:13:21', 7, 6),
-       (50, '2022-04-26 19:16:16', _binary '\0', NULL,
+       (51, '2022-04-26 19:16:16', _binary '\0', NULL,
         'mid-range segment, featuring Realme\'s signature design, a smartphone equipped with effects in full power and with a corresponding battery capacity.',
         ' Realme 8  ', 261.17, 5000, ' 16MP | main 64MP, sub 8MP, 2 2MP ', 128, 'Android 11', 'Unisoc T618 8-core', 8,
         'Super AMOLED6.4 Full HD+', 50, 'https://cdn.tgdd.vn/Products/Images/42/233135/realme-8-silver-600x600.jpg',
@@ -573,11 +566,11 @@ VALUES (1, 1),
 UNLOCK TABLES;
 
 --
--- Dumping data for table `product_image`
---
+-- Dumping data for table `product_feedbacks`
 
-LOCK TABLES product_image WRITE;
-UNLOCK TABLES;
+-- Dumping data for table `product_image`
+
+--
 
 --
 -- Dumping data for table `role`
@@ -592,9 +585,6 @@ UNLOCK TABLES;
 --
 -- Dumping data for table `transaction`
 --
-
-LOCK TABLES transaction WRITE;
-UNLOCK TABLES;
 
 --
 -- Dumping data for table `user`
@@ -665,11 +655,11 @@ VALUES (1, 'Ho Chi Minh', NULL, '2022-04-22 13:14:58', _binary '\0', NULL, 'admi
 UNLOCK TABLES;
 
 --
--- Dumping data for table `voucher`
---
+-- Dumping data for table `user_vouchers`
 
-LOCK TABLES voucher WRITE;
-UNLOCK TABLES;
+--
+-- Dumping data for table `voucher`
+
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
