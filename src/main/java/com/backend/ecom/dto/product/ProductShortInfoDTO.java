@@ -23,7 +23,6 @@ public class ProductShortInfoDTO {
     private Double price;
     private String brand;
     private Set<String> categories = new HashSet<>();
-
     private Discount discount;
     private Double totalPrice;
     private LocalDateTime createdDate;

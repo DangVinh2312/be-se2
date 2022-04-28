@@ -10,6 +10,10 @@ import com.backend.ecom.dto.product.ProductRequestDTO;
 
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +69,7 @@ public class ProductService {
     }
 
     public ResponseEntity<ResponseObject> getProductDetail(Long id, Boolean deleted) {
-        Product product = productRepository.findByIdAndDeleted(id, deleted)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + id));
         ProductDetailDTO productDetail = new ProductDetailDTO(product);
         return ResponseEntity.ok(new ResponseObject("ok", "Query product successfully", productDetail));
@@ -103,16 +107,6 @@ public class ProductService {
         Product product = new Product(productRequestDTO);
         if (!productRequestDTO.getThumbnail().equals(null) && !productRequestDTO.getThumbnail().equals("")) {
             product.setThumbnail(productRequestDTO.getThumbnail());
-        }
-        if (productRequestDTO.getDiscountId().longValue() != 0L) {
-            Discount discount = discountRepository.findById(productRequestDTO.getDiscountId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequestDTO.getDiscountId()));
-            if (discount.getEndDate().isAfter(LocalDate.now())) {
-                product.addDiscount(discount);
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ResponseObject("error", "Product is already existed", discount.getEndDate()));
-            }
         }
         for (Long categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
@@ -162,19 +156,8 @@ public class ProductService {
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the category with id: " + productRequest.getBrandId()));
             product.setBrand(brand);
         }
-        if (productRequest.getDiscountId().longValue() != 0L) {
-            Discount discount = discountRepository.findById(productRequest.getDiscountId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequest.getDiscountId()));
-            if (discount.getEndDate().isAfter(LocalDate.now())) {
-                product.addDiscount(discount);
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(new ResponseObject("error", "Product is already existed", discount.getEndDate()));
-            }
-        } else {
-            product.removeDiscount();
-        }
         productRepository.save(product);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("ok", "Update product successfully", product));
     }

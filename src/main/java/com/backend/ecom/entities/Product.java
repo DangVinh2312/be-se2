@@ -12,7 +12,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -24,6 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -54,7 +54,7 @@ public class Product {
     private ProductDetail productDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "discountId")
+    @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Discount discount;
 
