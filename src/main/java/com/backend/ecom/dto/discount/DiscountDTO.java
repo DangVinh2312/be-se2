@@ -23,10 +23,13 @@ public class DiscountDTO {
 
     private LocalDate endDate;
 
+    private Set<String> products = new HashSet<>();
     public DiscountDTO(Discount discount){
         this.id = discount.getId();
         this.percentage = discount.getPercentage();
         this.startDate = discount.getStartDate();
         this.endDate = discount.getEndDate();
+        discount.getProducts().forEach(product -> products.add(product.getName()));
+
     }
 }

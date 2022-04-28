@@ -1,10 +1,7 @@
 package com.backend.ecom.dto.product;
 
-import com.backend.ecom.entities.Brand;
-import com.backend.ecom.entities.Category;
-import com.backend.ecom.entities.Product;
+import com.backend.ecom.entities.*;
 
-import com.backend.ecom.entities.ProductDetail;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +23,8 @@ public class ProductShortInfoDTO {
     private Double price;
     private String brand;
     private Set<String> categories = new HashSet<>();
+
+    private Discount discount;
     private Double totalPrice;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
@@ -37,6 +36,7 @@ public class ProductShortInfoDTO {
         this.description = product.getDescription();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.discount = product.getDiscount();
         this.brand = product.getBrand().getName();
         product.getCategories().forEach(category -> categories.add(category.getName()));
         this.totalPrice = product.getTotalPrice();

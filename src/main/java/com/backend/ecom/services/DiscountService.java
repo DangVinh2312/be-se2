@@ -33,7 +33,7 @@ public class DiscountService {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found discount with id: " + id));
         DiscountDTO discountDTO = new DiscountDTO(discount);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete discount successfully", discountDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Query discount successfully", discountDTO));
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class DiscountService {
         for (Long productId : discountRequest.getProductIds()) {
             Product product = productRepository.findByIdAndDeleted(productId, false)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + productId));
-            product.setDiscount(discount);
+            product.addDiscount(discount);
             productRepository.save(product);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Create discount successfully", discount));
@@ -78,7 +78,7 @@ public class DiscountService {
         for (Long productId : discountRequest.getProductIds()) {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the product with id: " + productId));
-            product.setDiscount(discount);
+            product.addDiscount(discount);
             productRepository.save(product);
         }
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update discount successfully", discount));
@@ -91,7 +91,7 @@ public class DiscountService {
         }
         List<Product> products = productRepository.findProductsByDiscountIdAndDeleted(id, false);
         products.forEach(product -> {
-            product.setDiscount(null);
+            product.removeDiscount();
             productRepository.save(product);
         });
         discountRepository.deleteById(id);
