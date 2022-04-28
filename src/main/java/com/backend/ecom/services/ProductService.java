@@ -10,10 +10,6 @@ import com.backend.ecom.dto.product.ProductRequestDTO;
 
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +38,6 @@ public class ProductService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private DiscountRepository discountRepository;
 
     public List<ProductShortInfoDTO> getAllProducts(Boolean deleted) {
         List<ProductShortInfoDTO> productShortInfo = new ArrayList<>();
@@ -69,7 +61,7 @@ public class ProductService {
     }
 
     public ResponseEntity<ResponseObject> getProductDetail(Long id, Boolean deleted) {
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findByIdAndDeleted(id, deleted)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + id));
         ProductDetailDTO productDetail = new ProductDetailDTO(product);
         return ResponseEntity.ok(new ResponseObject("ok", "Query product successfully", productDetail));
@@ -89,7 +81,6 @@ public class ProductService {
         if (!productRepository.existsByIdAndDeleted(productId, false)) {
             throw new ResourceNotFoundException("Not found product with id: " + productId);
         }
-
         List<Feedback> feedbacks = feedbackRepository.findFeedbacksByProductId(productId);
         List<FeedbackDTO> feedbackDTOS = new ArrayList<>();
         feedbacks.forEach(feedback -> feedbackDTOS.add(new FeedbackDTO(feedback)));
