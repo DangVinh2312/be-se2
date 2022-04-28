@@ -1,7 +1,8 @@
-package main.java.com.backend.ecom.controllers;
+package com.backend.ecom.controllers;
 
-import main.java.com.backend.ecom.entities.Voucher;
-import main.java.com.backend.ecom.payload.response.ResponseObject;
+import com.backend.ecom.dto.voucher.VoucherRequestDTO;
+import com.backend.ecom.entities.Voucher;
+import com.backend.ecom.payload.response.ResponseObject;
 import main.java.com.backend.ecom.services.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/vouchers")
 public class VoucherController {
+
     @Autowired
     private VoucherService voucherService;
 
     @GetMapping("/all")
-    public ResponseEntity<ResponseObject> getAllVouchers() {
+    public List<Voucher> getAllVouchers() {
         return voucherService.getAllVouchers();
     }
 
@@ -27,12 +29,12 @@ public class VoucherController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createVoucher(@RequestBody Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> createVoucher(@RequestBody VoucherRequestDTO voucherRequest) {
         return voucherService.createVoucher(voucherRequest);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable("id") Long id, @RequestBody Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable("id") Long id, @RequestBody VoucherRequestDTO voucherRequest) {
         return voucherService.updateVoucher(id, voucherRequest);
     }
 

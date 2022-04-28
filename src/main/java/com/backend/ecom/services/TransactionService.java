@@ -1,10 +1,11 @@
 package com.backend.ecom.services;
 
+import com.backend.ecom.dto.transaction.TransactionDTO;
+import com.backend.ecom.dto.transaction.TransactionRequestDTO;
 import com.backend.ecom.entities.*;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.TransactionRepository;
-import com.backend.ecom.supporters.PaymentType;
 import com.backend.ecom.supporters.TransactionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,21 +26,24 @@ public class TransactionService {
     }
 
     public ResponseEntity<ResponseObject> getTransactionDetail(Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", ""));
-    }
-
-    public ResponseEntity<ResponseObject> updateTransaction(Long id, Transaction transactionRequest) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
 
-        transaction.setUser(transactionRequest.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", new TransactionDTO(transaction)));
+    }
+
+    public ResponseEntity<ResponseObject> updateTransaction(Long id, TransactionRequestDTO transactionRequest) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
+
+        transaction.setUser(transactionRequest.getCart().getUser());
         transaction.setPaymentType(transactionRequest.getPaymentType());
         transaction.setStatus(transactionRequest.getStatus());
         transaction.setVoucher(transactionRequest.getVoucher());
         transaction.setTotalPrice(transactionRequest.getTotalPrice());
         transaction.setCart(transactionRequest.getCart());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", transactionRepository.save(transaction)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", new TransactionDTO(transactionRepository.save(transaction))));
     }
 
     public ResponseEntity<ResponseObject> deleteTransaction(Long id) {
@@ -51,18 +55,18 @@ public class TransactionService {
 
     }
 
-    public ResponseEntity<ResponseObject> createTransaction(Cart cart, Voucher appliedVoucher, String message, PaymentType paymentType, TransactionStatus transactionStatus){
-        Set<CartItem>  cartItem = cart.getCartItems();
+    public ResponseEntity<ResponseObject> createTransaction(TransactionRequestDTO transactionRequest){
+        Set<CartItem>  cartItem = transactionRequest.getCart().getCartItems();
         double price = 0;
         for (CartItem item : cartItem){
             price = price + item.getTotalPrice();
         }
 
-        price = Voucher.applyVoucher(price, appliedVoucher);
+        price = Voucher.applyVoucher(price, transactionRequest.getVoucher());
 
-        com.backend.ecom.entities.User user = cart.getUser();
+        com.backend.ecom.entities.User user = transactionRequest.getCart().getUser();
 
-        Transaction transaction = new Transaction(user, paymentType,transactionStatus, message, appliedVoucher, price, cart);
+        Transaction transaction = new Transaction(user, transactionRequest.getPaymentType(),transactionRequest.getStatus(), transactionRequest.getMessage(), transactionRequest.getVoucher(), price, transactionRequest.getCart());
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "Transaction created!", transaction));
     }
 
@@ -71,7 +75,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
         transaction.setStatus(transactionStatus);
         transactionRepository.save(transaction);
-        return ResponseEntity.ok( new ResponseObject("ok", "Transaction status updated!", transaction));
+        return ResponseEntity.ok( new ResponseObject("ok", "Transaction status updated!", new TransactionDTO(transactionRepository.save(transaction))));
     }
 
 }
