@@ -1,9 +1,11 @@
 package main.java.com.backend.ecom.services;
 
-import main.java.com.backend.ecom.entities.Voucher;
-import main.java.com.backend.ecom.exception.ResourceNotFoundException;
-import main.java.com.backend.ecom.payload.response.ResponseObject;
-import main.java.com.backend.ecom.repositories.VoucherRepository;
+import com.backend.ecom.dto.voucher.VoucherDTO;
+import com.backend.ecom.dto.voucher.VoucherRequestDTO;
+import com.backend.ecom.repositories.VoucherRepository;
+import com.backend.ecom.entities.Voucher;
+import com.backend.ecom.exception.ResourceNotFoundException;
+import com.backend.ecom.payload.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,26 +18,27 @@ public class VoucherService {
     @Autowired
     private VoucherRepository voucherRepository;
 
-    public ResponseEntity<ResponseObject> getAllVouchers() {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Get all voucher!", voucherRepository.findAll()));
+    public List<Voucher> getAllVouchers() {
+        return voucherRepository.findAll();
     }
 
     public ResponseEntity<ResponseObject> getVoucherDetail(Long id) {
         Voucher voucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found voucher with id:" + id));
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher details found!", voucher));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher details found!", new VoucherDTO(voucher)));
     }
 
-    public ResponseEntity<ResponseObject> createVoucher(Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> createVoucher(VoucherRequestDTO voucherRequest) {
         boolean exist = voucherRepository.existsByName(voucherRequest.getName());
         if(exist){
             throw new ResourceNotFoundException("Voucher is already existed");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created",voucherRepository.save(voucherRequest)));
+        Voucher voucher = new Voucher(voucherRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created",new VoucherDTO(voucher)));
 
     }
 
-    public ResponseEntity<ResponseObject> updateVoucher(Long id, Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> updateVoucher(Long id, VoucherRequestDTO voucherRequest) {
         Voucher voucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found voucher with id:" + id));
 
@@ -46,7 +49,7 @@ public class VoucherService {
         voucher.setReductionPercentage(voucherRequest.getReductionPercentage());
         voucher.setMaxReduction(voucherRequest.getMaxReduction());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher updated!", voucherRepository.save(voucher)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher updated!",new VoucherDTO(voucherRepository.save(voucher))));
     }
 
     public ResponseEntity<ResponseObject> deleteVoucher(Long id) {

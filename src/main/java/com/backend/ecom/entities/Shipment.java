@@ -1,5 +1,6 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.shipment.ShipmentRequestDTO;
 import com.backend.ecom.supporters.ShipmentStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,4 +28,11 @@ public class Shipment {
 
     @OneToMany(mappedBy = "shipping_order")
     private Set<Transaction> transaction;
+
+    public Shipment(ShipmentRequestDTO shipmentRequestDTO){
+        this.startDate = shipmentRequestDTO.getStartDate();
+        this.estimatedArrivalDate = shipmentRequestDTO.getEstimatedArrivalDate();
+        this.status = shipmentRequestDTO.getStatus();
+        this.transaction = shipmentRequestDTO.getTransactions();
+    }
 }
