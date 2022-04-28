@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.transaction.TransactionRequestDTO;
 import com.backend.ecom.entities.Cart;
 import com.backend.ecom.entities.Transaction;
 import com.backend.ecom.entities.Voucher;
@@ -31,7 +32,7 @@ public class TransactionController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateTransaction(@PathVariable("id") Long id, @RequestBody Transaction transactionRequest) {
+    public ResponseEntity<ResponseObject> updateTransaction(@PathVariable("id") Long id, @RequestBody TransactionRequestDTO transactionRequest) {
         return transactionService.updateTransaction(id,transactionRequest );
     }
 
@@ -41,12 +42,8 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> newTransaction(@RequestBody Cart cart,
-                                                         @RequestBody Voucher appliedVoucher,
-                                                         @RequestBody String message,
-                                                         @RequestBody PaymentType paymentType,
-                                                         @RequestBody TransactionStatus transactionStatus){
-        return transactionService.createTransaction(cart, appliedVoucher, message, paymentType, transactionStatus);
+    public ResponseEntity<ResponseObject> newTransaction(@RequestBody TransactionRequestDTO transactionRequest){
+        return transactionService.createTransaction(transactionRequest);
     }
 
     @PutMapping("/payment")

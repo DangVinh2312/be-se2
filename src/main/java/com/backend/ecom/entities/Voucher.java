@@ -1,5 +1,6 @@
 package com.backend.ecom.entities;
 
+import com.backend.ecom.dto.voucher.VoucherRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,17 +42,14 @@ public class Voucher {
 
     private double maxReduction;
 
-    @OneToOne
-    private Transaction transaction;
-
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "vouchers")
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
+    public Voucher(VoucherRequestDTO v) {
+        this.name = v.getName();
+        this.description = v.getDescription();
+        this.startDate = v.getStartDate();
+        this.endDate = v.getEndDate();
+        this.reductionPercentage = v.getReductionPercentage();
+        this.maxReduction = v.getMaxReduction();
+    }
 
     public static double applyVoucher(double price, Voucher voucher){
         double finalPrice = price;
