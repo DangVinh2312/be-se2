@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -22,9 +23,9 @@ public class ProductDetailDTO {
     private Integer quantity;
     private Double price;
     private Double totalPrice;
-    private Brand brand;
+    private String brand;
     private Discount discount;
-    private Set<Category> categories;
+    private Set<String> categories = new HashSet<>();
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
@@ -37,9 +38,9 @@ public class ProductDetailDTO {
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.totalPrice = product.getTotalPrice();
-        this.brand = product.getBrand();
+        this.brand = product.getBrand().getName();
+        product.getCategories().forEach(category -> categories.add(category.getName()));
         this.discount = product.getDiscount();
-        this.categories = product.getCategories();
         this.createdDate = product.getCreatedAt();
         this.updatedDate = product.getUpdatedAt();
     }

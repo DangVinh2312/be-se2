@@ -128,4 +128,13 @@ public class Product {
         category.getProducts().remove(this);
     }
 
+    public void addDiscount(Discount discount) {
+        this.discount = discount;
+        discount.getProducts().add(this);
+    }
+
+    public void removeDiscount() {
+        getDiscount().getProducts().remove(this);
+        this.discount = null;
+    }
 }

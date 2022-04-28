@@ -7,7 +7,7 @@ import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.*;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.dto.product.ProductRequestDTO;
-import com.backend.ecom.payload.request.ArrayRequest;
+
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -97,6 +93,7 @@ public class ProductService {
 
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) {
         boolean exist = productRepository.existsByName(productRequestDTO.getName());
         if (exist) {
@@ -104,7 +101,19 @@ public class ProductService {
                     .body(new ResponseObject("error", "Product is already existed", ""));
         }
         Product product = new Product(productRequestDTO);
-        product.setThumbnail(productRequestDTO.getThumbnail());
+        if (!productRequestDTO.getThumbnail().equals(null) && !productRequestDTO.getThumbnail().equals("")) {
+            product.setThumbnail(productRequestDTO.getThumbnail());
+        }
+        if (productRequestDTO.getDiscountId().longValue() != 0L) {
+            Discount discount = discountRepository.findById(productRequestDTO.getDiscountId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequestDTO.getDiscountId()));
+            if (discount.getEndDate().isAfter(LocalDate.now())) {
+                product.addDiscount(discount);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponseObject("error", "Product is already existed", discount.getEndDate()));
+            }
+        }
         for (Long categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new ResourceNotFoundException("Not found category with id: " + categoryId));
@@ -129,6 +138,7 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Write feedback successfully", feedback));
     }
 
+    @Transactional
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
         Product product = productRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
@@ -152,10 +162,17 @@ public class ProductService {
                     .orElseThrow(() -> new ResourceNotFoundException("Not found the category with id: " + productRequest.getBrandId()));
             product.setBrand(brand);
         }
-        if (productRequest.getDiscountId().longValue() != 0 && productRequest.getDiscountId().longValue() != product.getDiscount().getId()) {
+        if (productRequest.getDiscountId().longValue() != 0L) {
             Discount discount = discountRepository.findById(productRequest.getDiscountId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequest.getBrandId()));
-            product.setDiscount(discount);
+                    .orElseThrow(() -> new ResourceNotFoundException("Not found the discount with id: " + productRequest.getDiscountId()));
+            if (discount.getEndDate().isAfter(LocalDate.now())) {
+                product.addDiscount(discount);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponseObject("error", "Product is already existed", discount.getEndDate()));
+            }
+        } else {
+            product.removeDiscount();
         }
         productRepository.save(product);
         return ResponseEntity.status(HttpStatus.OK)
