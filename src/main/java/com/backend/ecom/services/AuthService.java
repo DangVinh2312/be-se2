@@ -69,7 +69,7 @@ public class AuthService {
 
         if (roles.contains("ROLE_USER")) {
             User findCart = userRepository.findCartByUsername(authentication.getName());
-            if (findCart == null) {
+            if (findCart != null) {
                 Cart cart = new Cart();
                 cart.addUser(userRepository.getByUsername(authentication.getName()));
                 cartRepository.save(cart);

@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select (count(u) > 0) from User u where u.id = ?1 and  u.deleted = ?2")
     Boolean existsByIdAndDeleted(Long id, Boolean deleted);
 
-    @Query("select u.cart from User u where u.cart is null and u.username = ?1")
+    @Query("select u from User u where u.cart is null and u.username = ?1")
     User findCartByUsername (String name);
 
     User getByUsername (String authenticatedUsername);
