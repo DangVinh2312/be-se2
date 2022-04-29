@@ -64,7 +64,7 @@ public class Transaction {
     @JsonIgnore
     private Shipment shipment;
 
-    public Transaction(User user, PaymentType paymentType, TransactionStatus status, String message,Voucher vouchers, Double totalPrice, Cart cart) {
+    public Transaction(User user, PaymentType paymentType, TransactionStatus status, String message,Voucher vouchers, Double totalPrice, Cart cart, Shipment shipment) {
         this.user = user;
         this.paymentType = paymentType;
         this.status = status;
@@ -72,6 +72,7 @@ public class Transaction {
         this.voucher = vouchers;
         this.totalPrice = totalPrice;
         this.cart = cart;
+        this.shipment = shipment;
     }
 
     public Double getTotalPrice(){

@@ -44,6 +44,7 @@ public class TransactionService {
         transaction.setVoucher(transactionRequest.getVoucher());
         transaction.setTotalPrice(transactionRequest.getTotalPrice());
         transaction.setCart(transactionRequest.getCart());
+        transaction.setShipment(transactionRequest.getShipment());
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", new TransactionDTO(transactionRepository.save(transaction))));
     }
@@ -69,7 +70,7 @@ public class TransactionService {
 
         com.backend.ecom.entities.User user = transactionRequest.getCart().getUser();
 
-        Transaction transaction = new Transaction(user, transactionRequest.getPaymentType(), transactionRequest.getStatus(), transactionRequest.getMessage(), transactionRequest.getVoucher(), price, transactionRequest.getCart());
+        Transaction transaction = new Transaction(user, transactionRequest.getPaymentType(), transactionRequest.getStatus(), transactionRequest.getMessage(), transactionRequest.getVoucher(), price, transactionRequest.getCart(), transactionRequest.getShipment());
         transactionRepository.save(transaction);
         user.getCart().clearCart();
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "Transaction created!", new TransactionDTO(transaction)));

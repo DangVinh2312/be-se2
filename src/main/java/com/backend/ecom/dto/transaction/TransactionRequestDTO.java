@@ -1,9 +1,6 @@
 package com.backend.ecom.dto.transaction;
 
-import com.backend.ecom.entities.Cart;
-import com.backend.ecom.entities.Transaction;
-import com.backend.ecom.entities.User;
-import com.backend.ecom.entities.Voucher;
+import com.backend.ecom.entities.*;
 import com.backend.ecom.supporters.PaymentType;
 import com.backend.ecom.supporters.TransactionStatus;
 import lombok.Getter;
@@ -34,5 +31,8 @@ public class TransactionRequestDTO {
 
     @NotNull
     private String message;
+
+    @NotNull
+    private Shipment shipment;
 
 }

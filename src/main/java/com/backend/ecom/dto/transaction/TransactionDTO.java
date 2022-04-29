@@ -1,9 +1,6 @@
 package com.backend.ecom.dto.transaction;
 
-import com.backend.ecom.entities.Cart;
-import com.backend.ecom.entities.Transaction;
-import com.backend.ecom.entities.User;
-import com.backend.ecom.entities.Voucher;
+import com.backend.ecom.entities.*;
 import com.backend.ecom.supporters.PaymentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +29,8 @@ public class TransactionDTO {
 
     private Cart cart;
 
+    private Shipment shipment;
+
     public TransactionDTO(Transaction transaction){
         this.id = transaction.getId();
         this.user = transaction.getUser();
@@ -41,5 +40,6 @@ public class TransactionDTO {
         this.totalPrice = transaction.getTotalPrice();
         this.createAt = transaction.getCreatedAt();
         this.cart = transaction.getCart();
+        this.shipment = transaction.getShipment();
     }
 }
