@@ -3,6 +3,8 @@ package com.backend.ecom.controllers;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.services.SearchService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/search")
 public class SearchController {
+    private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     @Autowired
     private SearchService searchService;
 

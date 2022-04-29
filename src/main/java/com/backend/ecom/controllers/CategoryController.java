@@ -2,9 +2,10 @@ package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.backend.ecom.entities.Category;
-import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.CategoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
+    private static final Logger LOG = LoggerFactory.getLogger(CategoryController.class);
     @Autowired
     private CategoryService categoryService;
 

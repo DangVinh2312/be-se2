@@ -2,9 +2,10 @@ package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.brand.BrandDTO;
 import com.backend.ecom.dto.brand.BrandRequestDTO;
-import com.backend.ecom.entities.Brand;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.BrandService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/brands")
 public class BrandController {
+    private static final Logger LOG = LoggerFactory.getLogger(BrandController.class);
     @Autowired
     private BrandService brandService;
 

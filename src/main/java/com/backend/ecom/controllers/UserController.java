@@ -6,6 +6,8 @@ import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
 import com.backend.ecom.payload.request.ArrayRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
