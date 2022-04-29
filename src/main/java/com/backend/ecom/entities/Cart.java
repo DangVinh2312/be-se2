@@ -52,4 +52,8 @@ public class Cart {
         cartItems.forEach(cartItem -> totalItemPrice += cartItem.getTotalPrice());
         return totalItemPrice;
     }
+
+    public void clearCart(){
+        this.cartItems.clear();
+    }
 }

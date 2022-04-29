@@ -70,7 +70,9 @@ public class TransactionService {
         com.backend.ecom.entities.User user = transactionRequest.getCart().getUser();
 
         Transaction transaction = new Transaction(user, transactionRequest.getPaymentType(), transactionRequest.getStatus(), transactionRequest.getMessage(), transactionRequest.getVoucher(), price, transactionRequest.getCart());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "Transaction created!", transaction));
+        transactionRepository.save(transaction);
+        user.getCart().clearCart();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "Transaction created!", new TransactionDTO(transaction)));
     }
 
     @Transactional
