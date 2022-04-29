@@ -75,22 +75,22 @@ public class UserService {
     }
 
     public ResponseEntity<ResponseObject> createUser(UserCreateRequestDTO userCreateRequestDTO) {
-        if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
+        if (userRepository.existsByUsername(userCreateRequestDTO.getUsername().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
+        if (userRepository.existsByEmail(userCreateRequestDTO.getEmail().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
 
         User user = new User(userCreateRequestDTO);
-        user.setPassword(encoder.encode(userCreateRequestDTO.getPassword()));
+        user.setPassword(encoder.encode(userCreateRequestDTO.getPassword().trim()));
 
-        String role = userCreateRequestDTO.getRole();
+        String role = userCreateRequestDTO.getRole().trim();
 
         if (role.equals("admin")) {
             Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
@@ -112,22 +112,22 @@ public class UserService {
         User user = userRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
 
-        if (!userUpdateInfoRequestDTO.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername())) {
+        if (!userUpdateInfoRequestDTO.getUsername().equals(user.getUsername().trim()) && userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (!userUpdateInfoRequestDTO.getEmail().equals(user.getEmail()) && userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail())) {
+        if (!userUpdateInfoRequestDTO.getEmail().equals(user.getEmail().trim()) && userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
-        user.setFullName(userUpdateInfoRequestDTO.getFullName());
-        user.setUsername(userUpdateInfoRequestDTO.getUsername());
-        user.setEmail(userUpdateInfoRequestDTO.getEmail());
-        user.setAddress(userUpdateInfoRequestDTO.getAddress());
-        String role = userUpdateInfoRequestDTO.getRole();
+        user.setFullName(userUpdateInfoRequestDTO.getFullName().trim());
+        user.setUsername(userUpdateInfoRequestDTO.getUsername().trim());
+        user.setEmail(userUpdateInfoRequestDTO.getEmail().trim());
+        user.setAddress(userUpdateInfoRequestDTO.getAddress().trim());
+        String role = userUpdateInfoRequestDTO.getRole().trim();
 
         if (role.equals("admin")) {
             Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)

@@ -40,7 +40,7 @@ public class AccountService {
     }
 
     public ResponseEntity<HttpStatus> resetUserPassword(ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false)
+        User user = userRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail().trim(), false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found the user with email: " + resetPasswordRequest.getEmail()));
         int resetCode = (new Random().nextInt(900000) + 100000);
         user.setPasswordResetCode(resetCode);
@@ -51,7 +51,7 @@ public class AccountService {
 
 
     public ResponseEntity<HttpStatus> checkResetUserPasswordCode(ResetPasswordRequest resetPasswordRequest) {
-        User user = userRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false)
+        User user = userRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail().trim(), false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found the user with email: " + resetPasswordRequest.getEmail()));
         if (!(user.getPasswordResetCode() == resetPasswordRequest.getResetCode())) {
             throw new ResourceNotFoundException("Code is not matched");
@@ -60,7 +60,7 @@ public class AccountService {
     }
 
     public ResponseEntity<ResponseObject> updateNewPassword(UpdatePasswordAfterResetRequest updatePasswordAfterResetRequest) {
-        User user = userRepository.findByEmailAndDeleted(updatePasswordAfterResetRequest.getEmail(), false)
+        User user = userRepository.findByEmailAndDeleted(updatePasswordAfterResetRequest.getEmail().trim(), false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found the user with email: " + updatePasswordAfterResetRequest.getEmail()));
         user.setPassword(encoder.encode(updatePasswordAfterResetRequest.getNewPassword()));
         userRepository.save(user);

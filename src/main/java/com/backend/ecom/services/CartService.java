@@ -1,6 +1,5 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.dto.cart.AddToCartDTO;
 import com.backend.ecom.dto.cart.CartDTO;
 import com.backend.ecom.dto.cart.CartDetailDTO;
 import com.backend.ecom.entities.Cart;

@@ -78,14 +78,14 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) {
-        boolean exist = productRepository.existsByName(productRequestDTO.getName());
+        boolean exist = productRepository.existsByName(productRequestDTO.getName().trim());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponseObject("error", "Product is already existed", ""));
         }
         Product product = new Product(productRequestDTO);
         if (!productRequestDTO.getThumbnail().equals(null) && !productRequestDTO.getThumbnail().equals("")) {
-            product.setThumbnail(productRequestDTO.getThumbnail());
+            product.setThumbnail(productRequestDTO.getThumbnail().trim());
         }
         for (Long categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
@@ -115,12 +115,12 @@ public class ProductService {
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
         Product product = productRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
-        if (!product.getName().equals(productRequest.getName()) && productRepository.existsByName(productRequest.getName())) {
+        if (!product.getName().equals(productRequest.getName().trim()) && productRepository.existsByName(productRequest.getName().trim())) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("error", "Product name is already existed", productRequest.getName()));
         }
-        product.setName(productRequest.getName());
-        product.setDescription(productRequest.getDescription());
+        product.setName(productRequest.getName().trim());
+        product.setDescription(productRequest.getDescription().trim());
         product.setQuantity(productRequest.getQuantity());
         product.setPrice(productRequest.getPrice());
         product.setCategories(new HashSet<>());

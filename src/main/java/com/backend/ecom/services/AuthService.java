@@ -60,9 +60,9 @@ public class AuthService {
     @Transactional
     public ResponseEntity<ResponseObject> authenticateAccount(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername().trim(), loginRequest.getPassword().trim()));
 
-        userRepository.findByUsernameAndDeleted(loginRequest.getUsername(), false)
+        userRepository.findByUsernameAndDeleted(loginRequest.getUsername().trim(), false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -96,20 +96,20 @@ public class AuthService {
     }
 
     public ResponseEntity<ResponseObject> registerAccount(SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
 
         User user = new User(signUpRequest);
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setPassword(encoder.encode(signUpRequest.getPassword().trim()));
 
         Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
                 .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));

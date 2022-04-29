@@ -39,7 +39,7 @@ public class CategoryService {
     }
 
     public ResponseEntity<ResponseObject> createCategory(CategoryRequestDTO categoryRequest) {
-        boolean exist = categoryRepository.existsByName(categoryRequest.getName());
+        boolean exist = categoryRepository.existsByName(categoryRequest.getName().trim());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", categoryRequest.getName()));
         }
@@ -51,8 +51,8 @@ public class CategoryService {
     public ResponseEntity<ResponseObject> updateCategory(Long id, CategoryRequestDTO categoryRequest) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found category with id:" + id));
-        boolean existName = categoryRepository.existsByName(categoryRequest.getName());
-        if (!category.getName().equals(categoryRequest.getName()) && existName) {
+        boolean existName = categoryRepository.existsByName(categoryRequest.getName().trim());
+        if (!category.getName().equals(categoryRequest.getName().trim()) && existName) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Category name is already existed", ""));
         }
         category.setName(categoryRequest.getName());
