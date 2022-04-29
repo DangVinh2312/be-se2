@@ -34,6 +34,7 @@ public class VoucherService {
             throw new ResourceNotFoundException("Voucher is already existed");
         }
         Voucher voucher = new Voucher(voucherRequest);
+        voucherRepository.save(voucher);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created",new VoucherDTO(voucher)));
 
     }
