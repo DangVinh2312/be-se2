@@ -51,7 +51,8 @@ public class User {
     @JsonIgnore
     private Set<Feedback> feedbacks = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn
     @JsonIgnore
     private Cart cart;
 

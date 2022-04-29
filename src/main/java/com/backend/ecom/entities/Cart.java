@@ -20,8 +20,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
     private User user;
 
     @Transient
@@ -38,7 +37,7 @@ public class Cart {
         user.setCart(this);
     }
 
-    public void addCartItem(CartItem cartItem){
+    public void addCartItem(CartItem cartItem) {
         this.cartItems.add(cartItem);
         cartItem.setCart(this);
     }
