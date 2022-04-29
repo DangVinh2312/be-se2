@@ -25,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,8 +65,9 @@ public class AuthService {
                 .collect(Collectors.toList());
 
         if (roles.contains("ROLE_USER")) {
+            System.out.println("-------------" + authentication.getName() + "----------------");
             User findCart = userRepository.findCartByUsername(authentication.getName());
-            if (findCart == null) {
+            if (findCart != null) {
                 Cart cart = new Cart();
                 cart.addUser(userRepository.getByUsername(authentication.getName()));
                 cartRepository.save(cart);

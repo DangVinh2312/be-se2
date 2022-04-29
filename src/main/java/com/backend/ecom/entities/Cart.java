@@ -20,7 +20,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "cart")
     @JsonIgnore
     private User user;
 

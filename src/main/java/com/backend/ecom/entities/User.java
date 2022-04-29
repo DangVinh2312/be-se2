@@ -7,11 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +50,7 @@ public class User {
     private Set<Feedback> feedbacks = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
     @JsonIgnore
     private Cart cart;
 
