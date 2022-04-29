@@ -2,10 +2,10 @@ package com.backend.ecom.services;
 
 import com.backend.ecom.dto.voucher.VoucherDTO;
 import com.backend.ecom.dto.voucher.VoucherRequestDTO;
+import com.backend.ecom.repositories.VoucherRepository;
 import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
-import com.backend.ecom.repositories.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +30,12 @@ public class VoucherService {
 
     public ResponseEntity<ResponseObject> createVoucher(VoucherRequestDTO voucherRequest) {
         boolean exist = voucherRepository.existsByName(voucherRequest.getName());
-        if (exist) {
+        if(exist){
             throw new ResourceNotFoundException("Voucher is already existed");
         }
         Voucher voucher = new Voucher(voucherRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created", new VoucherDTO(voucher)));
+        voucherRepository.save(voucher);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created",new VoucherDTO(voucher)));
 
     }
 
@@ -48,7 +49,8 @@ public class VoucherService {
         voucher.setEndDate(voucherRequest.getEndDate());
         voucher.setReductionPercentage(voucherRequest.getReductionPercentage());
         voucher.setMaxReduction(voucherRequest.getMaxReduction());
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher updated!", new VoucherDTO(voucherRepository.save(voucher))));
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Voucher updated!",new VoucherDTO(voucherRepository.save(voucher))));
     }
 
     public ResponseEntity<ResponseObject> deleteVoucher(Long id) {
