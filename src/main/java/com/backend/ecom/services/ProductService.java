@@ -48,18 +48,6 @@ public class ProductService {
         return productShortInfo;
     }
 
-    public List<ProductShortInfoDTO> searchProduct(String query, String categories, Boolean deleted) {
-        List<ProductShortInfoDTO> productShortInfo = new ArrayList<>();
-        if (query.equals("") && categories.equals("")) {
-            List<Product> products = productRepository.findAllByDeleted(deleted);
-            products.forEach(product -> productShortInfo.add(new ProductShortInfoDTO(product)));
-        } else {
-            List<Product> products = productRepository.searchProduct(query, categories, deleted);
-            products.forEach(product -> productShortInfo.add(new ProductShortInfoDTO(product)));
-        }
-        return productShortInfo;
-    }
-
     public ResponseEntity<ResponseObject> getProductDetail(Long id, Boolean deleted) {
         Product product = productRepository.findByIdAndDeleted(id, deleted)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + id));

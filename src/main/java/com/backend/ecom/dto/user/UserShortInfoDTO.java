@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -21,6 +22,8 @@ public class UserShortInfoDTO {
     private String address;
     private LocalDateTime updatedAt;
 
+    private Duration lastLogin;
+
     public UserShortInfoDTO(User user) {
         this.id = user.getId();
         this.ava = user.getAva();
@@ -28,6 +31,7 @@ public class UserShortInfoDTO {
         this.username = user.getUsername();
         this.address = user.getAddress();
         this.updatedAt = user.getUpdatedDate();
+        this.lastLogin = user.getLastLogin();
     }
 
 }

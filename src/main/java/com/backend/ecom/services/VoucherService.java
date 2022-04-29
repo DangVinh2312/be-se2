@@ -1,6 +1,5 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.entities.Brand;
 import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
@@ -22,7 +21,7 @@ public class VoucherService {
     }
 
     public ResponseEntity<ResponseObject> getVoucherDetail(Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete voucher successfully", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete voucher successfully", voucherRepository.findById(id)));
     }
 
     public ResponseEntity<ResponseObject> createVoucher(Voucher voucherRequest) {

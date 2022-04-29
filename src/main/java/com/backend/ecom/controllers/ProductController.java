@@ -29,13 +29,6 @@ public class ProductController {
         return productService.getAllProducts(deleted);
     }
 
-    @GetMapping("/search")
-    public List<ProductShortInfoDTO> searchProduct(@RequestParam(value = "q", defaultValue = "") String query,
-                                                   @RequestParam(value = "categories", defaultValue = "") String categories,
-                                                   @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
-        return productService.searchProduct(query, categories, deleted);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getProductDetail(@Valid @PathVariable("id") Long id,
                                                            @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {

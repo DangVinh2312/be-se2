@@ -58,19 +58,6 @@ public class UserService {
         return userShortInfo;
     }
 
-    public List<UserShortInfoDTO> searchUser(String query, Boolean deleted) {
-        List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
-
-        if (query.equals("")) {
-            List<User> users = userRepository.findAllByDeleted(deleted);
-            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
-        } else {
-            List<User> users = userRepository.searchUser(query, deleted);
-            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
-        }
-        return userShortInfo;
-    }
-
     public List<UserShortInfoDTO> getAllUsersByRole(Boolean deleted, Long roleId) {
         List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
         List<User> users = userRepository.findAllByDeletedAndRoleId(deleted, roleId);
