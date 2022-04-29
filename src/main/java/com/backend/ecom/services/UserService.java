@@ -1,40 +1,26 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.dto.user.UserDetailDTO;
 import com.backend.ecom.dto.user.UserCreateRequestDTO;
+import com.backend.ecom.dto.user.UserDetailDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
-import com.backend.ecom.entities.Feedback;
-import com.backend.ecom.entities.Product;
 import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
-import com.backend.ecom.payload.request.ChangePasswordRequest;
-import com.backend.ecom.payload.request.ResetPasswordRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.FeedbackRepository;
 import com.backend.ecom.repositories.RoleRepository;
 import com.backend.ecom.repositories.UserRepository;
-import com.backend.ecom.security.auth.UserDetailsImpl;
-import com.backend.ecom.security.jwt.JwtUtils;
 import com.backend.ecom.supporters.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class UserService {
@@ -127,6 +113,7 @@ public class UserService {
         user.setUsername(userUpdateInfoRequestDTO.getUsername().trim());
         user.setEmail(userUpdateInfoRequestDTO.getEmail().trim());
         user.setAddress(userUpdateInfoRequestDTO.getAddress().trim());
+
         String role = userUpdateInfoRequestDTO.getRole().trim();
 
         if (role.equals("admin")) {

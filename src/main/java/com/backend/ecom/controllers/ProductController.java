@@ -1,18 +1,16 @@
 package com.backend.ecom.controllers;
 
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
+import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.payload.request.ArrayRequest;
-import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,13 +25,6 @@ public class ProductController {
     @GetMapping("/all")
     public List<ProductShortInfoDTO> getAllProducts(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return productService.getAllProducts(deleted);
-    }
-
-    @GetMapping("/search")
-    public List<ProductShortInfoDTO> searchProduct(@RequestParam(value = "q", defaultValue = "") String query,
-                                                   @RequestParam(value = "categories", defaultValue = "") String categories,
-                                                   @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
-        return productService.searchProduct(query, categories, deleted);
     }
 
     @GetMapping("/{id}")

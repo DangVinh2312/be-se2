@@ -4,17 +4,13 @@ import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
 import com.backend.ecom.payload.request.ArrayRequest;
-import com.backend.ecom.payload.request.ChangePasswordRequest;
-import com.backend.ecom.payload.request.ResetPasswordRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,12 +24,6 @@ public class UserController {
     @GetMapping("/all")
     public List<UserShortInfoDTO> getAllUsers(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getAllUsers(deleted);
-    }
-
-    @GetMapping("/search")
-    public List<UserShortInfoDTO> searchUser(@RequestParam(value = "q", defaultValue = "") String query,
-                                             @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
-        return userService.searchUser(query, deleted);
     }
 
     @GetMapping("/all/{roleId}")
