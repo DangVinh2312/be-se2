@@ -21,6 +21,7 @@ public class Cart {
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
+    @JsonIgnore
     private User user;
 
     @Transient
