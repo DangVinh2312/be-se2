@@ -1,5 +1,6 @@
 package com.backend.ecom.controllers;
 
+import com.backend.ecom.dto.voucher.VoucherRequestDTO;
 import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.VoucherService;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/vouchers")
 public class VoucherController {
+
     @Autowired
     private VoucherService voucherService;
 
@@ -27,12 +29,12 @@ public class VoucherController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseObject> createVoucher(@RequestBody Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> createVoucher(@RequestBody VoucherRequestDTO voucherRequest) {
         return voucherService.createVoucher(voucherRequest);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable("id") Long id, @RequestBody Voucher voucherRequest) {
+    public ResponseEntity<ResponseObject> updateVoucher(@PathVariable("id") Long id, @RequestBody VoucherRequestDTO voucherRequest) {
         return voucherService.updateVoucher(id, voucherRequest);
     }
 
