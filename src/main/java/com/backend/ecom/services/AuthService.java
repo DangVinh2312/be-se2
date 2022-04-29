@@ -65,7 +65,6 @@ public class AuthService {
                 .collect(Collectors.toList());
 
         if (roles.contains("ROLE_USER")) {
-            System.out.println("-------------" + authentication.getName() + "----------------");
             User findCart = userRepository.findCartByUsername(authentication.getName());
             if (findCart != null) {
                 Cart cart = new Cart();
