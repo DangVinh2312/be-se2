@@ -1,6 +1,5 @@
 package com.backend.ecom.dto.transaction;
 
-import com.backend.ecom.entities.*;
 import com.backend.ecom.supporters.PaymentType;
 import com.backend.ecom.supporters.TransactionStatus;
 import lombok.Getter;

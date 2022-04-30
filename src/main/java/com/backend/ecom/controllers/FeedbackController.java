@@ -4,6 +4,8 @@ import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.services.FeedbackService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/feedbacks")
 public class FeedbackController {
+    private static final Logger LOG = LoggerFactory.getLogger(FeedbackController.class);
     @Autowired
     private FeedbackService feedbackService;
 

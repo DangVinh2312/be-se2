@@ -1,40 +1,26 @@
 package com.backend.ecom.services;
 
-import com.backend.ecom.dto.user.UserDetailDTO;
 import com.backend.ecom.dto.user.UserCreateRequestDTO;
+import com.backend.ecom.dto.user.UserDetailDTO;
 import com.backend.ecom.dto.user.UserShortInfoDTO;
 import com.backend.ecom.dto.user.UserUpdateInfoRequestDTO;
-import com.backend.ecom.entities.Feedback;
-import com.backend.ecom.entities.Product;
 import com.backend.ecom.entities.Role;
 import com.backend.ecom.entities.User;
 import com.backend.ecom.exception.ResourceNotFoundException;
-import com.backend.ecom.payload.request.ChangePasswordRequest;
-import com.backend.ecom.payload.request.ResetPasswordRequest;
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.FeedbackRepository;
 import com.backend.ecom.repositories.RoleRepository;
 import com.backend.ecom.repositories.UserRepository;
-import com.backend.ecom.security.auth.UserDetailsImpl;
-import com.backend.ecom.security.jwt.JwtUtils;
 import com.backend.ecom.supporters.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class UserService {
@@ -58,19 +44,6 @@ public class UserService {
         return userShortInfo;
     }
 
-    public List<UserShortInfoDTO> searchUser(String query, Boolean deleted) {
-        List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
-
-        if (query.equals("")) {
-            List<User> users = userRepository.findAllByDeleted(deleted);
-            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
-        } else {
-            List<User> users = userRepository.searchUser(query, deleted);
-            users.forEach(user -> userShortInfo.add(new UserShortInfoDTO(user)));
-        }
-        return userShortInfo;
-    }
-
     public List<UserShortInfoDTO> getAllUsersByRole(Boolean deleted, Long roleId) {
         List<UserShortInfoDTO> userShortInfo = new ArrayList<>();
         List<User> users = userRepository.findAllByDeletedAndRoleId(deleted, roleId);
@@ -88,22 +61,22 @@ public class UserService {
     }
 
     public ResponseEntity<ResponseObject> createUser(UserCreateRequestDTO userCreateRequestDTO) {
-        if (userRepository.existsByUsername(userCreateRequestDTO.getUsername())) {
+        if (userRepository.existsByUsername(userCreateRequestDTO.getUsername().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (userRepository.existsByEmail(userCreateRequestDTO.getEmail())) {
+        if (userRepository.existsByEmail(userCreateRequestDTO.getEmail().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
 
         User user = new User(userCreateRequestDTO);
-        user.setPassword(encoder.encode(userCreateRequestDTO.getPassword()));
+        user.setPassword(encoder.encode(userCreateRequestDTO.getPassword().trim()));
 
-        String role = userCreateRequestDTO.getRole();
+        String role = userCreateRequestDTO.getRole().trim();
 
         if (role.equals("admin")) {
             Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
@@ -125,22 +98,23 @@ public class UserService {
         User user = userRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user"));
 
-        if (!userUpdateInfoRequestDTO.getUsername().equals(user.getUsername()) && userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername())) {
+        if (!userUpdateInfoRequestDTO.getUsername().equals(user.getUsername().trim()) && userRepository.existsByUsername(userUpdateInfoRequestDTO.getUsername().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Username is already taken!", ""));
         }
 
-        if (!userUpdateInfoRequestDTO.getEmail().equals(user.getEmail()) && userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail())) {
+        if (!userUpdateInfoRequestDTO.getEmail().equals(user.getEmail().trim()) && userRepository.existsByEmail(userUpdateInfoRequestDTO.getEmail().trim())) {
             return ResponseEntity
                     .badRequest()
                     .body(new ResponseObject("error", "Email is already in use!", ""));
         }
-        user.setFullName(userUpdateInfoRequestDTO.getFullName());
-        user.setUsername(userUpdateInfoRequestDTO.getUsername());
-        user.setEmail(userUpdateInfoRequestDTO.getEmail());
-        user.setAddress(userUpdateInfoRequestDTO.getAddress());
-        String role = userUpdateInfoRequestDTO.getRole();
+        user.setFullName(userUpdateInfoRequestDTO.getFullName().trim());
+        user.setUsername(userUpdateInfoRequestDTO.getUsername().trim());
+        user.setEmail(userUpdateInfoRequestDTO.getEmail().trim());
+        user.setAddress(userUpdateInfoRequestDTO.getAddress().trim());
+
+        String role = userUpdateInfoRequestDTO.getRole().trim();
 
         if (role.equals("admin")) {
             Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)

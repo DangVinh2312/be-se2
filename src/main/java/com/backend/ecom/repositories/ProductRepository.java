@@ -40,11 +40,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     void deleteAllByBrandId(Integer brandId);
 
-    @Query("select p from Product p inner join p.categories categories where " +
+    @Query("select p from Product p left join fetch p.categories categories where " +
             "p.deleted = ?3 and" +
-            "(p.name like  concat('%', ?1, '%')" +
+            "(p.name like concat('%', ?1, '%')" +
             "or p.brand.name like concat('%', ?1, '%')" +
             "or p.description like concat('%', ?1, '%'))" +
-            "or categories.name like concat('%', ?2, '%')")
+            "and categories.name like concat('%', ?2, '%')")
     List<Product> searchProduct(String query, String categories, Boolean deleted);
+
 }

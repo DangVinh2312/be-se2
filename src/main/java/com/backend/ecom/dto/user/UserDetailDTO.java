@@ -1,14 +1,14 @@
 package com.backend.ecom.dto.user;
 
-import com.backend.ecom.entities.*;
-
+import com.backend.ecom.entities.Feedback;
+import com.backend.ecom.entities.Transaction;
+import com.backend.ecom.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Set;
 
 @Getter
@@ -21,11 +21,12 @@ public class UserDetailDTO {
     private String username;
     private String email;
     private String address;
-    private Role role;
+    private long role;
     private Set<Feedback> feedbacks;
     private Set<Transaction> transactions;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Duration lastLogin;
 
     public UserDetailDTO(User user) {
         this.id = user.getId();
@@ -34,10 +35,11 @@ public class UserDetailDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.address = user.getAddress();
-        this.role = user.getRole();
+        this.role = user.getRole().getId();
         this.feedbacks = user.getFeedbacks();
         this.transactions = user.getTransactions();
         this.createdAt = user.getCreatedDate();
         this.updatedAt = user.getUpdatedDate();
+        this.lastLogin = user.getLastLogin();
     }
 }

@@ -3,7 +3,6 @@ package com.backend.ecom.dto.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +23,6 @@ public class UserUpdateInfoRequestDTO {
     @Email
     private String email;
 
-    @NotBlank
     private String role;
 
     private String address;

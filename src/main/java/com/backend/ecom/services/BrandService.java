@@ -54,7 +54,7 @@ public class BrandService {
     }
 
     public ResponseEntity<ResponseObject> createBrand(BrandRequestDTO brandRequest) {
-        boolean exist = brandRepository.existsByName(brandRequest.getName());
+        boolean exist = brandRepository.existsByName(brandRequest.getName().trim());
         if (exist) {
             throw new ResourceNotFoundException("Brand is already existed");
         }
@@ -66,8 +66,8 @@ public class BrandService {
     public ResponseEntity<ResponseObject> updateBrand(Integer id, BrandRequestDTO brandRequest) {
         Brand brand = brandRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found brand with id:" + id));
-        boolean existName = brandRepository.existsByName(brandRequest.getName());
-        if (!brand.getName().equals(brandRequest.getName()) && existName) {
+        boolean existName = brandRepository.existsByName(brandRequest.getName().trim());
+        if (!brand.getName().equals(brandRequest.getName().trim()) && existName) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseObject("error", "Brand name is already existed", ""));
         }
         brand.setName(brandRequest.getName());

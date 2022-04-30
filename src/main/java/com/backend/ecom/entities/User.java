@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class User {
     @JsonIgnore
     private Set<Feedback> feedbacks = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Cart cart;
@@ -72,6 +73,13 @@ public class User {
 
     private LocalDateTime deletedAt;
 
+    @Transient
+    private Duration lastLogin;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<UserLog> userLogs = new HashSet<>();
+
     public User(SignupRequest signUpRequest) {
         this.fullName = signUpRequest.getFullName();
         this.username = signUpRequest.getUsername();
@@ -83,5 +91,13 @@ public class User {
         this.fullName = userCreateRequestDTO.getFullName();
         this.username = userCreateRequestDTO.getUsername();
         this.email = userCreateRequestDTO.getEmail();
+    }
+
+    public Duration getLastLogin() {
+        if (userLogs.size() == 0) {
+            return lastLogin = null;
+        } else {
+            return lastLogin = Duration.between(userLogs.stream().toList().get(userLogs.size() - 1).getLoginTime(), LocalDateTime.now());
+        }
     }
 }

@@ -594,7 +594,7 @@ LOCK TABLES user WRITE;
 INSERT INTO user
 VALUES (1, 'Ho Chi Minh', NULL, '2022-04-22 13:14:58', _binary '\0', NULL, 'admin@gmail.com', 'admin',
         '$2a$10$WmqVgrbLSD97T63/oJ0s6uefast5MSu0WHwO1WBvea.cRbe4GyS2O', 0, '2022-04-22 13:14:58', 'admin', NULL, 1),
-       (2, 'Ha Noi', NULL, '2022-04-22 13:14:59', _binary '\0', NULL, 'aaaaa@gmail.com', 'Nguyen Van A',
+       (2, 'Ha Noi', NULL, '2022-04-22 13:14:59', _binary '\0', NULL, 'user@gmail.com', 'user',
         '$2a$10$h7L9UFEhNxNy4zUSL4gvjOmoLDWHg6yqpTqmMGxCNlJKp3iwX1pFS', 0, '2022-04-22 13:14:59', 'user', NULL, 2),
        (3, 'Hai Phong', NULL, '2022-04-22 13:17:02', _binary '\0', NULL, 'trietsm@gmail.com', 'Sai Minh Triet',
         '$2a$10$p.J8gRWxPekdzPFciH910OeFo8CTDmbTWuoRybE0J3L3mE4liog7O', 0, '2022-04-22 14:04:24', 'trietsm', NULL, 2),

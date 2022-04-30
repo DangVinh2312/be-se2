@@ -2,10 +2,15 @@ package com.backend.ecom.services;
 
 import com.backend.ecom.dto.transaction.TransactionDTO;
 import com.backend.ecom.dto.transaction.TransactionRequestDTO;
-import com.backend.ecom.entities.*;
+import com.backend.ecom.entities.Cart;
+import com.backend.ecom.entities.Transaction;
+import com.backend.ecom.entities.User;
+import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
-import com.backend.ecom.repositories.*;
+import com.backend.ecom.repositories.TransactionRepository;
+import com.backend.ecom.repositories.UserRepository;
+import com.backend.ecom.repositories.VoucherRepository;
 import com.backend.ecom.supporters.TransactionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,35 +45,6 @@ public class TransactionService {
     }
 
     @Transactional
-    public ResponseEntity<ResponseObject> updateTransaction(Long id, TransactionRequestDTO transactionRequest) {
-        Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found transaction with id:" + id));
-
-        Voucher voucher = voucherRepository.findById(transactionRequest.getVoucherID())
-                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found with id: "+transactionRequest.getVoucherID()));
-
-
-        //transaction.setUser(transactionRequest.getCart().getUser());
-        transaction.setPaymentType(transactionRequest.getPaymentType());
-        transaction.setStatus(transactionRequest.getStatus());
-        transaction.setVoucher(voucher);
-        transaction.setTotalPrice(transactionRequest.getTotalPrice());
-        //transaction.setCart(transactionRequest.getCart());
-        //transaction.setShipment(transactionRequest.getShipment());
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update transaction successfully", new TransactionDTO(transactionRepository.save(transaction))));
-    }
-
-    @Transactional
-    public ResponseEntity<ResponseObject> deleteTransaction(Long id) {
-        Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found transaction with id:" + id));
-        transaction.setStatus(TransactionStatus.CANCEL);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Delete transaction successfully", new TransactionDTO(transactionRepository.save(transaction))));
-
-    }
-
-    @Transactional
     public ResponseEntity<ResponseObject> createTransaction(TransactionRequestDTO transactionRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -90,6 +66,25 @@ public class TransactionService {
         transactionRepository.save(transaction);
         user.getCart().clearCart();
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseObject("ok", "Transaction created!", new TransactionDTO(transaction)));
+    }
+
+    @Transactional
+    public ResponseEntity<ResponseObject> updateTransaction(Long id, TransactionRequestDTO transactionRequest) {
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found transaction with id:" + id));
+
+        Voucher voucher = voucherRepository.findById(transactionRequest.getVoucherID())
+                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found with id: "+transactionRequest.getVoucherID()));
+
+        //transaction.setUser(transactionRequest.getCart().getUser());
+        transaction.setPaymentType(transactionRequest.getPaymentType());
+        transaction.setStatus(transactionRequest.getStatus());
+        transaction.setVoucher(voucher);
+        transaction.setTotalPrice(transactionRequest.getTotalPrice());
+        //transaction.setCart(transactionRequest.getCart());
+        //transaction.setShipment(transactionRequest.getShipment());
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Update transaction successfully", new TransactionDTO(transactionRepository.save(transaction))));
     }
 
     @Transactional

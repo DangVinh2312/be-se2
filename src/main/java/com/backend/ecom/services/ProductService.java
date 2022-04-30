@@ -3,11 +3,10 @@ package com.backend.ecom.services;
 import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.dto.product.ProductDetailDTO;
+import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.*;
 import com.backend.ecom.exception.ResourceNotFoundException;
-import com.backend.ecom.dto.product.ProductRequestDTO;
-
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +47,6 @@ public class ProductService {
         return productShortInfo;
     }
 
-    public List<ProductShortInfoDTO> searchProduct(String query, String categories, Boolean deleted) {
-        List<ProductShortInfoDTO> productShortInfo = new ArrayList<>();
-        if (query.equals("") && categories.equals("")) {
-            List<Product> products = productRepository.findAllByDeleted(deleted);
-            products.forEach(product -> productShortInfo.add(new ProductShortInfoDTO(product)));
-        } else {
-            List<Product> products = productRepository.searchProduct(query, categories, deleted);
-            products.forEach(product -> productShortInfo.add(new ProductShortInfoDTO(product)));
-        }
-        return productShortInfo;
-    }
-
     public ResponseEntity<ResponseObject> getProductDetail(Long id, Boolean deleted) {
         Product product = productRepository.findByIdAndDeleted(id, deleted)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id: " + id));
@@ -90,14 +77,14 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<ResponseObject> createProduct(ProductRequestDTO productRequestDTO) {
-        boolean exist = productRepository.existsByName(productRequestDTO.getName());
+        boolean exist = productRepository.existsByName(productRequestDTO.getName().trim());
         if (exist) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new ResponseObject("error", "Product is already existed", ""));
         }
         Product product = new Product(productRequestDTO);
         if (!productRequestDTO.getThumbnail().equals(null) && !productRequestDTO.getThumbnail().equals("")) {
-            product.setThumbnail(productRequestDTO.getThumbnail());
+            product.setThumbnail(productRequestDTO.getThumbnail().trim());
         }
         for (Long categoryId : productRequestDTO.getCategoryIds()) {
             Category category = categoryRepository.findById(categoryId)
@@ -127,12 +114,12 @@ public class ProductService {
     public ResponseEntity<ResponseObject> updateProduct(Long id, ProductRequestDTO productRequest) {
         Product product = productRepository.findByIdAndDeleted(id, false)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found product with id = " + id));
-        if (!product.getName().equals(productRequest.getName()) && productRepository.existsByName(productRequest.getName())) {
+        if (!product.getName().equals(productRequest.getName().trim()) && productRepository.existsByName(productRequest.getName().trim())) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("error", "Product name is already existed", productRequest.getName()));
         }
-        product.setName(productRequest.getName());
-        product.setDescription(productRequest.getDescription());
+        product.setName(productRequest.getName().trim());
+        product.setDescription(productRequest.getDescription().trim());
         product.setQuantity(productRequest.getQuantity());
         product.setPrice(productRequest.getPrice());
         product.setCategories(new HashSet<>());
@@ -155,32 +142,37 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.softDeleteAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete products successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, false)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.softDeleteAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users successfully", ""));
+
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.deleteAllById(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete products permanently", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.deleteAllById(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users permanently", ""));
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> restoreOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.restoreAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Restore products successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.restoreAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Restore users successfully", ""));
+
     }
 
 }
