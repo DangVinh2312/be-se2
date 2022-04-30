@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,17 +38,20 @@ public class BrandController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> createBrand(@Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.createBrand(brandRequest);
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateBrand(@Valid @PathVariable("id") Integer id,
                                                       @Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.updateBrand(id, brandRequest);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> deleteBrand(@Valid @PathVariable("id") Integer id) {
         return brandService.deleteBrand(id);
     }
