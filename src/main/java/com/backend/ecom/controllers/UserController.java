@@ -26,38 +26,40 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/all")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserShortInfoDTO> getAllUsers(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getAllUsers(deleted);
     }
 
     @GetMapping("/all/{roleId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserShortInfoDTO> getAllUsersByRole(@Valid @PathVariable("roleId") Long id,
                                                     @Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getAllUsersByRole(deleted, id);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> getUserDetail(@Valid @PathVariable("id") Long id,
                                                         @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getUserDetail(id, deleted);
     }
 
     @PostMapping("/create")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> createUser(@Valid @RequestBody UserCreateRequestDTO userCreateRequestDTO) {
         return userService.createUser(userCreateRequestDTO);
     }
 
     @PutMapping("/update/{id}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateUser(@Valid @PathVariable("id") Long id,
                                                      @Valid @RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
         return userService.updateUser(id, userUpdateInfoRequestDTO);
     }
 
     @PatchMapping("/delete")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> softDeleteManyUsers(@Valid @RequestBody ArrayRequest ids) {
         return userService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
     }
@@ -75,6 +77,7 @@ public class UserController {
     }
 
     @DeleteMapping("/feedbacks/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<ResponseObject> deleteFeedback(@PathVariable("id") Long id) {
         return userService.deleteFeedback(id);
     }
