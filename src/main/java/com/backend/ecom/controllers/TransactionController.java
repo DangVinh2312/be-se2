@@ -30,22 +30,16 @@ public class TransactionController {
         return transactionService.getTransactionDetail(id);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<ResponseObject> newTransaction(@RequestBody TransactionRequestDTO transactionRequest) {
+        return transactionService.createTransaction(transactionRequest);
+    }
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseObject> updateTransaction(@PathVariable("id") Long id, @RequestBody TransactionRequestDTO transactionRequest) {
         return transactionService.updateTransaction(id, transactionRequest);
     }
 
-    @PatchMapping("/delete/{id}")
-    public ResponseEntity<ResponseObject> deleteTransaction(@PathVariable("id") Long id) {
-        return transactionService.deleteTransaction(id);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<ResponseObject> newTransaction(@RequestBody TransactionRequestDTO transactionRequest) {
-        return transactionService.createTransaction(transactionRequest);
-    }
-
-    @PutMapping("/payment/{id}")
+    @PatchMapping("/payment/update/{id}")
     public ResponseEntity<ResponseObject> updateStatus(@PathVariable("id") Long id, @RequestParam TransactionStatus transactionStatus) {
         return transactionService.updatePayment(id, transactionStatus);
     }
