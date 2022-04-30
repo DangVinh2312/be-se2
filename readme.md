@@ -26,10 +26,11 @@ Replace:
 - **_$your-schema_** with your database username.
 - **_$your-schema_** with your password of the database.
 
-
-    spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/$your-schema
-    spring.datasource.username=$your-username
-    spring.datasource.password=$your-password
+````
+spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/$your-schema
+spring.datasource.username=$your-username
+spring.datasource.password=$your-password
+````
 
 :relaxed: After that, run the maven project and everything is done. 
 
