@@ -20,9 +20,9 @@ public class VoucherDTO {
 
     private String description;
 
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     private double reductionPercentage;
 

@@ -22,10 +22,10 @@ public class VoucherRequestDTO {
     private String description;
 
     @NotNull
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @NotNull
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @NotNull
     @Max(100)
