@@ -29,6 +29,6 @@ public class ShipmentDTO {
         this.startDate = shipment.getStartDate();
         this.estimatedArrivalDate = shipment.getEstimatedArrivalDate();
         this.status = shipment.getStatus();
-        this.transactions = shipment.getTransaction();
+        //this.transactions = shipment.getTransaction();
     }
 }

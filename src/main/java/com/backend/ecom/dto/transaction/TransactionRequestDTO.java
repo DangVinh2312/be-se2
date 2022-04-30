@@ -21,18 +21,13 @@ public class TransactionRequestDTO {
     private TransactionStatus status;
 
     @Nullable
-    private Voucher voucher;
+    private long voucherID;
 
     @NotNull
     private Double totalPrice;
 
     @NotNull
-    private Cart cart;
-
-    @NotNull
     private String message;
 
-    @NotNull
-    private Shipment shipment;
 
 }

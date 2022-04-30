@@ -35,7 +35,7 @@ public class TransactionController {
         return transactionService.updateTransaction(id, transactionRequest);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PatchMapping("/delete/{id}")
     public ResponseEntity<ResponseObject> deleteTransaction(@PathVariable("id") Long id) {
         return transactionService.deleteTransaction(id);
     }
@@ -45,8 +45,8 @@ public class TransactionController {
         return transactionService.createTransaction(transactionRequest);
     }
 
-    @PutMapping("/payment")
-    public ResponseEntity<ResponseObject> updateStatus(@PathVariable("id") Long id, @RequestBody TransactionStatus transactionStatus) {
+    @PutMapping("/payment/{id}")
+    public ResponseEntity<ResponseObject> updateStatus(@PathVariable("id") Long id, @RequestParam TransactionStatus transactionStatus) {
         return transactionService.updatePayment(id, transactionStatus);
     }
 
