@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.apache.tomcat.jni.Local;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,10 +31,10 @@ public class Voucher {
 
     private String description;
     @Column(name = "start_date", nullable = false)
-    private LocalTime startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date", nullable = false)
-    private LocalTime endDate;
+    private LocalDateTime endDate;
 
     private double reductionPercentage;
 
