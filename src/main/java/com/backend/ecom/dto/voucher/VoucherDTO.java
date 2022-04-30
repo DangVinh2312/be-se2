@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Setter
@@ -19,9 +20,9 @@ public class VoucherDTO {
 
     private String description;
 
-    private LocalTime startDate;
+    private LocalDate startDate;
 
-    private LocalTime endDate;
+    private LocalDate endDate;
 
     private double reductionPercentage;
 

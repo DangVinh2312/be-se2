@@ -8,6 +8,7 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Setter
@@ -21,10 +22,10 @@ public class VoucherRequestDTO {
     private String description;
 
     @NotNull
-    private LocalTime startDate;
+    private LocalDate startDate;
 
     @NotNull
-    private LocalTime endDate;
+    private LocalDate endDate;
 
     @NotNull
     @Max(100)
