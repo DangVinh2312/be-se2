@@ -1,9 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
---
--- Host: localhost    Database: e_com
--- ------------------------------------------------------
--- Server version	8.0.28
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION = @@COLLATION_CONNECTION */;
@@ -12,10 +6,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS = 0 */;
 /*!40101 SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES = @@SQL_NOTES, SQL_NOTES = 0 */;
-
---
--- Dumping data for table `brand`
---
 
 INSERT INTO brand
 VALUES (1, 'Samsung'),
@@ -30,10 +20,6 @@ VALUES (1, 'Samsung'),
        (10, 'itel'),
        (11, 'mastel');
 
---
--- Dumping data for table `cart`
---
-
 INSERT INTO cart
 VALUES (1),
        (2),
@@ -42,14 +28,6 @@ VALUES (1),
        (5),
        (6),
        (7);
-
---
--- Dumping data for table `cart_item`
---
-
---
--- Dumping data for table `category`
---
 
 INSERT INTO category
 VALUES (1, 'Camera Phone'),
@@ -64,10 +42,6 @@ VALUES (1, 'Camera Phone'),
        (10, 'fingerprint security'),
        (11, 'thin and light');
 
---
--- Dumping data for table `discount`
---
-
 INSERT INTO discount
 VALUES (1, '2022-04-30', 10, '2022-04-19'),
        (2, '2022-05-30', 20, '2022-05-01'),
@@ -79,15 +53,6 @@ VALUES (1, '2022-04-30', 10, '2022-04-19'),
        (8, '2022-05-26', 65, '2022-04-13'),
        (9, '2022-06-01', 76, '2022-04-03'),
        (10, '2022-06-01', 5, '2022-04-28');
-
---
--- Dumping data for table `feedback`
---
-
-
---
--- Dumping data for table `product`
---
 
 INSERT INTO product
 VALUES (1, '2022-04-21 19:12:34', _binary '\0', NULL,
@@ -371,9 +336,29 @@ VALUES (1, '2022-04-21 19:12:34', _binary '\0', NULL,
         'Super AMOLED6.4 Full HD+', 50, 'https://cdn.tgdd.vn/Products/Images/42/233135/realme-8-silver-600x600.jpg',
         '2022-04-26 19:16:16', 7, 8);
 
---
--- Dumping data for table `product_categories`
---
+INSERT INTO cart_item
+VALUES (1, 1, 1, 10),
+       (2, 1, 1, 15),
+       (3, 1, 1, 19),
+       (4, 1, 1, 51),
+       (5, 1, 2, 51),
+       (6, 1, 2, 11),
+       (7, 1, 2, 5),
+       (8, 1, 3, 5),
+       (9, 2, 3, 10),
+       (10, 1, 4, 10),
+       (11, 1, 4, 20),
+       (12, 1, 4, 25),
+       (13, 1, 4, 36),
+       (14, 1, 5, 36),
+       (15, 1, 5, 1),
+       (16, 1, 5, 49),
+       (17, 1, 5, 30),
+       (18, 1, 6, 30),
+       (19, 1, 6, 3),
+       (20, 1, 6, 42),
+       (21, 1, 7, 4),
+       (22, 1, 7, 5);
 
 INSERT INTO product_categories
 VALUES (1, 1),
@@ -566,31 +551,9 @@ VALUES (1, 1),
        (19, 11),
        (20, 11);
 
---
--- Dumping data for table `product_image`
---
-
-
---
--- Dumping data for table `role`
---
-
 INSERT INTO role
 VALUES (1, 'ROLE_ADMIN'),
        (2, 'ROLE_USER');
-
---
--- Dumping data for table `shipment`
---
-
-
---
--- Dumping data for table `transaction`
---
-
---
--- Dumping data for table `user`
---
 
 INSERT INTO user
 VALUES (1, 'Ho Chi Minh', NULL, '2022-04-22 13:14:58', _binary '\0', NULL, 'admin@gmail.com', 'admin',
@@ -654,10 +617,6 @@ VALUES (1, 'Ho Chi Minh', NULL, '2022-04-22 13:14:58', _binary '\0', NULL, 'admi
        (27, 'Nghe An', NULL, '2022-04-26 20:06:01', _binary '\0', NULL, 'hoangtc@gmail.com', 'Tieu Chi Hoang',
         '$2a$10$OG97NeZ2ZpoRS.fr6HKer.9KHLlWIInFwJDj2V0oCf0lg4fIXuysq', 0, '2022-04-26 20:06:01', 'hoangtc', NULL, 2);
 
---
--- Dumping data for table `user_log`
---
-
 INSERT INTO user_log
 VALUES (1, '2022-04-30 17:47:12', 5),
        (2, '2022-04-30 17:52:01', 6),
@@ -669,10 +628,6 @@ VALUES (1, '2022-04-30 17:47:12', 5),
        (8, '2022-04-30 18:08:13', 17),
        (9, '2022-04-30 18:12:31', 18);
 
---
--- Dumping data for table `voucher`
---
-
 INSERT INTO voucher
 VALUES (1, 'Sale 15% cap at $100!', '2022-06-01', 100, 'change Old to New', 15, '2022-04-30'),
        (2, 'Sale 10% cap at $100!', '2022-06-01', 100, 'Summer', 10, '2022-04-30'),
@@ -680,6 +635,12 @@ VALUES (1, 'Sale 15% cap at $100!', '2022-06-01', 100, 'change Old to New', 15, 
        (4, 'Sale 15% cap at $80!', '2022-06-01', 80, 'SaleMore', 15, '2022-04-30'),
        (5, 'Sale 85% cap at $10!', '2022-06-01', 10, 'shock', 85, '2022-04-30');
 
+INSERT INTO transaction
+VALUES (5, '2022-04-30 17:55:26', 'ok', 1, '', 2, 1, 5, 3),
+       (6, '2022-04-30 17:59:40', 'so bad', 0, '', 1, 4, 14, 4),
+       (7, '2022-04-30 18:03:07', 'done', 0, '', 4, 5, 16, 5),
+       (10, '2022-04-30 18:11:01', 'done', 0, '', 4, 6, 17, 1),
+       (11, '2022-04-30 18:13:03', 'OK ', 0, '', 0, 7, 18, 2);
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS */;
@@ -688,5 +649,3 @@ VALUES (1, 'Sale 15% cap at $100!', '2022-06-01', 100, 'change Old to New', 15, 
 /*!40101 SET CHARACTER_SET_RESULTS = @OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
-
--- Dump completed
