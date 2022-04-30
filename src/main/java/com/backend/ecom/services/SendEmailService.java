@@ -18,7 +18,7 @@ public class SendEmailService {
     public void sendEmail(String to, String body, String topic) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-        mimeMessageHelper.setFrom(new InternetAddress("chubuc2411@gmail.com", "DiGi World"));
+        mimeMessageHelper.setFrom(new InternetAddress("digiworldwebsite@gmail.com", "DiGi World"));
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setSubject(topic);
         mimeMessageHelper.setText(body);
