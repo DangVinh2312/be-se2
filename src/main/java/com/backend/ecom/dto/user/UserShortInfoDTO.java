@@ -16,6 +16,8 @@ public class UserShortInfoDTO {
     private String ava;
     private String fullName;
     private String username;
+
+    private String email;
     private String address;
 
     private long role;
@@ -30,6 +32,7 @@ public class UserShortInfoDTO {
         this.ava = user.getAva();
         this.fullName = user.getFullName();
         this.username = user.getUsername();
+        this.email = user.getEmail();
         this.address = user.getAddress();
         this.role = user.getRole().getId();
         this.createdAt = user.getCreatedDate();

@@ -84,6 +84,8 @@ public class AuthService {
             userLog.addUser(user);
             userLogRepository.save(userLog);
         }
+
+
         return ResponseEntity.ok(new ResponseObject("ok",
                 "Authenticate successfully",
                 new JwtResponse(jwt,

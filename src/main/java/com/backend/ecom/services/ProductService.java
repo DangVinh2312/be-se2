@@ -3,11 +3,10 @@ package com.backend.ecom.services;
 import com.backend.ecom.dto.feedback.FeedbackDTO;
 import com.backend.ecom.dto.feedback.FeedbackRequestDTO;
 import com.backend.ecom.dto.product.ProductDetailDTO;
+import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.backend.ecom.dto.product.ProductShortInfoDTO;
 import com.backend.ecom.entities.*;
 import com.backend.ecom.exception.ResourceNotFoundException;
-import com.backend.ecom.dto.product.ProductRequestDTO;
-
 import com.backend.ecom.payload.response.ResponseObject;
 import com.backend.ecom.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,32 +142,37 @@ public class ProductService {
 
     @Transactional
     public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.softDeleteAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete products successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, false)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.softDeleteAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users successfully", ""));
+
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.deleteAllById(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Delete products permanently", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.deleteAllById(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Delete users permanently", ""));
     }
 
     @Transactional
     public ResponseEntity<ResponseObject> restoreOneOrManyProducts(List<Long> ids) {
-        try {
-            productRepository.restoreAllByIds(ids);
-            return ResponseEntity.ok(new ResponseObject("ok", "Restore products successfully", ""));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Not found product with id: " + e);
+        for (Long id : ids) {
+            if (!productRepository.existsByIdAndDeleted(id, true)) {
+                throw new ResourceNotFoundException("Not found user with id: " + id);
+            }
         }
+        productRepository.restoreAllByIds(ids);
+        return ResponseEntity.ok(new ResponseObject("ok", "Restore users successfully", ""));
+
     }
 
 }
