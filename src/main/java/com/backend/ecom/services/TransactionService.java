@@ -78,11 +78,13 @@ public class TransactionService {
         Cart cart = user.getCart();
         double price = cart.getTotalItemPrice();
 
-        Voucher voucher = voucherRepository.findById(transactionRequest.getVoucherID())
-                .orElseThrow(() -> new ResourceNotFoundException("Voucher not found with id: "+transactionRequest.getVoucherID()));
+        Voucher voucher;
+        if (transactionRequest.getVoucherID()!=0){
+             voucher = voucherRepository.findById(transactionRequest.getVoucherID())
+                    .orElseThrow(() -> new ResourceNotFoundException("Voucher not found with id: "+transactionRequest.getVoucherID()));
+            price = Voucher.applyVoucher(price, voucher);
 
-        price = Voucher.applyVoucher(price, voucher);
-
+        } else voucher=null;
 
         Transaction transaction = new Transaction(user, transactionRequest.getPaymentType(), transactionRequest.getStatus(), transactionRequest.getMessage(), voucher, price, cart, null);
         transactionRepository.save(transaction);
