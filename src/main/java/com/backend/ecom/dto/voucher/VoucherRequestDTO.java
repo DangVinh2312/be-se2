@@ -1,15 +1,13 @@
 package com.backend.ecom.dto.voucher;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Setter
 @Getter
@@ -22,9 +20,11 @@ public class VoucherRequestDTO {
     private String description;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     @NotNull

@@ -2,15 +2,16 @@ package com.backend.ecom.services;
 
 import com.backend.ecom.dto.voucher.VoucherDTO;
 import com.backend.ecom.dto.voucher.VoucherRequestDTO;
-import com.backend.ecom.repositories.VoucherRepository;
 import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.exception.ResourceNotFoundException;
 import com.backend.ecom.payload.response.ResponseObject;
+import com.backend.ecom.repositories.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,6 +34,9 @@ public class VoucherService {
         if(exist){
             throw new ResourceNotFoundException("Voucher is already existed");
         }
+        if (voucherRequest.getEndDate().isBefore(LocalDate.now())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("error", "Voucher is outdated", voucherRequest.getEndDate()));
+        }
         Voucher voucher = new Voucher(voucherRequest);
         voucherRepository.save(voucher);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "New voucher created",new VoucherDTO(voucher)));
@@ -43,6 +47,11 @@ public class VoucherService {
         Voucher voucher = voucherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found voucher with id:" + id));
 
+        if (voucherRequest.getEndDate().isBefore(LocalDate.now())){
+            if (voucherRequest.getEndDate().isBefore(LocalDate.now())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject("error", "Voucher is outdated", voucherRequest.getEndDate()));
+            }
+        }
         voucher.setName(voucherRequest.getName());
         voucher.setDescription(voucherRequest.getDescription());
         voucher.setStartDate(voucherRequest.getStartDate());

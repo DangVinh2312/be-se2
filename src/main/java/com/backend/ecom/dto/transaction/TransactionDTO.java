@@ -1,13 +1,13 @@
 package com.backend.ecom.dto.transaction;
 
-import com.backend.ecom.entities.*;
+import com.backend.ecom.entities.Transaction;
+import com.backend.ecom.entities.Voucher;
 import com.backend.ecom.supporters.PaymentType;
 import com.backend.ecom.supporters.TransactionStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class TransactionDTO {
     private long id;
 
-    private User user;
+    private long user;
 
     private PaymentType paymentType;
 
@@ -28,22 +28,22 @@ public class TransactionDTO {
 
     private LocalDateTime createAt;
 
-    private Cart cart;
+    private long cart;
 
-    private String shipment;
+    private long shipment;
 
     private TransactionStatus status;
 
     public TransactionDTO(Transaction transaction){
         this.id = transaction.getId();
-        this.user = transaction.getUser();
+        this.user = transaction.getUser().getId();
         this.paymentType = transaction.getPaymentType();
         this.message = transaction.getMessage();
         this.voucher = transaction.getVoucher();
         this.totalPrice = transaction.getTotalPrice();
         this.createAt = transaction.getCreatedAt();
-        this.cart = transaction.getCart();
-        this.shipment = "";
+        this.cart = transaction.getCart().getId();
+        this.shipment = 1;
         this.status = transaction.getStatus();
     }
 }

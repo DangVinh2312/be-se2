@@ -27,7 +27,7 @@ public class Cart {
     @Transient
     private int countItem;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cart")
     private Set<CartItem> cartItems = new HashSet<>();
 
     @Transient
@@ -53,7 +53,7 @@ public class Cart {
         return totalItemPrice;
     }
 
-    public void clearCart(){
+    public void clearCart() {
         this.cartItems.clear();
     }
 }
