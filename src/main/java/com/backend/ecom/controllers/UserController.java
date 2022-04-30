@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserShortInfoDTO> getAllUsers(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getAllUsers(deleted);
     }
@@ -44,20 +44,20 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> createUser(@Valid @RequestBody UserCreateRequestDTO userCreateRequestDTO) {
         return userService.createUser(userCreateRequestDTO);
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateUser(@Valid @PathVariable("id") Long id,
                                                      @Valid @RequestBody UserUpdateInfoRequestDTO userUpdateInfoRequestDTO) {
         return userService.updateUser(id, userUpdateInfoRequestDTO);
     }
 
     @PatchMapping("/delete")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> softDeleteManyUsers(@Valid @RequestBody ArrayRequest ids) {
         return userService.softDeleteOneOrManyUsers(Arrays.asList(ids.getIds()));
     }

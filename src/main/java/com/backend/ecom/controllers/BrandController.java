@@ -38,20 +38,20 @@ public class BrandController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> createBrand(@Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.createBrand(brandRequest);
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateBrand(@Valid @PathVariable("id") Integer id,
                                                       @Valid @RequestBody BrandRequestDTO brandRequest) {
         return brandService.updateBrand(id, brandRequest);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> deleteBrand(@Valid @PathVariable("id") Integer id) {
         return brandService.deleteBrand(id);
     }

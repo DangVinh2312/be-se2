@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -48,38 +47,39 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> createProduct(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         return productService.createProduct(productRequestDTO);
     }
 
     @PostMapping("/{id}/feedbacks/create")
+//    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<ResponseObject> createFeedbackFromProduct(@Valid @PathVariable("id") Long id,
                                                                     @Valid @RequestBody FeedbackRequestDTO feedbackRequest) {
         return productService.createFeedbackFromProduct(id, feedbackRequest);
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateProduct(@Valid @PathVariable("id") Long id,
                                                         @Valid @RequestBody ProductRequestDTO productRequest) {
         return productService.updateProduct(id, productRequest);
     }
 
     @PatchMapping("/delete")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> softDeleteOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.softDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @DeleteMapping("/delete/force")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> forceDeleteOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.forceDeleteOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
 
     @PatchMapping("/restore")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> restoreOneOrManyProducts(@Valid @RequestBody ArrayRequest ids) {
         return productService.restoreOneOrManyProducts(Arrays.asList(ids.getIds()));
     }
