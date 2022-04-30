@@ -26,6 +26,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserShortInfoDTO> getAllUsers(@Valid @RequestParam(value = "deleted", defaultValue = "false") Boolean deleted) {
         return userService.getAllUsers(deleted);
     }

@@ -23,25 +23,30 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<Transaction> getAllTransactions() {
         return transactionService.getAllTransactions();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<ResponseObject> getTransactionDetail(@PathVariable("id") Long id) {
         return transactionService.getTransactionDetail(id);
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<ResponseObject> newTransaction(@RequestBody TransactionRequestDTO transactionRequest) {
         return transactionService.createTransaction(transactionRequest);
     }
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateTransaction(@PathVariable("id") Long id, @RequestBody TransactionRequestDTO transactionRequest) {
         return transactionService.updateTransaction(id, transactionRequest);
     }
 
     @PatchMapping("/payment/update/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseObject> updateStatus(@PathVariable("id") Long id, @RequestParam TransactionStatus transactionStatus) {
         return transactionService.updatePayment(id, transactionStatus);
     }
