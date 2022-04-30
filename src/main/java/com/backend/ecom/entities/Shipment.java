@@ -27,13 +27,13 @@ public class Shipment {
 
     private ShipmentStatus status;
 
-    @OneToMany(mappedBy = "shipment")
-    private Set<Transaction> transaction = new HashSet<>();
+    //@OneToMany(mappedBy = "shipment")
+    //private Set<Transaction> transaction = new HashSet<>();
 
     public Shipment(ShipmentRequestDTO shipmentRequestDTO){
         this.startDate = shipmentRequestDTO.getStartDate();
         this.estimatedArrivalDate = shipmentRequestDTO.getEstimatedArrivalDate();
         this.status = shipmentRequestDTO.getStatus();
-        this.transaction = shipmentRequestDTO.getTransactions();
+        //this.transaction = shipmentRequestDTO.getTransactions();
     }
 }

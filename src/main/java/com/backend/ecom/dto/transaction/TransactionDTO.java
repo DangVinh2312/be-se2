@@ -2,6 +2,7 @@ package com.backend.ecom.dto.transaction;
 
 import com.backend.ecom.entities.*;
 import com.backend.ecom.supporters.PaymentType;
+import com.backend.ecom.supporters.TransactionStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +30,9 @@ public class TransactionDTO {
 
     private Cart cart;
 
-    private Shipment shipment;
+    private String shipment;
+
+    private TransactionStatus status;
 
     public TransactionDTO(Transaction transaction){
         this.id = transaction.getId();
@@ -40,6 +43,7 @@ public class TransactionDTO {
         this.totalPrice = transaction.getTotalPrice();
         this.createAt = transaction.getCreatedAt();
         this.cart = transaction.getCart();
-        this.shipment = transaction.getShipment();
+        this.shipment = "";
+        this.status = transaction.getStatus();
     }
 }

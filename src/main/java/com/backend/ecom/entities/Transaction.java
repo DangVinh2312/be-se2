@@ -58,11 +58,7 @@ public class Transaction {
     @JsonIgnore
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Shipment shipment;
+    private String shipment;
 
     public Transaction(User user, PaymentType paymentType, TransactionStatus status, String message,Voucher vouchers, Double totalPrice, Cart cart, Shipment shipment) {
         this.user = user;
@@ -72,7 +68,7 @@ public class Transaction {
         this.voucher = vouchers;
         this.totalPrice = totalPrice;
         this.cart = cart;
-        this.shipment = shipment;
+        this.shipment = "";
     }
 
     public Double getTotalPrice(){

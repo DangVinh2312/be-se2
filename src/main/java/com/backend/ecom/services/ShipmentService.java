@@ -35,7 +35,7 @@ public class ShipmentService {
         shipment.setStatus(updateShipment.getStatus());
         shipment.setEstimatedArrivalDate(updateShipment.getEstimatedArrivalDate());
         shipment.setStartDate(updateShipment.getStartDate());
-        shipment.setTransaction(updateShipment.getTransactions());
+        //shipment.setTransaction(updateShipment.getTransactions());
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Shipment info updated!", new ShipmentDTO(shipmentRepository.save(shipment))));
     }
