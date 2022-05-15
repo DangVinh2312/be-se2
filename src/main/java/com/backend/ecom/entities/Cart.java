@@ -2,24 +2,27 @@ package com.backend.ecom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Cart {
+    @ToString.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private long id;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "cart")
     @JsonIgnore
     private User user;
@@ -27,8 +30,9 @@ public class Cart {
     @Transient
     private int countItem;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cart")
-    private Set<CartItem> cartItems = new HashSet<>();
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private Set<CartItem> cartItems = new java.util.LinkedHashSet<>();
 
     @Transient
     private double totalItemPrice;

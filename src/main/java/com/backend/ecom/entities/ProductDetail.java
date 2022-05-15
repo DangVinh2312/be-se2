@@ -1,14 +1,14 @@
 package com.backend.ecom.entities;
 
 import com.backend.ecom.dto.product.ProductRequestDTO;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
+@AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @Embeddable
 public class ProductDetail {

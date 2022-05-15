@@ -3,18 +3,18 @@ package com.backend.ecom.entities;
 import com.backend.ecom.dto.category.CategoryRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category {
@@ -24,14 +24,10 @@ public class Category {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "categories")
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonIgnore
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products = new java.util.LinkedHashSet<>();
 
     public Category(CategoryRequestDTO categoryRequestDTO){
         this.name = categoryRequestDTO.getName();

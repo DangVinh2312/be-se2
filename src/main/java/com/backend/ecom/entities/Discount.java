@@ -13,9 +13,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Discount {
@@ -29,9 +31,10 @@ public class Discount {
 
     private LocalDate endDate;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "discount")
     @JsonIgnore
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products = new java.util.LinkedHashSet<>();
    public Discount(DiscountRequestDTO discountRequestDTO){
        this.percentage = discountRequestDTO.getPercentage();
        this.startDate = discountRequestDTO.getStartDate();

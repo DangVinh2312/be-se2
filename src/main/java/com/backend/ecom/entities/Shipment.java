@@ -2,9 +2,7 @@ package com.backend.ecom.entities;
 
 import com.backend.ecom.dto.shipment.ShipmentRequestDTO;
 import com.backend.ecom.supporters.ShipmentStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
@@ -12,8 +10,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @Entity
 @Setter
+@ToString
 @Getter
 @NoArgsConstructor
 public class Shipment {

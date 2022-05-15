@@ -4,9 +4,7 @@ import com.backend.ecom.dto.user.UserCreateRequestDTO;
 import com.backend.ecom.payload.request.SignupRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,13 +14,15 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 
+@AllArgsConstructor
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
+@Table(name = "User", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username"}),
+        @UniqueConstraint(columnNames = {"email"})
 })
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
@@ -46,18 +46,21 @@ public class User {
     @ManyToOne
     private Role role;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private Set<Feedback> feedbacks = new HashSet<>();
+    private Set<Feedback> feedbacks = new java.util.LinkedHashSet<>();
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Cart cart;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private Set<Transaction> transactions;
+    private Set<Transaction> transactions = new java.util.LinkedHashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdDate;
@@ -76,9 +79,10 @@ public class User {
     @Transient
     private Duration lastLogin;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<UserLog> userLogs = new HashSet<>();
+    private Set<UserLog> userLogs = new java.util.LinkedHashSet<>();
 
     public User(SignupRequest signUpRequest) {
         this.fullName = signUpRequest.getFullName();

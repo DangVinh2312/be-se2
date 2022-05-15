@@ -8,23 +8,29 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@ToString
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Cart cart;
 
     private int quantity;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 

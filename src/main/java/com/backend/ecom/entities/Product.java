@@ -3,9 +3,7 @@ package com.backend.ecom.entities;
 import com.backend.ecom.dto.product.ProductRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -17,9 +15,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
@@ -42,9 +42,11 @@ public class Product {
     @Transient
     private Double totalPrice;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "product")
-    private Set<ProductImage> images = new HashSet<>();
+    private Set<ProductImage> images = new java.util.LinkedHashSet<>();
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "brandId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -53,26 +55,26 @@ public class Product {
     @Embedded
     private ProductDetail productDetail;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Discount discount;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-    private Set<Feedback> feedbacks = new HashSet<>();
+    @ToString.Exclude
+    @OneToMany(mappedBy = "product")
+    private Set<Feedback> feedbacks = new java.util.LinkedHashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "product_categories",
             joinColumns = @JoinColumn(name = "productId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
-    private Set<Category> categories = new HashSet<>();
+    private Set<Category> categories = new java.util.LinkedHashSet<>();
+    @ToString.Exclude
     @OneToMany(mappedBy = "product")
     @JsonIgnore
-    private Set<CartItem> cartItems = new HashSet<>();
+    private Set<CartItem> cartItems = new java.util.LinkedHashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
